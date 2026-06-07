@@ -11,10 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initScrollReveal();
   initStatsCounter();
   initHeroVideoObserver();
+  initVideoSoundToggle();
   initChatPopup();
   initBackToTop();
   initContactForm();
-  initCalendlyLazyLoad();
 });
 
 // --- Theme Toggle ---
@@ -548,28 +548,30 @@ function initChatPopup() {
   }
 
   // --- Scroll trigger: show chatbot popup when reaching Services (#what-i-build) on home, or after 400px on other pages ---
-  let scrollTimer = null;
   const servicesSec = document.getElementById('what-i-build');
-  window.addEventListener('scroll', () => {
-    if (shown || dismissed) return;
-    
-    let shouldTrigger = false;
-    if (servicesSec) {
-      const rect = servicesSec.getBoundingClientRect();
-      shouldTrigger = rect.top <= window.innerHeight * 0.75;
-    } else {
-      shouldTrigger = window.scrollY > 400;
-    }
-
-    if (shouldTrigger) {
-      if (!scrollTimer) {
-        scrollTimer = setTimeout(showPopup, 700);
+  if (servicesSec) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !shown && !dismissed) {
+          showPopup();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -25% 0px' });
+    observer.observe(servicesSec);
+  } else {
+    const handleScrollFallback = () => {
+      if (shown || dismissed) {
+        window.removeEventListener('scroll', handleScrollFallback);
+        return;
       }
-    } else {
-      clearTimeout(scrollTimer);
-      scrollTimer = null;
-    }
-  }, { passive: true });
+      if (window.scrollY > 400) {
+        showPopup();
+        window.removeEventListener('scroll', handleScrollFallback);
+      }
+    };
+    window.addEventListener('scroll', handleScrollFallback, { passive: true });
+  }
 
 
   // --- Dismiss (×) button ---
@@ -608,13 +610,19 @@ function initBackToTop() {
   const btn = document.getElementById('back-to-top');
   if (!btn) return;
 
+  let isVisible = false;
+
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 400) {
-      btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-      btn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
-    } else {
-      btn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
-      btn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+    const shouldBeVisible = window.scrollY > 400;
+    if (shouldBeVisible !== isVisible) {
+      isVisible = shouldBeVisible;
+      if (isVisible) {
+        btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        btn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      } else {
+        btn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        btn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      }
     }
   }, { passive: true });
 
@@ -778,68 +786,28 @@ function initContactForm() {
   });
 }
 
-// --- Dynamic Lazy Loading for Calendly ---
-function initCalendlyLazyLoad() {
-  const container = document.getElementById('calendly-inline-embed');
-  if (!container) return;
+// --- Hero Video Sound Control ---
+function initVideoSoundToggle() {
+  const video = document.getElementById("hero-loop-video");
+  const toggleBtn = document.getElementById("video-sound-toggle");
+  const soundOffIcon = document.getElementById("video-sound-off");
+  const soundOnIcon = document.getElementById("video-sound-on");
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        loadCalendlyWidget(container);
-        observer.unobserve(container);
-      }
-    });
-  }, { rootMargin: '300px 0px' }); // Load 300px before reaching the container
+  if (!video || !toggleBtn) return;
 
-  observer.observe(container);
-}
+  toggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isMuted = video.muted;
+    video.muted = !isMuted;
 
-function loadCalendlyWidget(container) {
-  const url = container.getAttribute('data-url');
-  if (!url) return;
-
-  const initWidget = () => {
-    if (window.Calendly) {
-      window.Calendly.initInlineWidget({
-        url: url,
-        parentElement: container,
-        prefill: {},
-        utm: {}
-      });
-
-      // Find the created iframe and fade out the skeleton loader on load
-      const checkIframe = setInterval(() => {
-        const iframe = container.querySelector('iframe');
-        if (iframe) {
-          clearInterval(checkIframe);
-          iframe.addEventListener('load', () => {
-            const skeleton = document.getElementById('calendly-skeleton');
-            if (skeleton) {
-              skeleton.style.opacity = '0';
-              setTimeout(() => skeleton.remove(), 300);
-            }
-          });
-          // Fallback if load event doesn't trigger
-          setTimeout(() => {
-            const skeleton = document.getElementById('calendly-skeleton');
-            if (skeleton) skeleton.remove();
-          }, 3000);
-        }
-      }, 100);
+    if (video.muted) {
+      soundOffIcon.classList.remove("hidden");
+      soundOnIcon.classList.add("hidden");
+    } else {
+      soundOffIcon.classList.add("hidden");
+      soundOnIcon.classList.remove("hidden");
     }
-  };
-
-  if (window.Calendly) {
-    initWidget();
-  } else {
-    // Load script dynamically
-    const script = document.createElement('script');
-    script.src = 'https://assets.calendly.com/assets/external/widget.js';
-    script.async = true;
-    script.onload = initWidget;
-    document.body.appendChild(script);
-  }
+  });
 }
 
 
