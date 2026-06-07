@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emmanuel's Portfolio — Systems-led product engineer</title>
+  <meta name="description" content="Emmanuel Ajibewe's complete product development and engineering registry. SaaS, e-commerce, and automation.">
+  <meta name="author" content="Emmanuel Ajibewe">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="transitions.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap">
+  <style>
+    :root {
+      --font-display: "Fraunces", serif !important;
+      --font-sans: "DM Sans", sans-serif !important;
+    }
+
+    /* Fluid typography overrides using clamp() */
+    h1, .display-xl, .text-\[clamp\(2\.2rem\,5\.5vw\,4\.5rem\)\] {
+      font-size: clamp(2rem, 5.5vw, 4.5rem) !important;
+      line-height: 1.1 !important;
+      font-family: var(--font-display) !important;
+    }
+    
+    /* Section Headings (text-3xl md:text-5xl) */
+    h2, .font-display.text-3xl {
+      font-size: clamp(1.65rem, 4.5vw, 3rem) !important;
+      line-height: 1.15 !important;
+      font-family: var(--font-display) !important;
+    }
+    
+    /* Project Card Headings (text-3xl md:text-4xl) */
+    .font-display.text-3xl.md\:text-4xl {
+      font-size: clamp(1.45rem, 3.5vw, 2.25rem) !important;
+      line-height: 1.2 !important;
+      font-family: var(--font-display) !important;
+    }
+    
+    /* Accordion Headings / Service Sub-headings (text-2xl md:text-3xl) */
+    h3, .font-display.text-2xl, .font-display.text-xl {
+      font-size: clamp(1.2rem, 2.5vw, 1.75rem) !important;
+      line-height: 1.25 !important;
+      font-family: var(--font-display) !important;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
+    }
+    .reveal.reveal-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .delay-100 { transition-delay: 100ms; }
+    .delay-200 { transition-delay: 200ms; }
+    .delay-300 { transition-delay: 300ms; }
+    .delay-400 { transition-delay: 400ms; }
+  </style>
+  <script>
+    try {
+      var saved = localStorage.getItem('ncs-theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.classList.remove('dark', 'light');
+      document.documentElement.classList.add(theme);
+      document.documentElement.classList.add('no-transition');
+    } catch(e) {}
+  </script>
+</head>
+<body class="min-h-screen bg-background text-foreground pb-36">
+<div id="theme-bg"></div>
+<canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-[-1]"></canvas>
+
+<header class="container-edge flex items-center justify-between py-6">
+  <a class="flex items-center gap-2 font-display text-lg font-semibold tracking-tight active" href="index.html">
+    <span class="inline-block h-2 w-2 rounded-full bg-primary"></span>Nocode<span class="text-primary">Savvy</span>
+  </a>
+  <div class="flex items-center gap-4">
+    <button id="theme-toggle" class="relative inline-flex h-9 w-9 items-center justify-center rounded-full border hairline bg-transparent text-foreground hover:bg-foreground/5 cursor-pointer" aria-label="Toggle Theme">
+      <!-- Sun Icon (visible in Dark Mode) -->
+      <svg id="theme-sun-icon" class="h-4 w-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+      </svg>
+      <!-- Moon Icon (visible in Light Mode) -->
+      <svg id="theme-moon-icon" class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+      </svg>
+    </button>
+    <div class="hidden md:flex items-center gap-3 text-xs text-muted-foreground">
+      <span class="inline-flex items-center gap-1.5">
+        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>Available for projects · May 2026
+      </span>
+    </div>
+  </div>
+</header>
+
+<div class="space-y-0">
+  <section data-section="portfolio-hero" id="portfolio-hero" class="container-edge pt-12 pb-16 reveal">
+    <div class="max-w-3xl">
+      <div class="eyebrow mb-6 flex items-center gap-2">
+        <span class="inline-block h-1 w-6 bg-primary"></span> Portfolio
+      </div>
+      <h1 class="display-xl text-[clamp(2.2rem,5.5vw,4.5rem)]">Selected Works & Systems</h1>
+      <p class="mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed font-sans">
+        A showcase of 13 production-grade applications, client projects, and custom systems built for speed, conversion, and architectural robustness.
+      </p>
+    </div>
+  </section>
+
+  <!-- Selected Work Grid Section -->
+  <section data-section="work" id="work" class="container-edge py-16 border-t hairline reveal">
+    <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
+      <div class="max-w-3xl">
+        <h2 class="font-display text-3xl md:text-5xl">Interactive Project Showcase</h2>
+      </div>
+      <a href="#work-list" class="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">View all registry <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-4 w-4" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
+    </div>
+    
+    <div class="grid gap-6 md:grid-cols-12">
+      <!-- Card 1: Captions.ai -->
+      <a href="https://www.captions.ai" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="caption-ai.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="Captions AI screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">AI Product Engineering · 2025</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">Captions.ai</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">Integrations for AI-powered video editing platforms, automated audio translations, and eye-contact correction logic.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">Next.js</span>
+          <span class="rounded-full border hairline px-2.5 py-1">OpenAI</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Python</span>
+        </div>
+      </a>
+
+      <!-- Card 2: WeGlobalee -->
+      <a href="https://app.weglobalee.com/version-test/?dg=log_in" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="weglobalee.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="WeGlobalee screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">Full-Stack Platform · 2025</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">WeGlobalee</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">Global recruiting platform connecting remote talent with international companies, featuring automated interviews and matching.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">Bubble.io</span>
+          <span class="rounded-full border hairline px-2.5 py-1">API Connectors</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Stripe</span>
+        </div>
+      </a>
+
+      <!-- Card 3: Curtsy -->
+      <a href="https://curtsyapp.com" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="curtsy.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="Curtsy screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">E-Commerce Marketplace · 2024</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">Curtsy</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">Peer-to-peer apparel marketplace app for buying and selling clothing, handling instant payouts and shipping integrations.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">React Native</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Node.js</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Shipping APIs</span>
+        </div>
+      </a>
+
+      <!-- Card 4: OceanAir Travels -->
+      <a href="https://www.oceanairtravels.com" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="ocean-air.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="OceanAir Travels screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">Booking Platform · 2024</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">OceanAir Travels</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">Automated booking systems, real-time desert safari schedules, and tour reservation engines in Dubai.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">Next.js</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Custom APIs</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Stripe</span>
+        </div>
+      </a>
+
+      <!-- Card 5: Rise CRM -->
+      <a href="https://rise.fairsketch.com/index.php/signin?redirect=https://rise.fairsketch.com/index.php/dashboard/index/1" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="rise.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="Rise CRM screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">Business Systems · 2025</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">Rise CRM & PM</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">Custom client portals, project management dashboards, billing, and team workflow automation systems.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">PHP</span>
+          <span class="rounded-full border hairline px-2.5 py-1">JavaScript</span>
+          <span class="rounded-full border hairline px-2.5 py-1">MySQL</span>
+        </div>
+      </a>
+
+      <!-- Card 6: California Realty Agents -->
+      <a href="https://jessicabouzane.californiarealtyagents.com" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="jessica.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="Jessica Bouzane screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">Real Estate Portal · 2024</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">California Realty</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">High-performance real estate portal with custom map searches, automated MLS listings syncing, and agent lead routing.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">Next.js</span>
+          <span class="rounded-full border hairline px-2.5 py-1">MLS API</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Mapbox</span>
+        </div>
+      </a>
+
+      <!-- Card 7: Accent Advisor -->
+      <a href="https://accentadvisor.com" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="accent-advisor.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="Accent Advisor screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">EdTech Platform · 2025</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">Accent Advisor</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">Scheduling system and coaching portal for American English pronunciation training, matching students and tutors.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">Bubble.io</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Calendar API</span>
+          <span class="rounded-full border hairline px-2.5 py-1">SendGrid</span>
+        </div>
+      </a>
+
+      <!-- Card 8: Kittenish -->
+      <a href="https://kittenish.com" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="kittenish.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="Kittenish screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">E-Commerce Storefront · 2025</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">Kittenish</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">Custom headless Shopify storefront and boutique shopping workflows built for speed and high conversion rates.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">Next.js</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Shopify API</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Tailwind</span>
+        </div>
+      </a>
+
+      <!-- Card 9: Opositiv FLO -->
+      <a href="https://opositiv.com/products/flo-pms-vitamin-capsules" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="opositiv.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="Opositiv FLO screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">E-Commerce & Subscriptions · 2024</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">Opositiv FLO</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">High-conversion checkout workflows and custom subscription models built for a leading health and wellness DTC brand.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">Next.js</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Recharge API</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Shopify</span>
+        </div>
+      </a>
+
+      <!-- Card 10: Dr. Saad Ajmal MD -->
+      <a href="https://www.saadajmalmd.com" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="dr-saad.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="Dr. Saad Ajmal MD screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">Medical Practice Platform · 2025</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">Dr. Saad Ajmal MD</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">Physician website and patient engagement platform with appointment booking, consultation forms, and medical profile management.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">WordPress</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Custom Forms</span>
+          <span class="rounded-full border hairline px-2.5 py-1">SEO</span>
+        </div>
+      </a>
+
+      <!-- Card 11: DojoChamp -->
+      <a href="https://dojochamp.com/" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="dojo-champ.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="DojoChamp screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">Sports & Training Platform · 2025</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">DojoChamp</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">Martial arts training platform with session scheduling, progress tracking, and community competition management.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">Bubble.io</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Stripe</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Calendar API</span>
+        </div>
+      </a>
+
+      <!-- Card 12: Mwawazi -->
+      <a href="https://www.mwawazi.com" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="mwawazi.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="Mwawazi screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">Legal Tech Platform · 2025</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">Mwawazi</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">Legal services platform connecting clients with advocates and paralegal professionals, with case management and secure document workflows.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">Bubble.io</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Document APIs</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Auth</span>
+        </div>
+      </a>
+
+      <!-- Card 13: Esseyi -->
+      <a href="https://www.esseyi.com" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
+        <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+          <img src="esseyi.jpg" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="Esseyi screen">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="eyebrow">E-Commerce Platform · 2025</div>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl">Esseyi</h3>
+            <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">Modern e-commerce storefront with curated product collections, custom checkout flows, and integrated payment and fulfillment systems.</p>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <span class="rounded-full border hairline px-2.5 py-1">Next.js</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Shopify</span>
+          <span class="rounded-full border hairline px-2.5 py-1">Stripe</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Complete Project Registry -->
+  <section data-section="work-list" id="work-list" class="container-edge py-16 border-t hairline reveal">
+    <div class="max-w-3xl mb-8">
+      <div class="eyebrow flex items-center gap-2 mb-4">
+        <span class="inline-block h-1 w-6 bg-primary"></span> Archive
+      </div>
+      <h2 class="font-display text-3xl md:text-5xl">Complete Project Registry</h2>
+    </div>
+    <section class="container-edge border-t hairline">
+      <!-- Row 01 -->
+      <a href="https://www.captions.ai" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">01</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">Captions.ai</div>
+          <div class="mt-2 text-sm text-muted-foreground">Integrations for AI-powered video editing platforms, automated audio translations, and eye-contact correction logic.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">AI Product Engineering</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2025</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 02 -->
+      <a href="https://app.weglobalee.com/version-test/?dg=log_in" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">02</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">WeGlobalee</div>
+          <div class="mt-2 text-sm text-muted-foreground">Global recruiting platform connecting remote talent with international companies, featuring automated interviews and matching.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">Full-Stack Platform</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2025</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 03 -->
+      <a href="https://curtsyapp.com" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">03</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">Curtsy</div>
+          <div class="mt-2 text-sm text-muted-foreground">Peer-to-peer apparel marketplace app for buying and selling clothing, handling instant payouts and shipping integrations.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">E-Commerce Marketplace</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2024</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 04 -->
+      <a href="https://www.oceanairtravels.com" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">04</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">OceanAir Travels</div>
+          <div class="mt-2 text-sm text-muted-foreground">Automated booking systems, real-time desert safari schedules, and tour reservation engines in Dubai.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">Booking Platform</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2024</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 05 -->
+      <a href="https://rise.fairsketch.com/index.php/signin?redirect=https://rise.fairsketch.com/index.php/dashboard/index/1" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">05</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">Rise CRM & PM</div>
+          <div class="mt-2 text-sm text-muted-foreground">Custom client portals, project management dashboards, billing, and team workflow automation systems.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">Business Systems</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2025</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 06 -->
+      <a href="https://jessicabouzane.californiarealtyagents.com" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">06</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">California Realty</div>
+          <div class="mt-2 text-sm text-muted-foreground">High-performance real estate portal with custom map searches, automated MLS listings syncing, and agent lead routing.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">Real Estate Portal</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2024</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 07 -->
+      <a href="https://accentadvisor.com" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">07</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">Accent Advisor</div>
+          <div class="mt-2 text-sm text-muted-foreground">Scheduling system and coaching portal for American English pronunciation training, matching students and tutors.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">EdTech Platform</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2025</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 08 -->
+      <a href="https://kittenish.com" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">08</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">Kittenish</div>
+          <div class="mt-2 text-sm text-muted-foreground">Custom headless Shopify storefront and boutique shopping workflows built for speed and high conversion rates.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">E-Commerce Storefront</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2025</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 09 -->
+      <a href="https://opositiv.com/products/flo-pms-vitamin-capsules" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">09</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">Opositiv FLO</div>
+          <div class="mt-2 text-sm text-muted-foreground">High-conversion checkout workflows and custom subscription models built for a leading health and wellness DTC brand.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">E-Commerce & Subscriptions</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2024</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 10 -->
+      <a href="https://www.saadajmalmd.com" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">10</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">Dr. Saad Ajmal MD</div>
+          <div class="mt-2 text-sm text-muted-foreground">Physician website and patient engagement platform with appointment booking, consultation forms, and medical profile management.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">Medical Practice Platform</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2025</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 11 -->
+      <a href="https://dojochamp.com/" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">11</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">DojoChamp</div>
+          <div class="mt-2 text-sm text-muted-foreground">Martial arts training platform with session scheduling, progress tracking, and community competition management.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">Sports & Training Platform</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2025</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 12 -->
+      <a href="https://www.mwawazi.com" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">12</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">Mwawazi</div>
+          <div class="mt-2 text-sm text-muted-foreground">Legal services platform connecting clients with advocates and paralegal professionals, with case management and secure document workflows.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">Legal Tech Platform</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2025</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+
+      <!-- Row 13 -->
+      <a href="https://www.esseyi.com" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
+        <div class="col-span-1 font-mono text-xs text-muted-foreground">13</div>
+        <div class="col-span-7 md:col-span-6">
+          <div class="font-display text-3xl md:text-5xl">Esseyi</div>
+          <div class="mt-2 text-sm text-muted-foreground">Modern e-commerce storefront with curated product collections, custom checkout flows, and integrated payment and fulfillment systems.</div>
+        </div>
+        <div class="hidden md:block col-span-3 text-sm text-muted-foreground">E-Commerce Platform</div>
+        <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">2025</div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+    </section>
+  </section>
+
+  <!-- Contact Section -->
+  <section data-section="contact" id="contact" class="container-edge py-24 md:py-32 border-t hairline reveal">
+    <div class="max-w-3xl mb-12">
+      <div class="eyebrow flex items-center gap-2 mb-4">
+        <span class="inline-block h-1 w-6 bg-primary"></span> Contact
+      </div>
+      <h2 class="font-display text-3xl md:text-5xl">Let's build the thing.</h2>
+      <p class="mt-4 text-muted-foreground">Book a 30-minute scoping consultation or send me a project description below.</p>
+    </div>
+    <div class="grid gap-12 md:grid-cols-12 items-start">
+      <div class="md:col-span-5">
+        <div class="space-y-6">
+          <div class="flex items-center gap-3">
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">EA</div>
+            <div>
+              <div class="font-display text-lg font-semibold">Emmanuel Ajibewe</div>
+              <div class="text-sm text-muted-foreground">Product engineer · Lagos / Remote</div>
+            </div>
+          </div>
+          <div class="space-y-3 text-sm text-muted-foreground">
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock h-4 w-4"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+              30 minutes · Google Meet
+            </div>
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar h-4 w-4"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+              Tuesday – Thursday
+            </div>
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check h-4 w-4 text-primary"><path d="M20 6 9 17l-5-5"></path></svg>
+              Walk through your current workflow + scope a sprint
+            </div>
+          </div>
+          
+          <div class="rounded-2xl border hairline p-6 bg-background">
+            <div class="eyebrow mb-4">Schedule a free consultation call</div>
+            <div class="grid grid-cols-2 gap-2">
+              <button class="rounded-lg border hairline px-3 py-3 text-sm hover:bg-primary hover:text-primary-foreground transition consultation-slot">Tue · 10:00</button>
+              <button class="rounded-lg border hairline px-3 py-3 text-sm hover:bg-primary hover:text-primary-foreground transition consultation-slot">Tue · 14:30</button>
+              <button class="rounded-lg border hairline px-3 py-3 text-sm hover:bg-primary hover:text-primary-foreground transition consultation-slot">Wed · 09:30</button>
+              <button class="rounded-lg border hairline px-3 py-3 text-sm hover:bg-primary hover:text-primary-foreground transition consultation-slot">Wed · 16:00</button>
+              <button class="rounded-lg border hairline px-3 py-3 text-sm hover:bg-primary hover:text-primary-foreground transition consultation-slot">Thu · 11:00</button>
+              <button class="rounded-lg border hairline px-3 py-3 text-sm hover:bg-primary hover:text-primary-foreground transition consultation-slot">Thu · 15:00</button>
+            </div>
+            <p class="mt-4 text-[10px] text-muted-foreground text-center">Powered by Calendly · embed connects in production.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="md:col-span-7">
+        <form id="enhanced-contact-form" class="space-y-5 rounded-2xl border hairline p-6 md:p-8 bg-foreground/[0.02]">
+          <div>
+            <label class="eyebrow block mb-2 text-xs">Full Name</label>
+            <input type="text" id="contact-name" name="name" required class="w-full rounded-lg border hairline bg-transparent px-4 py-3 text-sm outline-none focus:border-primary" />
+          </div>
+          <div>
+            <label class="eyebrow block mb-2 text-xs">Email Address</label>
+            <input type="email" id="contact-email" name="email" required class="w-full rounded-lg border hairline bg-transparent px-4 py-3 text-sm outline-none focus:border-primary" />
+          </div>
+          <div>
+            <label class="eyebrow block mb-2 text-xs">What are you building?</label>
+            <div class="flex flex-wrap gap-2 mt-1">
+              <label class="cursor-pointer">
+                <input type="radio" name="project_type" value="MVP" class="sr-only peer" checked>
+                <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">MVP</span>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="project_type" value="App Rescue" class="sr-only peer">
+                <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">App Rescue</span>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="project_type" value="AI Integration" class="sr-only peer">
+                <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">AI Integration</span>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="project_type" value="Redesign" class="sr-only peer">
+                <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">Redesign</span>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="project_type" value="Platform Ecosystem" class="sr-only peer">
+                <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">Platform Ecosystem</span>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="project_type" value="Not Sure Yet" class="sr-only peer">
+                <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">Not Sure Yet</span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="eyebrow block mb-2 text-xs">Budget</label>
+            <select id="contact-budget" name="budget" required class="w-full rounded-lg border hairline bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-primary cursor-pointer">
+              <option value="Under $1k">Under $1k</option>
+              <option value="$1k–$3k">$1k–$3k</option>
+              <option value="$3k–$8k">$3k–$8k</option>
+              <option value="$8k+">$8k+</option>
+              <option value="Let's talk">Let's talk</option>
+            </select>
+          </div>
+          <div>
+            <label class="eyebrow block mb-2 text-xs">Project Description</label>
+            <textarea id="contact-desc" name="description" rows="4" required placeholder="Tell me what you're building..." class="w-full rounded-lg border hairline bg-transparent px-4 py-3 text-sm outline-none focus:border-primary"></textarea>
+          </div>
+          <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:opacity-90 transition w-full justify-center">
+            Send message
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-4 w-4"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="mt-8 border-t hairline pt-8 flex flex-wrap gap-x-6 gap-y-3 text-xs text-muted-foreground justify-center w-full">
+      <a href="mailto:buildwithtimi8@gmail.com" class="flex items-center gap-1.5 hover:text-foreground">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail h-3.5 w-3.5"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path></svg>
+        buildwithtimi8@gmail.com
+      </a>
+      <a href="https://instagram.com/nocodesavvy" target="_blank" class="flex items-center gap-1.5 hover:text-foreground">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram h-3.5 w-3.5"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+        @nocodesavvy
+      </a>
+      <a href="https://linkedin.com/in/emmanuel-ajibewe" target="_blank" class="flex items-center gap-1.5 hover:text-foreground">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin h-3.5 w-3.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+        Emmanuel Ajibewe
+      </a>
+      <span class="flex items-center gap-1.5">
+        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+        Based in Nigeria. Remote. Worldwide.
+      </span>
+    </div>
+    <div class="mt-4 text-[11px] text-muted-foreground text-center w-full">
+      © 2026 Nocode Savvy · Built by Emmanuel Ajibewe
+    </div>
+  </section>
+</div>
+
+<div class="fixed inset-x-0 bottom-4 z-50 flex flex-col items-center gap-2 px-4 pointer-events-none">
+  <!-- Active Section indicator -->
+  <div id="active-section-indicator" class="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border hairline bg-popover/90 px-3 py-1 text-[11px] tracking-wide text-muted-foreground backdrop-blur">
+    Viewing Portfolio <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-3 w-3"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+  </div>
+  
+  <nav class="pointer-events-auto flex items-center gap-1 rounded-full border hairline bg-popover/90 px-1.5 py-1.5 shadow-[0_10px_40px_-12px_rgba(0,0,0,0.45)] backdrop-blur">
+    <!-- Home link -->
+    <a aria-label="Home" class="nav-link group relative inline-flex h-10 items-center gap-2 md:gap-0 rounded-full px-3 text-sm transition-colors text-foreground/80 hover:bg-foreground/5" href="index.html">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house h-[18px] w-[18px] md:hidden"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+      <span class="hidden md:inline">Home</span>
+    </a>
+    <!-- Work link -->
+    <a aria-label="Work" href="#work" class="nav-link group relative inline-flex h-10 items-center gap-2 md:gap-0 rounded-full px-3 text-sm transition-colors text-foreground/80 hover:bg-foreground/5">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid h-[18px] w-[18px] md:hidden"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+      <span class="hidden md:inline">Work</span>
+    </a>
+    <!-- Process link -->
+    <a aria-label="Process" href="index.html#process" class="nav-link group relative inline-flex h-10 items-center gap-2 md:gap-0 rounded-full px-3 text-sm transition-colors text-foreground/80 hover:bg-foreground/5">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list h-[18px] w-[18px] md:hidden"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"></svg>
+      <span class="hidden md:inline">Process</span>
+    </a>
+    <!-- Toolkit link -->
+    <a aria-label="Toolkit" href="index.html#toolkit" class="nav-link group relative inline-flex h-10 items-center gap-2 md:gap-0 rounded-full px-3 text-sm transition-colors text-foreground/80 hover:bg-foreground/5">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hammer h-[18px] w-[18px] md:hidden"><path d="m15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9"></path><path d="m18 15 4-4"></path><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172v-.344a2 2 0 0 0-.586-1.414l-1.657-1.657A6 6 0 0 0 12.516 3H9l1.243 1.243A6 6 0 0 1 12 8.485V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"></path></svg>
+      <span class="hidden md:inline">Toolkit</span>
+    </a>
+    <!-- About link -->
+    <a aria-label="About" href="index.html#about" class="nav-link group relative inline-flex h-10 items-center gap-2 md:gap-0 rounded-full px-3 text-sm transition-colors text-foreground/80 hover:bg-foreground/5">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user h-[18px] w-[18px] md:hidden"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="hidden md:inline">About</span>
+    </a>
+    <!-- Contact link -->
+    <a aria-label="Contact" href="#contact" class="nav-link group relative inline-flex h-10 items-center gap-2 md:gap-0 rounded-full px-3 text-sm transition-colors text-foreground/80 hover:bg-foreground/5">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail h-[18px] w-[18px] md:hidden"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg>
+      <span class="hidden md:inline">Contact</span>
+    </a>
+    
+    <span class="mx-1 h-6 w-px bg-foreground/10"></span>
+    
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" aria-label="Toggle theme" class="inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 hover:bg-foreground/5">
+      <!-- Sun icon (for dark mode) -->
+      <svg id="theme-sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun h-[18px] w-[18px]"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+      <!-- Moon icon (for light mode) -->
+      <svg id="theme-moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon h-[18px] w-[18px] hidden"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+    </button>
+  </nav>
+</div>
+
+<!-- Chatbot Scroll Popup -->
+<div id="chatbot-popup" class="fixed bottom-[88px] right-4 z-40 w-[280px] rounded-2xl border hairline bg-popover/98 shadow-2xl backdrop-blur-xl pointer-events-auto hidden overflow-hidden">
+  <div class="h-1 w-full bg-gradient-to-r from-primary via-primary/60 to-transparent"></div>
+  <div class="p-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2.5">
+        <div class="relative shrink-0">
+          <img src="profile.jpg" alt="Emmanuel" class="h-9 w-9 rounded-full object-cover border-2 border-primary/30">
+          <span class="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 border-2 border-popover"></span>
+        </div>
+        <div>
+          <p class="text-[12px] font-semibold text-foreground leading-none">Emmanuel Ajibewe</p>
+          <p class="text-[10px] text-emerald-400 mt-0.5 font-medium">● Online now</p>
+        </div>
+      </div>
+      <button id="chatbot-popup-dismiss" class="h-6 w-6 rounded-full bg-foreground/10 hover:bg-foreground/20 flex items-center justify-center cursor-pointer transition shrink-0" aria-label="Dismiss">
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div class="rounded-xl rounded-tl-none bg-foreground/[0.05] border hairline px-3.5 py-2.5 mb-3">
+      <p class="text-[12.5px] text-foreground leading-relaxed">👋 Hey! Got a project idea? I'm free to chat — ask me anything about timelines, pricing, or what I can build.</p>
+    </div>
+    <button id="chatbot-popup-cta" class="w-full rounded-xl bg-primary text-primary-foreground text-[12px] font-semibold py-2.5 hover:opacity-90 active:scale-95 transition cursor-pointer flex items-center justify-center gap-1.5">
+      Start a project
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+    </button>
+  </div>
+  <div class="absolute -bottom-1.5 right-6 w-3 h-3 rotate-45 bg-popover border-r border-b hairline"></div>
+</div>
+
+<!-- Back to Top Button -->
+<button id="back-to-top" aria-label="Back to top" class="fixed bottom-40 right-4 z-40 inline-flex h-12 w-12 items-center justify-center rounded-full border hairline bg-popover/90 shadow-xl backdrop-blur transition-all duration-300 hover:scale-110 active:scale-95 opacity-0 pointer-events-none translate-y-4">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-primary">
+    <path d="m18 15-6-6-6 6"/>
+  </svg>
+</button>
+
+<!-- Chatbot Toggle Button -->
+<button id="chatbot-toggle" aria-label="Open chat" class="fixed bottom-24 right-4 z-40 inline-flex h-12 w-12 items-center justify-center rounded-full border hairline bg-popover/90 shadow-xl backdrop-blur transition-all duration-300 hover:scale-110 active:scale-95 opacity-100 pointer-events-auto">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-primary">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    <path d="M12 7c0 1.5.5 2 2 2-1.5 0-2 .5-2 2 0-1.5-.5-2-2-2 1.5 0 2-.5 2-2z" fill="currentColor"/>
+  </svg>
+</button>
+
+<!-- Chatbot Window -->
+<div id="chatbot-window" class="fixed bottom-24 right-4 z-50 w-[calc(100vw-2rem)] max-w-[400px] rounded-2xl border hairline bg-popover/95 shadow-2xl backdrop-blur-xl flex flex-col max-h-[70vh] hidden pointer-events-auto">
+  <div class="flex items-center justify-between gap-3 border-b hairline p-4">
+    <div class="flex items-center gap-3">
+      <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full overflow-hidden border hairline">
+        <img src="profile.jpg" alt="Emmanuel Ajibewe" class="w-full h-full object-cover">
+      </div>
+      <div>
+        <div class="font-display text-sm font-semibold">Emmanuel Ajibewe</div>
+        <div class="text-[11px] text-muted-foreground flex items-center gap-1.5">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+          Emmanuel Twin (AI Agent)
+        </div>
+      </div>
+    </div>
+    <button id="chatbot-close" class="h-8 w-8 rounded-full flex items-center justify-center hover:bg-foreground/5 cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+  
+  <div id="chat-messages" class="flex-1 overflow-y-auto px-4 py-5 space-y-5 min-h-[200px]">
+    <!-- Messages loaded by JS -->
+  </div>
+  
+  <div id="chat-loading" class="px-4 py-2 text-xs text-muted-foreground hidden">
+    <span class="inline-block animate-pulse">Twin is typing...</span>
+  </div>
+  
+  <div class="border-t hairline p-3 space-y-2.5">
+    <div class="flex flex-wrap gap-1.5">
+      <button class="chat-pill rounded-full border hairline px-2.5 py-1 text-[11px] text-foreground/80 hover:bg-foreground/5 transition cursor-pointer">Full-Stack + Bubble</button>
+      <button class="chat-pill rounded-full border hairline px-2.5 py-1 text-[11px] text-foreground/80 hover:bg-foreground/5 transition cursor-pointer">UI/UX Design</button>
+      <button class="chat-pill rounded-full border hairline px-2.5 py-1 text-[11px] text-foreground/80 hover:bg-foreground/5 transition cursor-pointer">Custom Dev</button>
+    </div>
+    <form id="chat-form" class="flex items-center gap-2 rounded-full border hairline bg-background pl-4 pr-1.5 py-1">
+      <input type="text" id="chat-input" placeholder="Ask anything..." class="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" />
+      <button type="submit" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40" disabled>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right h-4 w-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Interactive Video Modal -->
+<div id="video-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+  <div class="relative w-full max-w-4xl px-4 md:px-8">
+    <!-- Close button -->
+    <button id="video-modal-close" class="absolute -top-12 right-4 md:right-8 text-white hover:text-primary transition flex items-center gap-1 text-sm bg-black/40 backdrop-blur px-3 py-1.5 rounded-full border border-white/10 cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      <span>Close</span>
+    </button>
+    
+    <!-- Player Container -->
+    <div class="aspect-video w-full rounded-2xl border border-white/10 bg-black overflow-hidden shadow-2xl relative flex flex-col justify-between group">
+      <!-- HTML5 Video Element -->
+      <video id="hero-video" class="absolute inset-0 w-full h-full object-cover z-0" playsinline>
+        <source src="1000540539.mp4" type="video/mp4">
+      </video>
+
+      <!-- Simulated Loom video content -->
+      <div class="absolute inset-0 flex flex-col justify-between p-6 z-10 pointer-events-none">
+        <!-- Loom branding header -->
+        <div class="flex items-center justify-between text-white/90">
+          <div class="flex items-center gap-2 bg-black/50 backdrop-blur px-3 py-1.5 rounded-full border border-white/5">
+            <span class="h-2 w-2 rounded-full bg-rose-500 animate-pulse"></span>
+            <span class="text-xs font-mono font-medium tracking-tight">Walkthrough · Product Demo Sprint</span>
+          </div>
+          <div class="bg-black/50 backdrop-blur px-3 py-1.5 rounded-full border border-white/5 text-[11px] font-mono">
+            By Emmanuel
+          </div>
+        </div>
+        
+        <!-- Large visual presentation content -->
+        <div class="flex-1 flex items-center justify-center">
+          <div class="text-center p-6 bg-black/60 backdrop-blur-sm rounded-xl border border-white/10 max-w-md pointer-events-auto cursor-pointer shadow-lg transform active:scale-95 transition-transform" id="video-play-overlay">
+            <!-- Play Indicator -->
+            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground mb-3 shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="ml-0.5"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <p class="text-white text-sm font-medium">Click to Play Demo Walkthrough</p>
+            <p class="text-xs text-white/60 mt-1">Showing Bubble.io + Supabase SaaS engineering</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Video player UI overlay (bottom controls) -->
+      <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/85 to-transparent p-4 z-20 flex flex-col gap-3">
+        <!-- Progress bar -->
+        <div class="w-full h-1.5 bg-white/20 rounded-full cursor-pointer relative group/progress" id="video-progress-container">
+          <div id="video-progress-bar" class="absolute left-0 top-0 bottom-0 bg-primary rounded-full transition-all duration-100" style="width: 0%;"></div>
+          <div id="video-progress-handle" class="absolute h-3.5 w-3.5 rounded-full bg-primary -top-1 opacity-0 group-hover/progress:opacity-100 transition-opacity" style="left: 0%;"></div>
+        </div>
+        
+        <div class="flex items-center justify-between text-white">
+          <div class="flex items-center gap-4">
+            <!-- Play/Pause -->
+            <button id="video-control-play" class="hover:text-primary transition cursor-pointer p-1">
+              <svg id="video-icon-play" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="video-icon-pause" class="h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            
+            <!-- Sound indicator -->
+            <button id="video-control-volume" class="hover:text-primary transition cursor-pointer p-1">
+              <svg id="video-icon-volume" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+              <svg id="video-icon-mute" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-x hidden"><path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+            </button>
+            
+            <!-- Time display -->
+            <span class="text-xs font-mono text-white/70" id="video-time-display">0:00 / 0:54</span>
+          </div>
+          
+          <div class="flex items-center justify-between text-white">
+            <span class="text-[10px] bg-white/10 hover:bg-white/20 transition rounded-md px-2 py-0.5 cursor-pointer font-mono font-medium" id="video-speed-btn">1.0x</span>
+            <!-- Demo Tag -->
+            <span class="text-xs opacity-60 font-medium tracking-tight">Walkthrough</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<footer class="border-t hairline mt-8">
+  <div class="container-edge py-20 md:py-28">
+    <div class="max-w-3xl">
+      <div class="eyebrow flex items-center gap-2 mb-6">
+        <span class="inline-block h-1 w-6 bg-primary"></span> Let's build together
+      </div>
+      <h2 class="font-display text-[clamp(2.4rem,6vw,5rem)] leading-[1.05] tracking-tight mb-6">
+        Got an idea?<br>
+        <em class="font-normal italic text-primary">Let's ship it.</em>
+      </h2>
+      <p class="text-base md:text-lg text-muted-foreground max-w-lg leading-relaxed mb-10">
+        I work with founders, agencies, and teams who need something built fast — without cutting corners on quality or architecture.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="index.html#contact" class="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:opacity-90 transition">
+          Start a project
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition group-hover:rotate-45"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+        </a>
+        <a href="mailto:buildwithtimi8@gmail.com" class="inline-flex items-center gap-2 rounded-full border hairline px-6 py-3 text-sm hover:bg-foreground/5 transition">
+          buildwithtimi8@gmail.com
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-edge border-t hairline py-14">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
+      <div class="col-span-2 md:col-span-1">
+        <div class="font-display text-2xl tracking-tight mb-3">Nocode Savvy</div>
+        <p class="text-xs text-muted-foreground leading-relaxed max-w-[180px]">Systems-led product engineering by Emmanuel Ajibewe.</p>
+        <div class="flex items-center gap-1.5 mt-4 text-[11px] text-muted-foreground">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+          Available for new projects
+        </div>
+      </div>
+      <div>
+        <p class="eyebrow text-[10px] mb-4">Navigate</p>
+        <ul class="space-y-2.5 text-sm text-muted-foreground">
+          <li><a href="index.html" class="hover:text-foreground transition">Home</a></li>
+          <li><a href="index.html#work" class="hover:text-foreground transition">Selected Work</a></li>
+          <li><a href="index.html#services" class="hover:text-foreground transition">Pricing</a></li>
+          <li><a href="index.html#about" class="hover:text-foreground transition">About</a></li>
+          <li><a href="portfolio.html" class="hover:text-foreground transition">Full Portfolio</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow text-[10px] mb-4">Services</p>
+        <ul class="space-y-2.5 text-sm text-muted-foreground">
+          <li><a href="index.html#what-i-build" class="hover:text-foreground transition">Bubble.io Apps</a></li>
+          <li><a href="index.html#what-i-build" class="hover:text-foreground transition">SaaS Platforms</a></li>
+          <li><a href="index.html#what-i-build" class="hover:text-foreground transition">MVP Rescue</a></li>
+          <li><a href="index.html#what-i-build" class="hover:text-foreground transition">API Integrations</a></li>
+          <li><a href="index.html#what-i-build" class="hover:text-foreground transition">Custom Dev</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow text-[10px] mb-4">Connect</p>
+        <ul class="space-y-2.5 text-sm text-muted-foreground">
+          <li>
+            <a href="mailto:buildwithtimi8@gmail.com" class="hover:text-foreground transition flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/></svg>
+              Email
+            </a>
+          </li>
+          <li>
+            <a href="https://instagram.com/nocodesavvy" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+              Instagram
+            </a>
+          </li>
+          <li>
+            <a href="https://linkedin.com/in/emmanuel-ajibewe" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href="https://twitter.com/nocodesavvy" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16H20L8.267 4z"/><path d="M4 20l6.768-6.768M15.232 9.232L20 4"/></svg>
+              Twitter / X
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-edge border-t hairline py-5 flex flex-wrap items-center justify-between gap-4">
+    <p class="text-[11px] text-muted-foreground">© 2026 Nocode Savvy · Built by Emmanuel Ajibewe · Based in Nigeria, working worldwide.</p>
+    <div class="flex items-center gap-4 text-[11px] text-muted-foreground">
+      <a href="index.html" class="hover:text-foreground transition">← Back to home</a>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="animations.js"></script>
+<script type="module" src="main.js"></script>
+</body>
+</html>

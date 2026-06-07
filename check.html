@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+<video id="v" src="1000540539.mp4" muted autoplay></video>
+<script>
+  const v = document.getElementById('v');
+  v.addEventListener('loadedmetadata', () => {
+    console.log('WIDTH:', v.videoWidth, 'HEIGHT:', v.videoHeight);
+    const div = document.createElement('div');
+    div.id = 'dims';
+    div.innerText = v.videoWidth + 'x' + v.videoHeight;
+    document.body.appendChild(div);
+  });
+</script>
+</body>
+</html>
