@@ -317,7 +317,20 @@ function injectStyles() {
     #about-portrait .profile-image-el {
       filter: grayscale(100%) brightness(0.85);
       transition: filter 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-    }    #about-portrait-wrapper:hover .profile-image-el,
+    }
+    
+    @media (hover: hover) {
+      #about-portrait-wrapper:hover .profile-image-el {
+        filter: grayscale(0%) brightness(1.0);
+      }
+      #about-portrait-wrapper:hover #about-tagline {
+        color: var(--primary);
+      }
+      #about-portrait-wrapper:hover #about-subtagline {
+        letter-spacing: 0.15em;
+      }
+    }
+
     #about-portrait-wrapper:active .profile-image-el,
     #about-portrait-wrapper.touch-active .profile-image-el {
       filter: grayscale(0%) brightness(1.0);
@@ -333,12 +346,10 @@ function injectStyles() {
       transform: translateY(0);
     }
 
-    #about-portrait-wrapper:hover #about-tagline,
     #about-portrait-wrapper:active #about-tagline,
     #about-portrait-wrapper.touch-active #about-tagline {
       color: var(--primary);
     }
-    #about-portrait-wrapper:hover #about-subtagline,
     #about-portrait-wrapper:active #about-subtagline,
     #about-portrait-wrapper.touch-active #about-subtagline {
       letter-spacing: 0.15em;
