@@ -10,9 +10,7 @@
   <link rel="stylesheet" href="theme.css">
   <link rel="stylesheet" href="transitions.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap">
-  <!-- Calendly widget styles and script -->
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+  <!-- CSS styling frameworks -->
   <style>
     :root {
       --font-display: "Fraunces", serif !important;
@@ -315,13 +313,25 @@
     <video id="hero-loop-video" class="w-full h-full object-cover filter brightness-[0.8] transition duration-500" autoplay muted loop playsinline preload="metadata">
       <source src="1000540539.mp4" type="video/mp4">
     </video>
-    <!-- Video Sound Toggle Overlay -->
-    <button id="video-sound-toggle" aria-label="Toggle sound" class="absolute bottom-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-background/80 border hairline text-foreground backdrop-blur hover:bg-background transition pointer-events-auto shadow-sm cursor-pointer hover:scale-105 active:scale-95">
-      <!-- Mute Icon -->
-      <svg id="video-sound-off" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-x"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
-      <!-- Unmute Icon -->
-      <svg id="video-sound-on" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2 hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-    </button>
+    
+    <!-- Controls Overlay Group -->
+    <div class="absolute bottom-4 right-4 z-10 flex items-center gap-2 pointer-events-auto">
+      <!-- Play/Pause Toggle -->
+      <button id="video-play-toggle" aria-label="Toggle play" class="flex h-9 w-9 items-center justify-center rounded-full bg-background/80 border hairline text-foreground backdrop-blur hover:bg-background transition shadow-sm cursor-pointer hover:scale-105 active:scale-95">
+        <!-- Pause Icon (visible initially since video autoplay is on) -->
+        <svg id="video-pause-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pause"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg>
+        <!-- Play Icon -->
+        <svg id="video-play-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play hidden"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+      </button>
+
+      <!-- Video Sound Toggle -->
+      <button id="video-sound-toggle" aria-label="Toggle sound" class="flex h-9 w-9 items-center justify-center rounded-full bg-background/80 border hairline text-foreground backdrop-blur hover:bg-background transition shadow-sm cursor-pointer hover:scale-105 active:scale-95">
+        <!-- Mute Icon -->
+        <svg id="video-sound-off" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-x"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+        <!-- Unmute Icon -->
+        <svg id="video-sound-on" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2 hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      </button>
+    </div>
   </div>
   <dl class="stats-grid grid grid-cols-2 gap-px overflow-hidden rounded-2xl border hairline bg-foreground/5"><div class="bg-background p-5"><dt class="font-display text-3xl">20+</dt><dd class="mt-1 text-[11px] uppercase tracking-widest text-muted-foreground">Apps shipped</dd></div><div class="bg-background p-5"><dt class="font-display text-3xl">15+</dt><dd class="mt-1 text-[11px] uppercase tracking-widest text-muted-foreground">Live platforms</dd></div><div class="bg-background p-5"><dt class="font-display text-3xl">5+ yrs</dt><dd class="mt-1 text-[11px] uppercase tracking-widest text-muted-foreground">Web design</dd></div><div class="bg-background p-5"><dt class="font-display text-3xl">95%</dt><dd class="mt-1 text-[11px] uppercase tracking-widest text-muted-foreground">Completion</dd></div></dl></div></div></section><section class="border-y hairline overflow-hidden py-5"><div class="flex gap-10 whitespace-nowrap animate-[marquee_40s_linear_infinite]"><span class="font-display text-2xl text-muted-foreground">Bubble.io<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Next.js<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Supabase<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Stripe<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">PHP<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">TypeScript<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Python<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">SendGrid<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Make<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Figma<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Cursor<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Lovable<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Airtable<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Cloudflare<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Bubble.io<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Next.js<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Supabase<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Stripe<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">PHP<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">TypeScript<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Python<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">SendGrid<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Make<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Figma<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Cursor<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Lovable<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Airtable<!-- --> <span class="text-primary">·</span></span><span class="font-display text-2xl text-muted-foreground">Cloudflare<!-- --> <span class="text-primary">·</span></span></div><style>@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}</style></section>
 <section data-section="problem" id="problem" class="container-edge py-24 md:py-32 border-t hairline reveal">
@@ -903,76 +913,80 @@
     <h2 class="font-display text-3xl md:text-5xl mb-6">Don't Take My Word for It. Take Theirs.</h2>
     <p class="text-muted-foreground text-sm max-w-xl mx-auto mb-16">Real reviews from real founders and businesses. Verified. Unedited. Exactly as written.</p>
     
-    <!-- Testimonial Slider Container -->
-    <div class="relative mx-auto max-w-2xl bg-foreground/[0.02] border hairline rounded-2xl pt-14 pb-8 px-6 md:pt-16 md:pb-10 md:px-10 shadow-sm min-h-[385px] md:min-h-[300px] flex flex-col justify-between" id="testimonial-slider">
-      <!-- Premium Floating Quote Icon -->
-      <div class="absolute -top-5 left-1/2 -translate-x-1/2 flex h-10 w-10 items-center justify-center rounded-full border hairline bg-background text-primary shadow-md z-10">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="lucide lucide-quote"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2H3c-1.25 0-2 .75-2 2v7c0 1.25.75 2 2 2h4v1c0 3-2 5-4 5v2zm11 0c3 0 7-1 7-8V5c0-1.25-.75-2-2-2h-5c-1.25 0-2 .75-2 2v7c0 1.25.75 2 2 2h4v1c0 3-2 5-4 5v2z"/></svg>
-      </div>
-
-      <!-- Slides Wrapper -->
-      <div class="relative overflow-hidden flex-1 flex items-center justify-center">
-        <!-- Testimonial 1 -->
-        <blockquote class="testimonial-slide transition-opacity duration-500 w-full" data-active="true">
-          <p class="underline-sweep-target text-sm md:text-base text-foreground font-medium leading-relaxed italic tracking-wide text-center">
-            "Emmanuel did an excellent job integrating ChatGPT, Claude, and a voice-to-speech API into our Bubble app using Make. Their understanding of Bubble workflows, API connections, and automation through Make was impressive and efficient. They delivered everything as requested, communicated clearly, and handled technical challenges with confidence. The final result was smooth, reliable, and exceeded our expectations."
-          </p>
-          <div class="mt-6 flex items-center justify-center gap-3">
-            <div class="h-px w-6 bg-foreground/20"></div>
-            <cite class="not-italic text-xs text-muted-foreground uppercase tracking-widest font-mono">
-              Folawe A. · Founder
-            </cite>
-            <div class="h-px w-6 bg-foreground/20"></div>
+    <!-- Redesigned Testimonials Bento Grid -->
+    <div class="mt-12 grid gap-6 md:grid-cols-3 items-stretch">
+      <!-- Card 1 (Featured Testimonial - Velo) -->
+      <div class="md:col-span-2 relative overflow-hidden bg-gradient-to-br from-primary/5 via-foreground/[0.02] to-transparent border border-primary/20 rounded-2xl p-8 flex flex-col justify-between hover:border-primary/40 hover:shadow-[0_12px_40px_rgba(99,56,245,0.08)] transition duration-500 group">
+        <!-- Ambient radial glow behind card -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(99,56,245,0.12),transparent_60%)] pointer-events-none"></div>
+        <div class="flex-1 relative z-10">
+          <div class="flex items-center gap-1 mb-6 text-amber-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           </div>
-        </blockquote>
-
-        <!-- Testimonial 2 -->
-        <blockquote class="testimonial-slide transition-opacity duration-500 w-full hidden opacity-0">
-          <p class="underline-sweep-target text-sm md:text-base text-foreground font-medium leading-relaxed italic tracking-wide text-center">
+          <p class="text-base md:text-lg text-foreground leading-relaxed font-sans font-medium text-left">
             "We needed to ship a Supabase + Next.js dashboard in weeks for an upcoming investor meeting. Emmanuel didn't just write clean code—they helped us refine our database design, set up robust authentication, and integrated Stripe billing seamlessly. Absolutely stellar product engineer."
           </p>
-          <div class="mt-6 flex items-center justify-center gap-3">
-            <div class="h-px w-6 bg-foreground/20"></div>
-            <cite class="not-italic text-xs text-muted-foreground uppercase tracking-widest font-mono">
-              Sarah K. · Product Director, Velo
-            </cite>
-            <div class="h-px w-6 bg-foreground/20"></div>
+        </div>
+        <div class="mt-8 pt-4 border-t border-foreground/10 flex items-center justify-between relative z-10">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-full bg-primary/20 text-primary font-display font-semibold flex items-center justify-center text-sm border border-primary/20">SK</div>
+            <div class="text-left">
+              <div class="text-sm font-semibold text-foreground flex items-center gap-1">Sarah K. <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check text-emerald-500"><path d="M20 6 9 17l-5-5"/></svg></div>
+              <div class="text-xs text-muted-foreground font-medium">Product Director, Velo</div>
+            </div>
           </div>
-        </blockquote>
-
-        <!-- Testimonial 3 -->
-        <blockquote class="testimonial-slide transition-opacity duration-500 w-full hidden opacity-0">
-          <p class="underline-sweep-target text-sm md:text-base text-foreground font-medium leading-relaxed italic tracking-wide text-center">
-            "Working with Emmanuel was a game-changer. They built our customer support workflows and connected our Bubble platform to our internal APIs with custom integrations. Responsive, technically strong, and extremely business-minded."
-          </p>
-          <div class="mt-6 flex items-center justify-center gap-3">
-            <div class="h-px w-6 bg-foreground/20"></div>
-            <cite class="not-italic text-xs text-muted-foreground uppercase tracking-widest font-mono">
-              David L. · Co-founder, Orbit
-            </cite>
-            <div class="h-px w-6 bg-foreground/20"></div>
-          </div>
-        </blockquote>
+          <span class="text-[10px] uppercase font-mono tracking-wider text-muted-foreground/80 px-2.5 py-1 rounded-full border border-foreground/10 bg-foreground/[0.03]">Featured Partner</span>
+        </div>
       </div>
 
-      <!-- Navigation & Dots -->
-      <div class="flex items-center justify-between mt-8 pt-4 border-t border-foreground/5">
-        <!-- Prev Button -->
-        <button id="testimonial-prev" aria-label="Previous testimonial" class="p-2 rounded-full border hairline bg-background hover:bg-foreground/5 transition active:scale-95 cursor-pointer">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
-        </button>
-
-        <!-- Dots Indicator -->
-        <div class="flex gap-1.5" id="testimonial-dots">
-          <button class="h-1.5 w-1.5 rounded-full transition-all duration-300 bg-primary w-4" data-index="0" aria-label="Go to slide 1"></button>
-          <button class="h-1.5 w-1.5 rounded-full transition-all duration-300 bg-foreground/25" data-index="1" aria-label="Go to slide 2"></button>
-          <button class="h-1.5 w-1.5 rounded-full transition-all duration-300 bg-foreground/25" data-index="2" aria-label="Go to slide 3"></button>
+      <!-- Card 2 (Folawe A.) -->
+      <div class="md:col-span-1 relative overflow-hidden bg-foreground/[0.02] border hairline rounded-2xl p-6 flex flex-col justify-between hover:bg-foreground/[0.04] hover:shadow-md hover:border-foreground/25 transition duration-300 group">
+        <div class="flex-1 text-left">
+          <div class="flex items-center gap-1 mb-4 text-amber-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="text-sm text-muted-foreground leading-relaxed group-hover:text-foreground transition duration-300">
+            "Emmanuel did an excellent job integrating ChatGPT, Claude, and a voice-to-speech API into our Bubble app using Make. Their understanding of Bubble workflows, API connections, and automation through Make was impressive. Delivered everything as requested, and handled technical challenges with confidence."
+          </p>
         </div>
+        <div class="mt-6 pt-4 border-t hairline flex items-center gap-3">
+          <div class="h-8 w-8 rounded-full bg-primary/10 text-primary font-display font-semibold flex items-center justify-center text-xs border border-primary/10">FA</div>
+          <div class="text-left">
+            <div class="text-xs font-semibold text-foreground flex items-center gap-1">Folawe A. <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check text-emerald-500"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <div class="text-[10px] text-muted-foreground uppercase font-mono tracking-wider">Founder</div>
+          </div>
+        </div>
+      </div>
 
-        <!-- Next Button -->
-        <button id="testimonial-next" aria-label="Next testimonial" class="p-2 rounded-full border hairline bg-background hover:bg-foreground/5 transition active:scale-95 cursor-pointer">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
-        </button>
+      <!-- Card 3 (David L. - Orbit - Banner testimonial spanning 3 columns) -->
+      <div class="md:col-span-3 relative overflow-hidden bg-foreground/[0.02] border hairline rounded-2xl p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:bg-foreground/[0.04] hover:shadow-md hover:border-foreground/25 transition duration-300 group">
+        <div class="flex-1 text-left">
+          <div class="flex items-center gap-1 mb-4 text-amber-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="text-sm md:text-base text-muted-foreground group-hover:text-foreground transition duration-300 leading-relaxed italic max-w-4xl">
+            "Working with Emmanuel was a game-changer. They built our customer support workflows and connected our Bubble platform to our internal APIs with custom integrations. Responsive, technically strong, and extremely business-minded."
+          </p>
+        </div>
+        <div class="shrink-0 md:pl-6 md:border-l border-foreground/10 flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+          <div class="h-10 w-10 rounded-full bg-primary/10 text-primary font-display font-semibold flex items-center justify-center text-sm border border-primary/10">DL</div>
+          <div class="text-left">
+            <div class="text-sm font-semibold text-foreground flex items-center gap-1">David L. <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check text-emerald-500"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <div class="text-xs text-muted-foreground font-medium">Co-founder, Orbit</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1163,38 +1177,33 @@
   <div class="grid gap-12 md:grid-cols-12 items-start">
     <div class="md:col-span-5">
       
-<div class="space-y-6">
-  <div class="flex items-center gap-3">
-    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">EA</div>
-    <div>
-      <div class="font-display text-lg font-semibold">Emmanuel Ajibewe</div>
-      <div class="text-sm text-muted-foreground">Product engineer · Lagos / Remote</div>
+<div class="grid gap-12 md:grid-cols-12 items-start">
+  <div class="md:col-span-5">
+    <div class="space-y-6 rounded-2xl border hairline p-6 bg-foreground/[0.02]">
+      <div class="flex items-center gap-3">
+        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">EA</div>
+        <div>
+          <div class="font-display text-lg font-semibold">Emmanuel Ajibewe</div>
+          <div class="text-sm text-muted-foreground">Product engineer · Lagos / Remote</div>
+        </div>
+      </div>
+      <div class="space-y-3 text-sm text-muted-foreground border-t hairline pt-6">
+        <div class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock h-4 w-4"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+          30 minutes · Google Meet
+        </div>
+        <div class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar h-4 w-4"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+          Tuesday – Thursday
+        </div>
+        <div class="flex items-center gap-2 text-primary font-medium">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check h-4 w-4"><path d="M20 6 9 17l-5-5"></path></svg>
+          Walk through workflow & scope sprint
+        </div>
+      </div>
     </div>
   </div>
-  <div class="space-y-3 text-sm text-muted-foreground">
-    <div class="flex items-center gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock h-4 w-4"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
-      30 minutes · Google Meet
-    </div>
-    <div class="flex items-center gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar h-4 w-4"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
-      Tuesday – Thursday
-    </div>
-    <div class="flex items-center gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check h-4 w-4 text-primary"><path d="M20 6 9 17l-5-5"></path></svg>
-      Walk through your current workflow + scope a sprint
-    </div>
-  </div>
-  
-  <!-- Calendly Inline Widget -->
-  <div class="rounded-2xl border hairline overflow-hidden bg-background">
-    <div class="eyebrow px-5 pt-5 pb-3">Schedule a free consultation call</div>
-    <div class="calendly-inline-widget" data-url="https://calendly.com/nocodesavvy?hide_landing_page_details=1" style="min-width:320px;height:700px;"></div>
-  </div>
-</div>
-
-    </div>
-    <div class="md:col-span-7">
+  <div class="md:col-span-7">
       
 <form id="enhanced-contact-form" action="https://formspree.io/f/xqeopvkl" method="POST" class="space-y-5 rounded-2xl border hairline p-6 md:p-8 bg-foreground/[0.02]">
   <div>

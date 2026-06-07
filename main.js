@@ -5,16 +5,17 @@ document.addEventListener("DOMContentLoaded", () => {
   initThemeToggle();
   initFaqAccordion();
   initRoiCalculator();
-  initTestimonialSlider();
   initScrollHighlight();
   initChatbot();
   initScrollReveal();
   initStatsCounter();
   initHeroVideoObserver();
+  initVideoPlayToggle();
   initVideoSoundToggle();
   initChatPopup();
   initBackToTop();
   initContactForm();
+  initMobilePortraitTap();
 });
 
 // --- Theme Toggle ---
@@ -193,78 +194,6 @@ function initRoiCalculator() {
   recalculate();
 }
 
-// --- Testimonials Slider ---
-function initTestimonialSlider() {
-  const slider = document.getElementById("testimonial-slider");
-  if (!slider) return;
-
-  const slides = slider.querySelectorAll(".testimonial-slide");
-  const prevBtn = document.getElementById("testimonial-prev");
-  const nextBtn = document.getElementById("testimonial-next");
-  const dots = document.querySelectorAll("#testimonial-dots button");
-
-  if (slides.length === 0) return;
-
-  let currentIdx = 0;
-  let isAnimating = false;
-
-  function showSlide(index) {
-    if (isAnimating || index === currentIdx) return;
-    isAnimating = true;
-
-    const currentSlide = slides[currentIdx];
-    const nextSlide = slides[index];
-
-    // Fade out current slide
-    currentSlide.style.opacity = "0";
-    dots[currentIdx].classList.remove("bg-primary", "w-4");
-    dots[currentIdx].classList.add("bg-foreground/25");
-
-    setTimeout(() => {
-      currentSlide.classList.add("hidden");
-      
-      // Fade in next slide
-      nextSlide.classList.remove("hidden");
-      // Force repaint
-      nextSlide.offsetHeight;
-      nextSlide.style.opacity = "1";
-
-      dots[index].classList.remove("bg-foreground/25");
-      dots[index].classList.add("bg-primary", "w-4");
-
-      currentIdx = index;
-      isAnimating = false;
-    }, 300);
-  }
-
-  prevBtn?.addEventListener("click", () => {
-    let prevIdx = currentIdx - 1;
-    if (prevIdx < 0) prevIdx = slides.length - 1;
-    showSlide(prevIdx);
-  });
-
-  nextBtn?.addEventListener("click", () => {
-    let nextIdx = currentIdx + 1;
-    if (nextIdx >= slides.length) nextIdx = 0;
-    showSlide(nextIdx);
-  });
-
-  dots.forEach((dot, idx) => {
-    dot.addEventListener("click", () => {
-      showSlide(idx);
-    });
-  });
-
-  // Setup transitions on slides
-  slides.forEach((slide, idx) => {
-    slide.style.transition = "opacity 0.3s ease";
-    if (idx !== 0) {
-      slide.style.opacity = "0";
-    } else {
-      slide.style.opacity = "1";
-    }
-  });
-}
 
 // --- Scroll Highlighting & Indicator ---
 function initScrollHighlight() {
@@ -809,5 +738,53 @@ function initVideoSoundToggle() {
     }
   });
 }
+
+// --- Hero Video Play/Pause Control ---
+function initVideoPlayToggle() {
+  const video = document.getElementById("hero-loop-video");
+  const toggleBtn = document.getElementById("video-play-toggle");
+  const pauseIcon = document.getElementById("video-pause-icon");
+  const playIcon = document.getElementById("video-play-icon");
+
+  if (!video || !toggleBtn) return;
+
+  toggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (video.paused) {
+      video.play().then(() => {
+        pauseIcon.classList.remove("hidden");
+        playIcon.classList.add("hidden");
+      }).catch(err => {
+        console.error("Video play failed:", err);
+      });
+    } else {
+      video.pause();
+      pauseIcon.classList.add("hidden");
+      playIcon.classList.remove("hidden");
+    }
+  });
+
+  // Keep button state sync'd if video elements are played/paused elsewhere
+  video.addEventListener("play", () => {
+    pauseIcon.classList.remove("hidden");
+    playIcon.classList.add("hidden");
+  });
+
+  video.addEventListener("pause", () => {
+    pauseIcon.classList.add("hidden");
+    playIcon.classList.remove("hidden");
+  });
+}
+
+// --- Mobile Tap-to-toggle profile picture grayscale ---
+function initMobilePortraitTap() {
+  const wrapper = document.getElementById("about-portrait-wrapper");
+  if (!wrapper) return;
+
+  wrapper.addEventListener("click", () => {
+    wrapper.classList.toggle("touch-active");
+  });
+}
+
 
 
