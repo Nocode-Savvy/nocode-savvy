@@ -913,80 +913,90 @@
     <h2 class="font-display text-3xl md:text-5xl mb-6">Don't Take My Word for It. Take Theirs.</h2>
     <p class="text-muted-foreground text-sm max-w-xl mx-auto mb-16">Real reviews from real founders and businesses. Verified. Unedited. Exactly as written.</p>
     
-    <!-- Redesigned Testimonials Bento Grid -->
-    <div class="mt-12 grid gap-6 md:grid-cols-3 items-stretch">
-      <!-- Card 1 (Featured Testimonial - Velo) -->
-      <div class="md:col-span-2 relative overflow-hidden bg-gradient-to-br from-primary/5 via-foreground/[0.02] to-transparent border border-primary/20 rounded-2xl p-8 flex flex-col justify-between hover:border-primary/40 hover:shadow-[0_12px_40px_rgba(99,56,245,0.08)] transition duration-500 group">
-        <!-- Ambient radial glow behind card -->
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(99,56,245,0.12),transparent_60%)] pointer-events-none"></div>
-        <div class="flex-1 relative z-10">
-          <div class="flex items-center gap-1 mb-6 text-amber-500">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <p class="text-base md:text-lg text-foreground leading-relaxed font-sans font-medium text-left">
-            "We needed to ship a Supabase + Next.js dashboard in weeks for an upcoming investor meeting. Emmanuel didn't just write clean code—they helped us refine our database design, set up robust authentication, and integrated Stripe billing seamlessly. Absolutely stellar product engineer."
-          </p>
-        </div>
-        <div class="mt-8 pt-4 border-t border-foreground/10 flex items-center justify-between relative z-10">
-          <div class="flex items-center gap-3">
-            <div class="h-10 w-10 rounded-full bg-primary/20 text-primary font-display font-semibold flex items-center justify-center text-sm border border-primary/20">SK</div>
-            <div class="text-left">
-              <div class="text-sm font-semibold text-foreground flex items-center gap-1">Sarah K. <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check text-emerald-500"><path d="M20 6 9 17l-5-5"/></svg></div>
-              <div class="text-xs text-muted-foreground font-medium">Product Director, Velo</div>
+    <!-- Redesigned Testimonials Slider Container -->
+    <div class="relative mx-auto max-w-3xl mt-12" id="testimonial-slider-container">
+      <div class="relative min-h-[360px] md:min-h-[290px] flex items-center justify-center" id="testimonial-slider">
+        
+        <!-- Testimonial 1 (Sarah K.) -->
+        <blockquote class="testimonial-slide transition-opacity duration-500 w-full text-center" data-active="true">
+          <div class="relative bg-foreground/[0.02] border border-foreground/10 rounded-3xl p-8 md:p-10 shadow-sm backdrop-blur-md flex flex-col justify-between min-h-[280px]">
+            <div class="flex-1">
+              <div class="flex justify-center mb-6 text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor" class="opacity-75"><path d="M11.192 15.757c0-.907-.188-1.754-.563-2.54s-.918-1.477-1.658-2.072a7.351 7.351 0 0 1-2.42-3.153 7.8 7.8 0 0 1-.563-3.003c0-.952.193-1.802.58-2.548A5.7 5.7 0 0 1 8.16 .58C8.868.193 9.697 0 10.647 0c.952 0 1.782.193 2.49.58A5.7 5.7 0 0 1 14.73 2.44c.386.746.58 1.596.58 2.548 0 .998-.188 1.848-.563 2.548a7.868 7.868 0 0 1-1.658 2.072 7.351 7.351 0 0 1-2.42 3.153 7.8 7.8 0 0 1-.563 3.003c0 .884.188 1.731.563 2.54s.918 1.477 1.658 2.072a7.351 7.351 0 0 1 2.42 3.153c.375.839.563 1.84.563 3.003 0 .952-.193 1.802-.58 2.548a5.7 5.7 0 0 1-1.592 1.86c-.708.386-1.538.58-2.49.58-.95 0-1.779-.193-2.487-.58a5.7 5.7 0 0 1-1.596-1.86c-.388-.746-.582-1.596-.582-2.548 0-.998.188-1.848.563-2.548a7.868 7.868 0 0 1 1.658-2.072 7.351 7.351 0 0 1 2.42-3.153 7.8 7.8 0 0 1 .563-3.003zm9 0c0-.907-.188-1.754-.563-2.54s-.918-1.477-1.658-2.072a7.351 7.351 0 0 1-2.42-3.153 7.8 7.8 0 0 1-.563-3.003c0-.952.193-1.802.58-2.548A5.7 5.7 0 0 1 17.16.58C17.868.193 18.697 0 19.647 0c.952 0 1.782.193 2.49.58A5.7 5.7 0 0 1 23.73 2.44c.386.746.58 1.596.58 2.548 0 .998-.188 1.848-.563 2.548a7.868 7.868 0 0 1-1.658 2.072 7.351 7.351 0 0 1-2.42 3.153 7.8 7.8 0 0 1-.563 3.003c0 .884.188 1.731.563 2.54s.918 1.477 1.658 2.072a7.351 7.351 0 0 1 2.42 3.153c.375.839.563 1.84.563 3.003 0 .952-.193 1.802-.58 2.548a5.7 5.7 0 0 1-1.592 1.86c-.708.386-1.538.58-2.49.58-.95 0-1.779-.193-2.487-.58a5.7 5.7 0 0 1-1.596-1.86c-.388-.746-.582-1.596-.582-2.548 0-.998.188-1.848.563-2.548a7.868 7.868 0 0 1 1.658-2.072 7.351 7.351 0 0 1 2.42-3.153 7.8 7.8 0 0 1 .563-3.003z"/></svg>
+              </div>
+              <p class="text-base md:text-lg text-foreground font-sans font-medium leading-relaxed max-w-2xl mx-auto mb-8">
+                "We needed to ship a Supabase + Next.js dashboard in weeks for an upcoming investor meeting. Emmanuel didn't just write clean code—they helped us refine our database design, set up robust authentication, and integrated Stripe billing seamlessly. Absolutely stellar product engineer."
+              </p>
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="h-10 w-10 rounded-full bg-primary/20 text-primary font-display font-semibold flex items-center justify-center text-sm border border-primary/20 mb-2">SK</div>
+              <div>
+                <div class="text-sm font-semibold text-foreground flex items-center justify-center gap-1">Sarah K. <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500 inline-block"><path d="M20 6 9 17l-5-5"/></svg></div>
+                <div class="text-[11px] text-muted-foreground uppercase font-mono tracking-wider mt-0.5">Product Director, Velo</div>
+              </div>
             </div>
           </div>
-          <span class="text-[10px] uppercase font-mono tracking-wider text-muted-foreground/80 px-2.5 py-1 rounded-full border border-foreground/10 bg-foreground/[0.03]">Featured Partner</span>
-        </div>
+        </blockquote>
+        
+        <!-- Testimonial 2 (Folawe A.) -->
+        <blockquote class="testimonial-slide transition-opacity duration-500 w-full text-center hidden opacity-0">
+          <div class="relative bg-foreground/[0.02] border border-foreground/10 rounded-3xl p-8 md:p-10 shadow-sm backdrop-blur-md flex flex-col justify-between min-h-[280px]">
+            <div class="flex-1">
+              <div class="flex justify-center mb-6 text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor" class="opacity-75"><path d="M11.192 15.757c0-.907-.188-1.754-.563-2.54s-.918-1.477-1.658-2.072a7.351 7.351 0 0 1-2.42-3.153 7.8 7.8 0 0 1-.563-3.003c0-.952.193-1.802.58-2.548A5.7 5.7 0 0 1 8.16 .58C8.868.193 9.697 0 10.647 0c.952 0 1.782.193 2.49.58A5.7 5.7 0 0 1 14.73 2.44c.386.746.58 1.596.58 2.548 0 .998-.188 1.848-.563 2.548a7.868 7.868 0 0 1-1.658 2.072 7.351 7.351 0 0 1-2.42 3.153 7.8 7.8 0 0 1-.563 3.003c0 .884.188 1.731.563 2.54s.918 1.477 1.658 2.072a7.351 7.351 0 0 1 2.42 3.153c.375.839.563 1.84.563 3.003 0 .952-.193 1.802-.58 2.548a5.7 5.7 0 0 1-1.592 1.86c-.708.386-1.538.58-2.49.58-.95 0-1.779-.193-2.487-.58a5.7 5.7 0 0 1-1.596-1.86c-.388-.746-.582-1.596-.582-2.548 0-.998.188-1.848.563-2.548a7.868 7.868 0 0 1 1.658-2.072 7.351 7.351 0 0 1 2.42-3.153 7.8 7.8 0 0 1 .563-3.003zm9 0c0-.907-.188-1.754-.563-2.54s-.918-1.477-1.658-2.072a7.351 7.351 0 0 1-2.42-3.153 7.8 7.8 0 0 1-.563-3.003c0-.952.193-1.802.58-2.548A5.7 5.7 0 0 1 17.16.58C17.868.193 18.697 0 19.647 0c.952 0 1.782.193 2.49.58A5.7 5.7 0 0 1 23.73 2.44c.386.746.58 1.596.58 2.548 0 .998-.188 1.848-.563 2.548a7.868 7.868 0 0 1-1.658 2.072 7.351 7.351 0 0 1-2.42 3.153 7.8 7.8 0 0 1-.563 3.003c0 .884.188 1.731.563 2.54s.918 1.477 1.658 2.072a7.351 7.351 0 0 1 2.42 3.153c.375.839.563 1.84.563 3.003 0 .952-.193 1.802-.58 2.548a5.7 5.7 0 0 1-1.592 1.86c-.708.386-1.538.58-2.49.58-.95 0-1.779-.193-2.487-.58a5.7 5.7 0 0 1-1.596-1.86c-.388-.746-.582-1.596-.582-2.548 0-.998.188-1.848.563-2.548a7.868 7.868 0 0 1 1.658-2.072 7.351 7.351 0 0 1 2.42-3.153 7.8 7.8 0 0 1 .563-3.003z"/></svg>
+              </div>
+              <p class="text-base md:text-lg text-foreground font-sans font-medium leading-relaxed max-w-2xl mx-auto mb-8">
+                "Emmanuel did an excellent job integrating ChatGPT, Claude, and a voice-to-speech API into our Bubble app using Make. Their understanding of Bubble workflows, API connections, and automation through Make was impressive. Delivered everything as requested, and handled technical challenges with confidence."
+              </p>
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="h-10 w-10 rounded-full bg-primary/20 text-primary font-display font-semibold flex items-center justify-center text-sm border border-primary/20 mb-2">FA</div>
+              <div>
+                <div class="text-sm font-semibold text-foreground flex items-center justify-center gap-1">Folawe A. <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500 inline-block"><path d="M20 6 9 17l-5-5"/></svg></div>
+                <div class="text-[11px] text-muted-foreground uppercase font-mono tracking-wider mt-0.5">Founder</div>
+              </div>
+            </div>
+          </div>
+        </blockquote>
+        
+        <!-- Testimonial 3 (David L.) -->
+        <blockquote class="testimonial-slide transition-opacity duration-500 w-full text-center hidden opacity-0">
+          <div class="relative bg-foreground/[0.02] border border-foreground/10 rounded-3xl p-8 md:p-10 shadow-sm backdrop-blur-md flex flex-col justify-between min-h-[280px]">
+            <div class="flex-1">
+              <div class="flex justify-center mb-6 text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor" class="opacity-75"><path d="M11.192 15.757c0-.907-.188-1.754-.563-2.54s-.918-1.477-1.658-2.072a7.351 7.351 0 0 1-2.42-3.153 7.8 7.8 0 0 1-.563-3.003c0-.952.193-1.802.58-2.548A5.7 5.7 0 0 1 8.16 .58C8.868.193 9.697 0 10.647 0c.952 0 1.782.193 2.49.58A5.7 5.7 0 0 1 14.73 2.44c.386.746.58 1.596.58 2.548 0 .998-.188 1.848-.563 2.548a7.868 7.868 0 0 1-1.658 2.072 7.351 7.351 0 0 1-2.42 3.153 7.8 7.8 0 0 1-.563 3.003c0 .884.188 1.731.563 2.54s.918 1.477 1.658 2.072a7.351 7.351 0 0 1 2.42 3.153c.375.839.563 1.84.563 3.003 0 .952-.193 1.802-.58 2.548a5.7 5.7 0 0 1-1.592 1.86c-.708.386-1.538.58-2.49.58-.95 0-1.779-.193-2.487-.58a5.7 5.7 0 0 1-1.596-1.86c-.388-.746-.582-1.596-.582-2.548 0-.998.188-1.848.563-2.548a7.868 7.868 0 0 1 1.658-2.072 7.351 7.351 0 0 1 2.42-3.153 7.8 7.8 0 0 1 .563-3.003zm9 0c0-.907-.188-1.754-.563-2.54s-.918-1.477-1.658-2.072a7.351 7.351 0 0 1-2.42-3.153 7.8 7.8 0 0 1-.563-3.003c0-.952.193-1.802.58-2.548A5.7 5.7 0 0 1 17.16.58C17.868.193 18.697 0 19.647 0c.952 0 1.782.193 2.49.58A5.7 5.7 0 0 1 23.73 2.44c.386.746.58 1.596.58 2.548 0 .998-.188 1.848-.563 2.548a7.868 7.868 0 0 1-1.658 2.072 7.351 7.351 0 0 1-2.42 3.153 7.8 7.8 0 0 1-.563 3.003c0 .884.188 1.731.563 2.54s.918 1.477 1.658 2.072a7.351 7.351 0 0 1 2.42 3.153c.375.839.563 1.84.563 3.003 0 .952-.193 1.802-.58 2.548a5.7 5.7 0 0 1-1.592 1.86c-.708.386-1.538.58-2.49.58-.95 0-1.779-.193-2.487-.58a5.7 5.7 0 0 1-1.596-1.86c-.388-.746-.582-1.596-.582-2.548 0-.998.188-1.848.563-2.548a7.868 7.868 0 0 1 1.658-2.072 7.351 7.351 0 0 1 2.42-3.153 7.8 7.8 0 0 1 .563-3.003z"/></svg>
+              </div>
+              <p class="text-base md:text-lg text-foreground font-sans font-medium leading-relaxed max-w-2xl mx-auto mb-8">
+                "Working with Emmanuel was a game-changer. They built our customer support workflows and connected our Bubble platform to our internal APIs with custom integrations. Responsive, technically strong, and extremely business-minded."
+              </p>
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="h-10 w-10 rounded-full bg-primary/20 text-primary font-display font-semibold flex items-center justify-center text-sm border border-primary/20 mb-2">DL</div>
+              <div>
+                <div class="text-sm font-semibold text-foreground flex items-center justify-center gap-1">David L. <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500 inline-block"><path d="M20 6 9 17l-5-5"/></svg></div>
+                <div class="text-[11px] text-muted-foreground uppercase font-mono tracking-wider mt-0.5">Co-founder, Orbit</div>
+              </div>
+            </div>
+          </div>
+        </blockquote>
       </div>
-
-      <!-- Card 2 (Folawe A.) -->
-      <div class="md:col-span-1 relative overflow-hidden bg-foreground/[0.02] border hairline rounded-2xl p-6 flex flex-col justify-between hover:bg-foreground/[0.04] hover:shadow-md hover:border-foreground/25 transition duration-300 group">
-        <div class="flex-1 text-left">
-          <div class="flex items-center gap-1 mb-4 text-amber-500">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <p class="text-sm text-muted-foreground leading-relaxed group-hover:text-foreground transition duration-300">
-            "Emmanuel did an excellent job integrating ChatGPT, Claude, and a voice-to-speech API into our Bubble app using Make. Their understanding of Bubble workflows, API connections, and automation through Make was impressive. Delivered everything as requested, and handled technical challenges with confidence."
-          </p>
+      
+      <!-- Slider Navigation Controls -->
+      <div class="flex items-center justify-between mt-8 max-w-[240px] mx-auto">
+        <button id="testimonial-prev" aria-label="Previous testimonial" class="p-2 rounded-full border border-foreground/10 bg-background hover:bg-foreground/5 transition active:scale-95 cursor-pointer text-foreground">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        
+        <!-- Navigation Dots -->
+        <div class="flex items-center gap-2" id="testimonial-dots">
+          <button aria-label="Go to testimonial 1" class="h-2 w-4 rounded-full bg-primary transition-all duration-300 cursor-pointer"></button>
+          <button aria-label="Go to testimonial 2" class="h-2 w-2 rounded-full bg-foreground/25 transition-all duration-300 cursor-pointer"></button>
+          <button aria-label="Go to testimonial 3" class="h-2 w-2 rounded-full bg-foreground/25 transition-all duration-300 cursor-pointer"></button>
         </div>
-        <div class="mt-6 pt-4 border-t hairline flex items-center gap-3">
-          <div class="h-8 w-8 rounded-full bg-primary/10 text-primary font-display font-semibold flex items-center justify-center text-xs border border-primary/10">FA</div>
-          <div class="text-left">
-            <div class="text-xs font-semibold text-foreground flex items-center gap-1">Folawe A. <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check text-emerald-500"><path d="M20 6 9 17l-5-5"/></svg></div>
-            <div class="text-[10px] text-muted-foreground uppercase font-mono tracking-wider">Founder</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3 (David L. - Orbit - Banner testimonial spanning 3 columns) -->
-      <div class="md:col-span-3 relative overflow-hidden bg-foreground/[0.02] border hairline rounded-2xl p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:bg-foreground/[0.04] hover:shadow-md hover:border-foreground/25 transition duration-300 group">
-        <div class="flex-1 text-left">
-          <div class="flex items-center gap-1 mb-4 text-amber-500">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <p class="text-sm md:text-base text-muted-foreground group-hover:text-foreground transition duration-300 leading-relaxed italic max-w-4xl">
-            "Working with Emmanuel was a game-changer. They built our customer support workflows and connected our Bubble platform to our internal APIs with custom integrations. Responsive, technically strong, and extremely business-minded."
-          </p>
-        </div>
-        <div class="shrink-0 md:pl-6 md:border-l border-foreground/10 flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
-          <div class="h-10 w-10 rounded-full bg-primary/10 text-primary font-display font-semibold flex items-center justify-center text-sm border border-primary/10">DL</div>
-          <div class="text-left">
-            <div class="text-sm font-semibold text-foreground flex items-center gap-1">David L. <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check text-emerald-500"><path d="M20 6 9 17l-5-5"/></svg></div>
-            <div class="text-xs text-muted-foreground font-medium">Co-founder, Orbit</div>
-          </div>
-        </div>
+        
+        <button id="testimonial-next" aria-label="Next testimonial" class="p-2 rounded-full border border-foreground/10 bg-background hover:bg-foreground/5 transition active:scale-95 cursor-pointer text-foreground">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
       </div>
     </div>
   </div>
@@ -1167,27 +1177,24 @@
 </section>
 
 <section data-section="contact" id="contact" class="container-edge py-24 md:py-32 border-t hairline reveal">
-  <div class="max-w-3xl mb-12">
-    <div class="eyebrow flex items-center gap-2 mb-4">
+  <div class="max-w-2xl mb-12 mx-auto text-center">
+    <div class="eyebrow flex items-center justify-center gap-2 mb-4">
       <span class="inline-block h-1 w-6 bg-primary"></span> Contact
     </div>
     <h2 class="font-display text-3xl md:text-5xl">Let's build the thing.</h2>
     <p class="mt-4 text-muted-foreground">Book a 30-minute scoping consultation or send me a project description below.</p>
   </div>
-  <div class="grid gap-12 md:grid-cols-12 items-start">
-    <div class="md:col-span-5">
-      
-<div class="grid gap-12 md:grid-cols-12 items-start">
-  <div class="md:col-span-5">
+  
+  <div class="max-w-2xl mx-auto space-y-8">
     <div class="space-y-6 rounded-2xl border hairline p-6 bg-foreground/[0.02]">
       <div class="flex items-center gap-3">
         <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">EA</div>
-        <div>
+        <div class="text-left">
           <div class="font-display text-lg font-semibold">Emmanuel Ajibewe</div>
           <div class="text-sm text-muted-foreground">Product engineer · Lagos / Remote</div>
         </div>
       </div>
-      <div class="space-y-3 text-sm text-muted-foreground border-t hairline pt-6">
+      <div class="space-y-3 text-sm text-muted-foreground border-t hairline pt-6 text-left">
         <div class="flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock h-4 w-4"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
           30 minutes · Google Meet
@@ -1202,75 +1209,72 @@
         </div>
       </div>
     </div>
+    
+    <form id="enhanced-contact-form" action="https://formspree.io/f/xqeopvkl" method="POST" class="space-y-5 rounded-2xl border hairline p-6 md:p-8 bg-foreground/[0.02] text-left">
+      <div>
+        <label class="eyebrow block mb-2 text-xs">Full Name</label>
+        <input type="text" id="contact-name" name="name" required class="w-full rounded-lg border hairline bg-transparent px-4 py-3 text-sm outline-none focus:border-primary" />
+      </div>
+      <div>
+        <label class="eyebrow block mb-2 text-xs">Email Address</label>
+        <input type="email" id="contact-email" name="email" required class="w-full rounded-lg border hairline bg-transparent px-4 py-3 text-sm outline-none focus:border-primary" />
+      </div>
+      <div>
+        <label class="eyebrow block mb-2 text-xs">What are you building?</label>
+        <div class="flex flex-wrap gap-2 mt-1">
+          <label class="cursor-pointer">
+            <input type="radio" name="project_type" value="MVP" class="sr-only peer" checked>
+            <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">MVP</span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="project_type" value="App Rescue" class="sr-only peer">
+            <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">App Rescue</span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="project_type" value="AI Integration" class="sr-only peer">
+            <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">AI Integration</span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="project_type" value="Redesign" class="sr-only peer">
+            <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">Redesign</span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="project_type" value="Platform Ecosystem" class="sr-only peer">
+            <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">Platform Ecosystem</span>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="project_type" value="Not Sure Yet" class="sr-only peer">
+            <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">Not Sure Yet</span>
+          </label>
+        </div>
+      </div>
+      <div>
+        <label class="eyebrow block mb-2 text-xs">Budget</label>
+        <select id="contact-budget" name="budget" required class="w-full rounded-lg border hairline bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-primary cursor-pointer">
+          <option value="Under $1k">Under $1k</option>
+          <option value="$1k–$3k">$1k–$3k</option>
+          <option value="$3k–$8k">$3k–$8k</option>
+          <option value="$8k+">$8k+</option>
+          <option value="Let's talk">Let's talk</option>
+        </select>
+      </div>
+      <div>
+        <label class="eyebrow block mb-2 text-xs">Project Description</label>
+        <textarea id="contact-desc" name="description" rows="4" required placeholder="Tell me what you're building..." class="w-full rounded-lg border hairline bg-transparent px-4 py-3 text-sm outline-none focus:border-primary"></textarea>
+      </div>
+      <button type="submit" id="contact-submit-btn" class="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:opacity-90 transition w-full justify-center">
+        <span id="contact-btn-text">Send message</span>
+        <svg id="contact-btn-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-4 w-4"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </button>
+      <div id="contact-success" class="hidden text-center py-3 px-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 text-sm font-medium">
+        ✓ Message sent! I'll get back to you within 24 hours.
+      </div>
+      <div id="contact-error" class="hidden text-center py-3 px-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-sm font-medium">
+        Something went wrong. Please email me directly at buildwithtimi8@gmail.com
+      </div>
+    </form>
   </div>
-  <div class="md:col-span-7">
-      
-<form id="enhanced-contact-form" action="https://formspree.io/f/xqeopvkl" method="POST" class="space-y-5 rounded-2xl border hairline p-6 md:p-8 bg-foreground/[0.02]">
-  <div>
-    <label class="eyebrow block mb-2 text-xs">Full Name</label>
-    <input type="text" id="contact-name" name="name" required class="w-full rounded-lg border hairline bg-transparent px-4 py-3 text-sm outline-none focus:border-primary" />
-  </div>
-  <div>
-    <label class="eyebrow block mb-2 text-xs">Email Address</label>
-    <input type="email" id="contact-email" name="email" required class="w-full rounded-lg border hairline bg-transparent px-4 py-3 text-sm outline-none focus:border-primary" />
-  </div>
-  <div>
-    <label class="eyebrow block mb-2 text-xs">What are you building?</label>
-    <div class="flex flex-wrap gap-2 mt-1">
-      <label class="cursor-pointer">
-        <input type="radio" name="project_type" value="MVP" class="sr-only peer" checked>
-        <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">MVP</span>
-      </label>
-      <label class="cursor-pointer">
-        <input type="radio" name="project_type" value="App Rescue" class="sr-only peer">
-        <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">App Rescue</span>
-      </label>
-      <label class="cursor-pointer">
-        <input type="radio" name="project_type" value="AI Integration" class="sr-only peer">
-        <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">AI Integration</span>
-      </label>
-      <label class="cursor-pointer">
-        <input type="radio" name="project_type" value="Redesign" class="sr-only peer">
-        <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">Redesign</span>
-      </label>
-      <label class="cursor-pointer">
-        <input type="radio" name="project_type" value="Platform Ecosystem" class="sr-only peer">
-        <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">Platform Ecosystem</span>
-      </label>
-      <label class="cursor-pointer">
-        <input type="radio" name="project_type" value="Not Sure Yet" class="sr-only peer">
-        <span class="rounded-full border hairline px-3 py-1.5 text-xs inline-block peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary hover:bg-foreground/5 transition text-muted-foreground peer-checked:text-primary-foreground">Not Sure Yet</span>
-      </label>
-    </div>
-  </div>
-  <div>
-    <label class="eyebrow block mb-2 text-xs">Budget</label>
-    <select id="contact-budget" name="budget" required class="w-full rounded-lg border hairline bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-primary cursor-pointer">
-      <option value="Under $1k">Under $1k</option>
-      <option value="$1k–$3k">$1k–$3k</option>
-      <option value="$3k–$8k">$3k–$8k</option>
-      <option value="$8k+">$8k+</option>
-      <option value="Let's talk">Let's talk</option>
-    </select>
-  </div>
-  <div>
-    <label class="eyebrow block mb-2 text-xs">Project Description</label>
-    <textarea id="contact-desc" name="description" rows="4" required placeholder="Tell me what you're building..." class="w-full rounded-lg border hairline bg-transparent px-4 py-3 text-sm outline-none focus:border-primary"></textarea>
-  </div>
-  <button type="submit" id="contact-submit-btn" class="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:opacity-90 transition w-full justify-center">
-    <span id="contact-btn-text">Send message</span>
-    <svg id="contact-btn-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-4 w-4"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-  </button>
-  <div id="contact-success" class="hidden text-center py-3 px-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 text-sm font-medium">
-    ✓ Message sent! I'll get back to you within 24 hours.
-  </div>
-  <div id="contact-error" class="hidden text-center py-3 px-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-sm font-medium">
-    Something went wrong. Please email me directly at buildwithtimi8@gmail.com
-  </div>
-</form>
 
-    </div>
-  </div>
   
 <div class="mt-8 border-t hairline pt-8 flex flex-wrap gap-x-6 gap-y-3 text-xs text-muted-foreground justify-center w-full">
   <a href="mailto:buildwithtimi8@gmail.com" class="flex items-center gap-1.5 hover:text-foreground">

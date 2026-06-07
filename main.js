@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initThemeToggle();
   initFaqAccordion();
   initRoiCalculator();
+  initTestimonialSlider();
   initScrollHighlight();
   initChatbot();
   initScrollReveal();
@@ -193,7 +194,78 @@ function initRoiCalculator() {
   // Run initial calculation
   recalculate();
 }
+// --- Testimonials Slider ---
+function initTestimonialSlider() {
+  const slider = document.getElementById("testimonial-slider");
+  if (!slider) return;
 
+  const slides = slider.querySelectorAll(".testimonial-slide");
+  const prevBtn = document.getElementById("testimonial-prev");
+  const nextBtn = document.getElementById("testimonial-next");
+  const dots = document.querySelectorAll("#testimonial-dots button");
+
+  if (slides.length === 0) return;
+
+  let currentIdx = 0;
+  let isAnimating = false;
+
+  function showSlide(index) {
+    if (isAnimating || index === currentIdx) return;
+    isAnimating = true;
+
+    const currentSlide = slides[currentIdx];
+    const nextSlide = slides[index];
+
+    // Fade out current slide
+    currentSlide.style.opacity = "0";
+    dots[currentIdx].classList.remove("bg-primary", "w-4");
+    dots[currentIdx].classList.add("bg-foreground/25", "w-2");
+
+    setTimeout(() => {
+      currentSlide.classList.add("hidden");
+      
+      // Fade in next slide
+      nextSlide.classList.remove("hidden");
+      // Force repaint
+      nextSlide.offsetHeight;
+      nextSlide.style.opacity = "1";
+
+      dots[index].classList.remove("bg-foreground/25", "w-2");
+      dots[index].classList.add("bg-primary", "w-4");
+
+      currentIdx = index;
+      isAnimating = false;
+    }, 300);
+  }
+
+  prevBtn?.addEventListener("click", () => {
+    let prevIdx = currentIdx - 1;
+    if (prevIdx < 0) prevIdx = slides.length - 1;
+    showSlide(prevIdx);
+  });
+
+  nextBtn?.addEventListener("click", () => {
+    let nextIdx = currentIdx + 1;
+    if (nextIdx >= slides.length) nextIdx = 0;
+    showSlide(nextIdx);
+  });
+
+  dots.forEach((dot, idx) => {
+    dot.addEventListener("click", () => {
+      showSlide(idx);
+    });
+  });
+
+  // Setup transitions on slides
+  slides.forEach((slide, idx) => {
+    slide.style.transition = "opacity 0.3s ease";
+    if (idx !== 0) {
+      slide.style.opacity = "0";
+    } else {
+      slide.style.opacity = "1";
+    }
+  });
+}
 
 // --- Scroll Highlighting & Indicator ---
 function initScrollHighlight() {
