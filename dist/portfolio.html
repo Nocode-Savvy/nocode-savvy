@@ -65,8 +65,9 @@
       document.documentElement.classList.add('no-transition');
     } catch(e) {}
   </script>
-  <script type="module" crossorigin src="/assets/main-B6pO-o-n.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/main-DXIsyZ1G.css">
+  <script type="module" crossorigin src="/assets/transitions-CTRLMX6l.js"></script>
+  <script type="module" crossorigin src="/assets/main-DDQ4uosl.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/transitions-DXIsyZ1G.css">
 </head>
 <body class="min-h-screen bg-background text-foreground pb-36">
 <div id="theme-bg"></div>
@@ -118,7 +119,7 @@
       <a href="#work-list" class="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">View all registry <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-4 w-4" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
     </div>
     
-    <div class="grid gap-6 md:grid-cols-12">
+    <div class="grid gap-6 md:grid-cols-12" id="portfolio-showcase-grid">
       <!-- Card 1: WeGlobalee -->
       <a href="https://app.weglobalee.com/version-test/?dg=log_in" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4">
         <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
@@ -369,7 +370,7 @@
       </div>
       <h2 class="font-display text-3xl md:text-5xl">Complete Project Registry</h2>
     </div>
-    <section class="container-edge border-t hairline">
+    <section class="container-edge border-t hairline" id="registry-list-container">
       <!-- Row 01 -->
       <a href="https://app.weglobalee.com/version-test/?dg=log_in" target="_blank" rel="noopener noreferrer" class="group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition">
         <div class="col-span-1 font-mono text-xs text-muted-foreground">01</div>
@@ -953,5 +954,6 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>

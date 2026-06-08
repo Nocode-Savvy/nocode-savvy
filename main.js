@@ -1,10 +1,17 @@
 // main.js
 import { initCanvas } from './background-canvas.js';
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   initThemeToggle();
   initFaqAccordion();
   initRoiCalculator();
+  
+  try {
+    await initDynamicContent();
+  } catch (err) {
+    console.error("Dynamic content hydration failed:", err);
+  }
+
   initTestimonialSlider();
   initScrollHighlight();
   initChatbot();
@@ -17,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initBackToTop();
   initContactForm();
   initMobilePortraitTap();
+  initAdminLink();
 });
 
 // --- Theme Toggle ---
@@ -855,6 +863,260 @@ function initMobilePortraitTap() {
 
   wrapper.addEventListener("click", () => {
     wrapper.classList.toggle("touch-active");
+  });
+}
+
+// --- Dynamic Content Sync & Hydration ---
+let supabaseClient = null;
+
+function getSupabaseClient() {
+  if (supabaseClient) return supabaseClient;
+  const url = localStorage.getItem("sb_url");
+  const key = localStorage.getItem("sb_key");
+  if (url && key && window.supabase) {
+    try {
+      supabaseClient = window.supabase.createClient(url, key);
+      return supabaseClient;
+    } catch (e) {
+      console.error("Supabase client failed to initialize:", e);
+    }
+  }
+  return null;
+}
+
+async function getProjectsData() {
+  const client = getSupabaseClient();
+  if (client) {
+    const { data, error } = await client.from("projects").select("*").order("created_at", { ascending: false });
+    if (!error) return data;
+  }
+  const local = localStorage.getItem("db_projects");
+  return local ? JSON.parse(local) : [];
+}
+
+async function getTestimonialsData() {
+  const client = getSupabaseClient();
+  if (client) {
+    const { data, error } = await client.from("testimonials").select("*").order("created_at", { ascending: false });
+    if (!error) return data;
+  }
+  const local = localStorage.getItem("db_testimonials");
+  return local ? JSON.parse(local) : [];
+}
+
+async function getAboutInfoData() {
+  const client = getSupabaseClient();
+  if (client) {
+    const { data, error } = await client.from("about_me").select("*").eq("key", "profile_info").single();
+    if (!error && data) return data.value;
+  }
+  const local = localStorage.getItem("db_about_me");
+  return local ? JSON.parse(local) : null;
+}
+
+async function getBugsData() {
+  const client = getSupabaseClient();
+  if (client) {
+    const { data, error } = await client.from("bugs").select("*").order("created_at", { ascending: false });
+    if (!error) return data;
+  }
+  const local = localStorage.getItem("db_bugs");
+  return local ? JSON.parse(local) : [];
+}
+
+async function initDynamicContent() {
+  // 1. Hydrate Projects (Showcase on home, Showcase on portfolio, Registry on portfolio)
+  const projects = await getProjectsData();
+  if (projects && projects.length > 0) {
+    // A. Homepage Showcase Grid
+    const homeShowcase = document.getElementById("projects-showcase-grid");
+    if (homeShowcase) {
+      projects.forEach(p => {
+        const tagsHtml = (p.tags || []).map(t => `<span class="rounded-full border hairline px-2.5 py-1">${t}</span>`).join("");
+        const imageBlock = p.image_url 
+          ? `<img src="${p.image_url}" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="${p.title} screen">`
+          : `<div class="w-full h-full bg-gradient-to-br from-primary/5 to-primary/20 flex items-center justify-center font-display text-3xl font-semibold text-primary/30 select-none">${p.title.substring(0, 2).toUpperCase()}</div>`;
+
+        const card = document.createElement("a");
+        card.href = p.link || "#";
+        card.target = "_blank";
+        card.className = "group block rounded-2xl border hairline overflow-hidden transition hover:shadow-lg md:col-span-4";
+        card.innerHTML = `
+          <div class="aspect-square w-full overflow-hidden relative">
+            ${imageBlock}
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div class="eyebrow">${p.category} · ${p.year}</div>
+                <h3 class="mt-2 font-display text-3xl md:text-4xl">${p.title}</h3>
+                <p class="mt-2 text-sm text-muted-foreground leading-relaxed">${p.description}</p>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 shrink-0 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+              ${tagsHtml}
+            </div>
+          </div>
+        `;
+        homeShowcase.prepend(card);
+      });
+    }
+
+    // B. Portfolio page Showcase Grid
+    const portShowcase = document.getElementById("portfolio-showcase-grid");
+    if (portShowcase) {
+      projects.forEach(p => {
+        const tagsHtml = (p.tags || []).map(t => `<span class="rounded-full border hairline px-2.5 py-1">${t}</span>`).join("");
+        const imageBlock = p.image_url 
+          ? `<img src="${p.image_url}" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="${p.title} screen">`
+          : `<div class="w-full h-full bg-gradient-to-br from-primary/5 to-primary/20 flex items-center justify-center font-display text-3xl font-semibold text-primary/30 select-none">${p.title.substring(0, 2).toUpperCase()}</div>`;
+
+        const card = document.createElement("a");
+        card.href = p.link || "#";
+        card.target = "_blank";
+        card.className = "group block rounded-2xl border hairline p-6 transition hover:bg-foreground/[0.03] md:col-span-4";
+        card.innerHTML = `
+          <div class="aspect-square w-full rounded-xl overflow-hidden mb-4 border border-foreground/5 relative">
+            ${imageBlock}
+          </div>
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="eyebrow">${p.category} · ${p.year}</div>
+              <h3 class="mt-3 font-display text-3xl md:text-4xl">${p.title}</h3>
+              <p class="mt-3 max-w-md text-sm text-muted-foreground leading-relaxed">${p.description}</p>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+          </div>
+          <div class="mt-6 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+            ${tagsHtml}
+          </div>
+        `;
+        portShowcase.prepend(card);
+      });
+    }
+
+    // C. Portfolio page Registry Table list
+    const registry = document.getElementById("registry-list-container");
+    if (registry) {
+      projects.forEach((p, idx) => {
+        const indexStr = String(idx + 1).padStart(2, "0");
+        const row = document.createElement("a");
+        row.href = p.link || "#";
+        row.target = "_blank";
+        row.className = "group grid grid-cols-12 items-center gap-4 border-b hairline py-8 md:py-10 hover:bg-foreground/[0.03] -mx-4 px-4 md:-mx-8 md:px-8 transition";
+        row.innerHTML = `
+          <div class="col-span-1 font-mono text-xs text-muted-foreground">${indexStr}</div>
+          <div class="col-span-7 md:col-span-6">
+            <div class="font-display text-3xl md:text-5xl">${p.title}</div>
+            <div class="mt-2 text-sm text-muted-foreground">${p.description}</div>
+          </div>
+          <div class="hidden md:block col-span-3 text-sm text-muted-foreground">${p.category}</div>
+          <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">${p.year}</div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        `;
+        registry.prepend(row);
+      });
+    }
+  }
+
+  // 2. Hydrate Testimonials Slider
+  const testimonials = await getTestimonialsData();
+  if (testimonials && testimonials.length > 0) {
+    const slider = document.getElementById("testimonial-slider");
+    const dotsContainer = document.getElementById("testimonial-dots");
+    if (slider && dotsContainer) {
+      slider.innerHTML = "";
+      dotsContainer.innerHTML = "";
+
+      testimonials.forEach((t, i) => {
+        const active = i === 0;
+        const slide = document.createElement("blockquote");
+        slide.className = `testimonial-slide transition-opacity duration-500 w-full text-center ${active ? "" : "hidden opacity-0"}`;
+        if (active) slide.setAttribute("data-active", "true");
+
+        slide.innerHTML = `
+          <p class="font-display text-2xl md:text-3xl lg:text-4xl text-foreground leading-relaxed max-w-3xl mx-auto">
+            "${t.review_text}"
+          </p>
+          <cite class="mt-8 block not-italic">
+            <span class="font-display text-lg font-semibold text-foreground">${t.client_name}</span>
+            <span class="text-xs uppercase tracking-widest text-muted-foreground block mt-1">${t.company_role}</span>
+          </cite>
+        `;
+        slider.appendChild(slide);
+
+        const dot = document.createElement("button");
+        dot.setAttribute("aria-label", `Go to testimonial ${i + 1}`);
+        dot.className = `h-2 ${active ? "w-4 bg-primary" : "w-2 bg-foreground/25"} rounded-full transition-all duration-300 cursor-pointer`;
+        dotsContainer.appendChild(dot);
+      });
+    }
+  }
+
+  // 3. Hydrate About Me Profile Info
+  const aboutInfo = await getAboutInfoData();
+  if (aboutInfo) {
+    const nameEl = document.getElementById("about-tagline");
+    const subtagEl = document.getElementById("about-subtagline");
+    const bioContainer = document.getElementById("about-bio-container");
+
+    if (nameEl) nameEl.textContent = aboutInfo.name;
+    if (subtagEl) subtagEl.textContent = aboutInfo.tagline;
+    if (bioContainer && (aboutInfo.bio1 || aboutInfo.bio2)) {
+      bioContainer.innerHTML = `
+        <p><strong class="text-foreground">My name is <span class="font-display font-bold text-primary text-lg md:text-xl">${aboutInfo.name}</span>.</strong> ${aboutInfo.bio1}</p>
+        ${aboutInfo.bio2 ? `<p>${aboutInfo.bio2}</p>` : ""}
+      `;
+    }
+  }
+
+  // 4. Hydrate Bugs & Changelog list
+  const bugs = await getBugsData();
+  const bugsContainer = document.getElementById("changelog-container");
+  if (bugsContainer) {
+    if (bugs && bugs.length > 0) {
+      bugsContainer.innerHTML = "";
+      bugs.forEach(b => {
+        let badgeColor = "bg-primary/10 text-primary border border-primary/20";
+        if (b.status === "Resolved") badgeColor = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+        if (b.status === "In Progress") badgeColor = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+
+        const logEntry = document.createElement("div");
+        logEntry.className = "p-6 rounded-2xl border hairline bg-foreground/[0.02] flex flex-wrap items-center justify-between gap-4";
+        logEntry.innerHTML = `
+          <div class="space-y-1 max-w-2xl text-left">
+            <h4 class="font-display text-lg font-semibold text-foreground">${b.title}</h4>
+            <p class="text-sm text-muted-foreground">${b.description}</p>
+          </div>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${badgeColor}">${b.status}</span>
+        `;
+        bugsContainer.appendChild(logEntry);
+      });
+    } else {
+      bugsContainer.innerHTML = `
+        <div class="text-center p-8 border border-dashed rounded-2xl border-foreground/15 text-muted-foreground text-sm">
+          All systems operational. No active bugs reported!
+        </div>
+      `;
+    }
+  }
+}
+
+function initAdminLink() {
+  const footers = document.querySelectorAll("footer");
+  footers.forEach(footer => {
+    const linkDiv = footer.querySelector(".flex.items-center.gap-4") || footer;
+    if (linkDiv) {
+      const adminLink = document.createElement("a");
+      adminLink.href = "admin.html";
+      adminLink.className = "hover:text-foreground transition text-[11px] text-muted-foreground";
+      adminLink.textContent = "Admin Portal";
+      
+      const separator = document.createTextNode(" · ");
+      linkDiv.appendChild(separator);
+      linkDiv.appendChild(adminLink);
+    }
   });
 }
 

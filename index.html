@@ -674,7 +674,7 @@
     </div>
     <a href="portfolio.html" class="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">View all <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-4 w-4" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
   </div>
-  <div class="mt-12 grid gap-6 md:grid-cols-12">
+  <div class="mt-12 grid gap-6 md:grid-cols-12" id="projects-showcase-grid">
     <!-- Card 1: Dr. Saad Ajmal MD -->
     <a href="https://www.saadajmalmd.com" target="_blank" rel="noopener noreferrer" class="group block rounded-2xl border hairline overflow-hidden transition hover:shadow-lg md:col-span-4">
       <div class="aspect-square w-full overflow-hidden relative">
@@ -817,7 +817,7 @@
         <span class="inline-block h-1 w-6 bg-primary"></span> About the builder
       </div>
       <h2 class="font-display text-3xl md:text-5xl mb-8">I Build Things That Work. That's the Whole Job.</h2>
-      <div class="space-y-6 text-base md:text-lg text-muted-foreground leading-relaxed">
+      <div class="space-y-6 text-base md:text-lg text-muted-foreground leading-relaxed" id="about-bio-container">
         <p><strong class="text-foreground">My name is <span class="font-display font-bold text-primary text-lg md:text-xl">Emmanuel Ajibewe</span>.</strong> I'm a no-code developer, digital product builder, and the founder of Nocode Savvy — a one-person studio that punches well above its weight.</p>
         <p>I got into no-code because I was tired of watching great ideas die in development backlogs. Bubble.io changed that for me. Today I use it to build production-grade web applications that would take a traditional dev team months to ship in weeks, at a fraction of the cost, without cutting corners on architecture or scalability.</p>
         <p>I'm also a final-year Mechanical Engineering student and that background matters more than you'd think. Engineering teaches you to think in systems. To find failure points before they fail. To build things that don't just work today, but hold up under pressure.</p>
@@ -975,6 +975,21 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
         </button>
       </div>
+    </div>
+  </div>
+</section>
+
+<section data-section="changelog" id="changelog" class="container-edge py-24 md:py-32 border-t hairline reveal">
+  <div class="max-w-3xl mb-12">
+    <div class="eyebrow flex items-center gap-2 mb-4">
+      <span class="inline-block h-1 w-6 bg-primary"></span> engineering logs
+    </div>
+    <h2 class="font-display text-3xl md:text-5xl">Live Changelog & Bug Tracker</h2>
+    <p class="mt-4 text-muted-foreground">In the spirit of build-in-public transparency, here is a live feed of active issues, in-progress updates, and resolved bug fixes across my projects.</p>
+  </div>
+  <div class="max-w-4xl mx-auto space-y-4" id="changelog-container">
+    <div class="text-center p-8 border border-dashed rounded-2xl border-foreground/15 text-muted-foreground text-sm">
+      No log entries recorded yet.
     </div>
   </div>
 </section>
@@ -1424,6 +1439,7 @@
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="module" src="animations.js"></script>
 <script type="module" src="main.js"></script></body>
 </html>
