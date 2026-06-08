@@ -11,8 +11,10 @@ function initSupabase() {
   if (url && key && window.supabase) {
     try {
       sbClient = window.supabase.createClient(url, key);
-      badge.textContent = "Supabase Connected";
-      badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+      if (badge) {
+        badge.textContent = "Supabase Connected";
+        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+      }
       return true;
     } catch (e) {
       console.error("Supabase client init failed:", e);
@@ -20,8 +22,10 @@ function initSupabase() {
   }
 
   sbClient = null;
-  badge.textContent = "LocalStorage Only";
-  badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20";
+  if (badge) {
+    badge.textContent = "LocalStorage Only";
+    badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20";
+  }
   return false;
 }
 
@@ -215,6 +219,10 @@ document.getElementById("logout-btn").addEventListener("click", () => {
 
 // Check auth state on load
 window.addEventListener("load", () => {
+  initTheme();
+  initBackgroundCanvas();
+  initSupabase();
+
   if (localStorage.getItem("admin_logged_in") === "true") {
     document.getElementById("login-overlay").classList.add("hidden");
     document.getElementById("dashboard-content").classList.remove("hidden");
@@ -236,33 +244,42 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 
 // Theme toggle configuration for admin dashboard
 function initTheme() {
-  const themeToggle = document.getElementById("theme-toggle");
-  const sunIcon = document.getElementById("theme-sun-icon");
-  const moonIcon = document.getElementById("theme-moon-icon");
+  const themeToggles = document.querySelectorAll("#theme-toggle");
+  const sunIcons = document.querySelectorAll("#theme-sun-icon");
+  const moonIcons = document.querySelectorAll("#theme-moon-icon");
 
   let currentTheme = localStorage.getItem("ncs-theme") || 
                      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
   document.documentElement.setAttribute("data-theme", currentTheme);
+  document.documentElement.classList.remove("dark", "light");
   document.documentElement.classList.add(currentTheme);
   updateIcons(currentTheme);
 
-  themeToggle.addEventListener("click", () => {
-    const nextTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", nextTheme);
-    document.documentElement.classList.remove("dark", "light");
-    document.documentElement.classList.add(nextTheme);
-    localStorage.setItem("ncs-theme", nextTheme);
-    updateIcons(nextTheme);
+  themeToggles.forEach(toggle => {
+    toggle.addEventListener("click", () => {
+      document.documentElement.classList.add("theme-transitioning");
+      
+      const nextTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", nextTheme);
+      document.documentElement.classList.remove("dark", "light");
+      document.documentElement.classList.add(nextTheme);
+      localStorage.setItem("ncs-theme", nextTheme);
+      updateIcons(nextTheme);
+      
+      setTimeout(() => {
+        document.documentElement.classList.remove("theme-transitioning");
+      }, 600);
+    });
   });
 
   function updateIcons(theme) {
     if (theme === "dark") {
-      sunIcon.classList.remove("hidden");
-      moonIcon.classList.add("hidden");
+      sunIcons.forEach(icon => icon.classList.remove("hidden"));
+      moonIcons.forEach(icon => icon.classList.add("hidden"));
     } else {
-      sunIcon.classList.add("hidden");
-      moonIcon.classList.remove("hidden");
+      sunIcons.forEach(icon => icon.classList.add("hidden"));
+      moonIcons.forEach(icon => icon.classList.remove("hidden"));
     }
   }
 }
@@ -316,16 +333,7 @@ function initBackgroundCanvas() {
 
 // Dashboard Initializer
 async function initDashboard() {
-  initTheme();
-  initBackgroundCanvas();
-  initSupabase();
-  
-  // Fill values in Supabase Config form
-  document.getElementById("sb-url").value = localStorage.getItem("sb_url") || "https://iyhynpndndgxyioojdwp.supabase.co";
-  document.getElementById("sb-key").value = localStorage.getItem("sb_key") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aHlucG5kbmRneHlpb29qZHdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NDg4MTksImV4cCI6MjA5NjUyNDgxOX0.QrDi0n3i-Et4EUabbPU6dtn9A-g35xDm3Ogv22jzXe4";
-
   // Set up forms & event listeners
-  setupDatabaseConfig();
   setupProjectsManager();
   setupTestimonialsManager();
   setupAboutManager();
@@ -347,36 +355,7 @@ async function updateStats() {
   document.getElementById("stat-bugs").textContent = blogs.length;
 }
 
-// 1. Supabase Database configuration handlers
-function setupDatabaseConfig() {
-  const form = document.getElementById("db-config-form");
-  const disconnect = document.getElementById("sb-disconnect");
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const url = document.getElementById("sb-url").value.trim();
-    const key = document.getElementById("sb-key").value.trim();
-
-    localStorage.setItem("sb_url", url);
-    localStorage.setItem("sb_key", key);
-
-    if (initSupabase()) {
-      alert("Successfully connected to Supabase!");
-      updateStats();
-      location.reload();
-    } else {
-      alert("Supabase integration details saved, but connection failed. Make sure URL and Keys are valid.");
-    }
-  });
-
-  disconnect.addEventListener("click", () => {
-    localStorage.removeItem("sb_url");
-    localStorage.removeItem("sb_key");
-    initSupabase();
-    alert("Supabase disconnected. Falling back to local storage.");
-    location.reload();
-  });
-}
+// 1. Database Configuration elements removed from layout. Fallback initialized directly.
 
 // 2. Projects Manager Implementation
 async function setupProjectsManager() {

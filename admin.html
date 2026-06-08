@@ -1,9 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard — Nocode Savvy</title>
+  <script>
+    (function() {
+      var saved = localStorage.getItem('ncs-theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.classList.remove('dark', 'light');
+      document.documentElement.classList.add(theme);
+    })();
+  </script>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="theme.css">
   <link rel="stylesheet" href="transitions.css">
@@ -50,7 +59,13 @@
 
   <!-- Login Overlay -->
   <div id="login-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-md">
-    <div class="w-full max-w-md p-8 admin-card shadow-2xl space-y-6 mx-4">
+    <div class="w-full max-w-md p-8 admin-card shadow-2xl space-y-6 mx-4 relative">
+      <!-- Theme Toggle -->
+      <button id="theme-toggle" class="absolute top-6 right-6 p-2.5 rounded-full border border-foreground/15 hover:bg-foreground/[0.03] transition relative" aria-label="Toggle theme">
+        <svg id="theme-sun-icon" class="h-4 w-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+        <svg id="theme-moon-icon" class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+      </button>
+
       <div class="text-center">
         <h2 class="text-3xl font-bold">Admin Portal</h2>
         <p class="text-sm text-muted-foreground mt-2">Enter credentials to manage your portfolio site</p>
@@ -86,7 +101,7 @@
 
     <!-- Navigation Tabs -->
     <div class="flex flex-wrap gap-2 border-b border-foreground/5 pb-4">
-      <button class="tab-btn active px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="status">Dashboard & Database</button>
+      <button class="tab-btn active px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="status">Overview</button>
       <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="projects">Projects</button>
       <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="testimonials">Testimonials</button>
       <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="about">About Me</button>
@@ -96,123 +111,34 @@
     <!-- Tab Sections -->
     <main class="space-y-6">
       
-      <!-- Tab 1: Database Status & Config -->
+      <!-- Tab 1: Workspace Overview -->
       <section id="tab-status" class="tab-section space-y-6">
-        <div class="grid gap-6 md:grid-cols-2">
-          <!-- Database Sync Config -->
-          <div class="p-6 admin-card space-y-4">
-            <h3 class="text-2xl font-bold">Supabase Live Connection</h3>
-            <p class="text-sm text-muted-foreground">Sync your portfolio dynamically to a live Supabase database. If credentials are not set, it will safely fallback to browser LocalStorage.</p>
-            <form id="db-config-form" class="space-y-3">
-              <div>
-                <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Supabase API URL</label>
-                <input type="url" id="sb-url" class="w-full px-4 py-2.5 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary" placeholder="https://your-project.supabase.co">
+        <div class="max-w-2xl mx-auto p-6 admin-card flex flex-col justify-between space-y-6">
+          <div>
+            <h3 class="text-2xl font-bold">Workspace Overview</h3>
+            <p class="text-sm text-muted-foreground mt-1">Manage your projects, testimonials, and blogs. Below is your current content status and backup/restore tools.</p>
+            <div class="mt-6 space-y-3 text-sm">
+              <div class="flex justify-between items-center border-b border-foreground/5 pb-2">
+                <span class="text-muted-foreground">Total Projects:</span>
+                <span id="stat-projects" class="font-mono font-semibold">0</span>
               </div>
-              <div>
-                <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Supabase Anon Key</label>
-                <input type="password" id="sb-key" class="w-full px-4 py-2.5 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+              <div class="flex justify-between items-center border-b border-foreground/5 pb-2">
+                <span class="text-muted-foreground">Total Testimonials:</span>
+                <span id="stat-testimonials" class="font-mono font-semibold">0</span>
               </div>
-              <div class="flex gap-3 pt-2">
-                <button type="submit" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg transition hover:opacity-90">Save Configuration</button>
-                <button type="button" id="sb-disconnect" class="px-4 py-2 text-sm font-medium border border-foreground/15 rounded-lg transition hover:bg-foreground/[0.03]">Disconnect</button>
-              </div>
-            </form>
-          </div>
-
-          <!-- Connection Stats -->
-          <div class="p-6 admin-card flex flex-col justify-between">
-            <div>
-              <h3 class="text-2xl font-bold">Active System Status</h3>
-              <div class="mt-4 space-y-3 text-sm">
-                <div class="flex justify-between items-center border-b border-foreground/5 pb-2">
-                  <span class="text-muted-foreground">Active Storage Layer:</span>
-                  <span id="storage-status-badge" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary">LocalStorage Only</span>
-                </div>
-                <div class="flex justify-between items-center border-b border-foreground/5 pb-2">
-                  <span class="text-muted-foreground">Total Projects Added:</span>
-                  <span id="stat-projects" class="font-mono">0</span>
-                </div>
-                <div class="flex justify-between items-center border-b border-foreground/5 pb-2">
-                  <span class="text-muted-foreground">Total Testimonials Added:</span>
-                  <span id="stat-testimonials" class="font-mono">0</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-muted-foreground">Active Blogs Published:</span>
-                  <span id="stat-bugs" class="font-mono">0</span>
-                </div>
+              <div class="flex justify-between items-center">
+                <span class="text-muted-foreground">Blogs Published:</span>
+                <span id="stat-bugs" class="font-mono font-semibold">0</span>
               </div>
             </div>
-
-            <!-- Import/Export Tools (for LocalStorage backup) -->
-            <div class="pt-4 border-t border-foreground/10 flex gap-2">
-              <button id="export-data" class="flex-1 py-2 text-xs font-medium border border-foreground/15 rounded-lg hover:bg-foreground/[0.03] transition">Backup Data (JSON)</button>
-              <button id="import-data-btn" class="flex-1 py-2 text-xs font-medium border border-foreground/15 rounded-lg hover:bg-foreground/[0.03] transition">Restore Data</button>
-              <input type="file" id="import-file-input" class="hidden" accept=".json">
-            </div>
           </div>
-        </div>
 
-        <!-- SQL Schema Guide for Supabase Setup -->
-        <div class="p-6 admin-card space-y-4">
-          <h3 class="text-2xl font-bold">Supabase Database Setup Instructions</h3>
-          <p class="text-sm text-muted-foreground">If using Supabase, copy and execute this SQL snippet in the Supabase **SQL Editor** to create the necessary tables:</p>
-          <pre class="bg-foreground/5 p-4 rounded-xl text-xs font-mono overflow-x-auto select-all leading-relaxed max-h-[300px]">
--- 1. Projects Table
-create table if not exists projects (
-  id uuid default gen_random_uuid() primary key,
-  title text not null,
-  description text,
-  category text,
-  year text,
-  link text,
-  tags text[],
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
--- Enable RLS and add public policies
-alter table projects enable row level security;
-create policy "Public Read" on projects for select using (true);
-create policy "Admin Write" on projects for all using (true); -- Set appropriate auth rules as needed
-
--- 2. Testimonials Table
-create table if not exists testimonials (
-  id uuid default gen_random_uuid() primary key,
-  client_name text not null,
-  company_role text,
-  review_text text,
-  image_url text,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
-alter table testimonials enable row level security;
-create policy "Public Read" on testimonials for select using (true);
-create policy "Admin Write" on testimonials for all using (true);
-
--- 3. About Me Table
-create table if not exists about_me (
-  key text primary key,
-  value jsonb,
-  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
-alter table about_me enable row level security;
-create policy "Public Read" on about_me for select using (true);
-create policy "Admin Write" on about_me for all using (true);
-
--- 4. Blogs Table
-create table if not exists blogs (
-  id uuid default gen_random_uuid() primary key,
-  title text not null,
-  content text not null,
-  excerpt text,
-  status text default 'Published', -- Published, Draft
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
-alter table blogs enable row level security;
-create policy "Public Read" on blogs for select using (true);
-create policy "Admin Write" on blogs for all using (true);
-          </pre>
+          <!-- Import/Export Tools (for backup) -->
+          <div class="pt-6 border-t border-foreground/10 flex gap-3">
+            <button id="export-data" class="flex-1 py-3 text-xs font-semibold border border-foreground/15 rounded-lg hover:bg-foreground/[0.03] transition">Backup Workspace (JSON)</button>
+            <button id="import-data-btn" class="flex-1 py-3 text-xs font-semibold border border-foreground/15 rounded-lg hover:bg-foreground/[0.03] transition">Restore Workspace</button>
+            <input type="file" id="import-file-input" class="hidden" accept=".json">
+          </div>
         </div>
       </section>
 
