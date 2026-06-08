@@ -871,8 +871,8 @@ let supabaseClient = null;
 
 function getSupabaseClient() {
   if (supabaseClient) return supabaseClient;
-  const url = localStorage.getItem("sb_url");
-  const key = localStorage.getItem("sb_key");
+  const url = localStorage.getItem("sb_url") || "https://iyhynpndndgxyioojdwp.supabase.co";
+  const key = localStorage.getItem("sb_key") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aHlucG5kbmRneHlpb29qZHdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NDg4MTksImV4cCI6MjA5NjUyNDgxOX0.QrDi0n3i-Et4EUabbPU6dtn9A-g35xDm3Ogv22jzXe4";
   if (url && key && window.supabase) {
     try {
       supabaseClient = window.supabase.createClient(url, key);
@@ -914,13 +914,13 @@ async function getAboutInfoData() {
   return local ? JSON.parse(local) : null;
 }
 
-async function getBugsData() {
+async function getBlogsData() {
   const client = getSupabaseClient();
   if (client) {
-    const { data, error } = await client.from("bugs").select("*").order("created_at", { ascending: false });
+    const { data, error } = await client.from("blogs").select("*").order("created_at", { ascending: false });
     if (!error) return data;
   }
-  const local = localStorage.getItem("db_bugs");
+  const local = localStorage.getItem("db_blogs");
   return local ? JSON.parse(local) : [];
 }
 
@@ -931,6 +931,7 @@ async function initDynamicContent() {
     // A. Homepage Showcase Grid
     const homeShowcase = document.getElementById("projects-showcase-grid");
     if (homeShowcase) {
+      homeShowcase.innerHTML = ""; // Clear static fallbacks!
       projects.forEach(p => {
         const tagsHtml = (p.tags || []).map(t => `<span class="rounded-full border hairline px-2.5 py-1">${t}</span>`).join("");
         const imageBlock = p.image_url 
@@ -959,13 +960,14 @@ async function initDynamicContent() {
             </div>
           </div>
         `;
-        homeShowcase.prepend(card);
+        homeShowcase.appendChild(card);
       });
     }
 
     // B. Portfolio page Showcase Grid
     const portShowcase = document.getElementById("portfolio-showcase-grid");
     if (portShowcase) {
+      portShowcase.innerHTML = ""; // Clear static fallbacks!
       projects.forEach(p => {
         const tagsHtml = (p.tags || []).map(t => `<span class="rounded-full border hairline px-2.5 py-1">${t}</span>`).join("");
         const imageBlock = p.image_url 
@@ -992,13 +994,14 @@ async function initDynamicContent() {
             ${tagsHtml}
           </div>
         `;
-        portShowcase.prepend(card);
+        portShowcase.appendChild(card);
       });
     }
 
     // C. Portfolio page Registry Table list
     const registry = document.getElementById("registry-list-container");
     if (registry) {
+      registry.innerHTML = ""; // Clear static fallbacks!
       projects.forEach((p, idx) => {
         const indexStr = String(idx + 1).padStart(2, "0");
         const row = document.createElement("a");
@@ -1015,7 +1018,7 @@ async function initDynamicContent() {
           <div class="col-span-3 md:col-span-1 text-right text-sm text-muted-foreground">${p.year}</div>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:rotate-45 group-hover:text-primary" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
         `;
-        registry.prepend(row);
+        registry.appendChild(row);
       });
     }
   }
@@ -1071,32 +1074,40 @@ async function initDynamicContent() {
     }
   }
 
-  // 4. Hydrate Bugs & Changelog list
-  const bugs = await getBugsData();
-  const bugsContainer = document.getElementById("changelog-container");
-  if (bugsContainer) {
-    if (bugs && bugs.length > 0) {
-      bugsContainer.innerHTML = "";
-      bugs.forEach(b => {
+  // 4. Hydrate Blogs list
+  const blogs = await getBlogsData();
+  const blogsContainer = document.getElementById("changelog-container");
+  if (blogsContainer) {
+    if (blogs && blogs.length > 0) {
+      blogsContainer.innerHTML = "";
+      blogs.forEach(b => {
         let badgeColor = "bg-primary/10 text-primary border border-primary/20";
-        if (b.status === "Resolved") badgeColor = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-        if (b.status === "In Progress") badgeColor = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+        if (b.status === "Published") badgeColor = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+        if (b.status === "Draft") badgeColor = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
 
-        const logEntry = document.createElement("div");
-        logEntry.className = "p-6 rounded-2xl border hairline bg-foreground/[0.02] flex flex-wrap items-center justify-between gap-4";
-        logEntry.innerHTML = `
-          <div class="space-y-1 max-w-2xl text-left">
-            <h4 class="font-display text-lg font-semibold text-foreground">${b.title}</h4>
-            <p class="text-sm text-muted-foreground">${b.description}</p>
+        const blogEntry = document.createElement("article");
+        blogEntry.className = "p-6 rounded-2xl border hairline bg-foreground/[0.02] flex flex-col items-start gap-4 text-left w-full";
+        
+        // Format post date tastefully
+        const postDate = b.created_at ? new Date(b.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+        
+        blogEntry.innerHTML = `
+          <div class="flex items-center justify-between w-full gap-4">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">${postDate}</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${badgeColor}">${b.status}</span>
           </div>
-          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${badgeColor}">${b.status}</span>
+          <div class="space-y-2 mt-1">
+            <h4 class="font-display text-2xl font-bold text-foreground leading-tight">${b.title}</h4>
+            <p class="text-sm text-muted-foreground leading-relaxed">${b.excerpt || ''}</p>
+            <div class="text-sm text-foreground/80 mt-4 leading-relaxed pt-2 border-t border-foreground/5 whitespace-pre-wrap">${b.content}</div>
+          </div>
         `;
-        bugsContainer.appendChild(logEntry);
+        blogsContainer.appendChild(blogEntry);
       });
     } else {
-      bugsContainer.innerHTML = `
+      blogsContainer.innerHTML = `
         <div class="text-center p-8 border border-dashed rounded-2xl border-foreground/15 text-muted-foreground text-sm">
-          All systems operational. No active bugs reported!
+          No articles or blog posts published yet.
         </div>
       `;
     }

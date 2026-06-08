@@ -4,8 +4,8 @@ let sbClient = null;
 
 // Initialize Supabase Client if credentials exist
 function initSupabase() {
-  const url = localStorage.getItem("sb_url");
-  const key = localStorage.getItem("sb_key");
+  const url = localStorage.getItem("sb_url") || "https://iyhynpndndgxyioojdwp.supabase.co";
+  const key = localStorage.getItem("sb_key") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aHlucG5kbmRneHlpb29qZHdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NDg4MTksImV4cCI6MjA5NjUyNDgxOX0.QrDi0n3i-Et4EUabbPU6dtn9A-g35xDm3Ogv22jzXe4";
   const badge = document.getElementById("storage-status-badge");
 
   if (url && key && window.supabase) {
@@ -145,49 +145,49 @@ const db = {
     return true;
   },
 
-  // Bugs / Changelog Operations
-  async getBugs() {
+  // Blogs Operations
+  async getBlogs() {
     if (sbClient) {
-      const { data, error } = await sbClient.from("bugs").select("*").order("created_at", { ascending: false });
+      const { data, error } = await sbClient.from("blogs").select("*").order("created_at", { ascending: false });
       if (!error) return data;
       console.warn("Supabase load failed, falling back to LocalStorage:", error);
     }
-    const local = localStorage.getItem("db_bugs");
+    const local = localStorage.getItem("db_blogs");
     return local ? JSON.parse(local) : [];
   },
-  async saveBug(bug) {
+  async saveBlog(blog) {
     if (sbClient) {
       let result;
-      if (bug.id) {
-        result = await sbClient.from("bugs").update(bug).eq("id", bug.id);
+      if (blog.id) {
+        result = await sbClient.from("blogs").update(blog).eq("id", blog.id);
       } else {
-        delete bug.id;
-        result = await sbClient.from("bugs").insert([bug]);
+        delete blog.id;
+        result = await sbClient.from("blogs").insert([blog]);
       }
       if (!result.error) return true;
       console.warn("Supabase save failed, falling back to LocalStorage:", result.error);
     }
-    const bugs = await this.getBugs();
-    if (bug.id) {
-      const idx = bugs.findIndex(b => b.id === bug.id);
-      if (idx !== -1) bugs[idx] = bug;
+    const blogs = await this.getBlogs();
+    if (blog.id) {
+      const idx = blogs.findIndex(b => b.id === blog.id);
+      if (idx !== -1) blogs[idx] = blog;
     } else {
-      bug.id = crypto.randomUUID();
-      bug.created_at = new Date().toISOString();
-      bugs.unshift(bug);
+      blog.id = crypto.randomUUID();
+      blog.created_at = new Date().toISOString();
+      blogs.unshift(blog);
     }
-    localStorage.setItem("db_bugs", JSON.stringify(bugs));
+    localStorage.setItem("db_blogs", JSON.stringify(blogs));
     return true;
   },
-  async deleteBug(id) {
+  async deleteBlog(id) {
     if (sbClient) {
-      const { error } = await sbClient.from("bugs").delete().eq("id", id);
+      const { error } = await sbClient.from("blogs").delete().eq("id", id);
       if (!error) return true;
       console.warn("Supabase delete failed, falling back to LocalStorage:", error);
     }
-    const bugs = await this.getBugs();
-    const updated = bugs.filter(b => b.id !== id);
-    localStorage.setItem("db_bugs", JSON.stringify(updated));
+    const blogs = await this.getBlogs();
+    const updated = blogs.filter(b => b.id !== id);
+    localStorage.setItem("db_blogs", JSON.stringify(updated));
     return true;
   }
 };
@@ -321,15 +321,15 @@ async function initDashboard() {
   initSupabase();
   
   // Fill values in Supabase Config form
-  document.getElementById("sb-url").value = localStorage.getItem("sb_url") || "";
-  document.getElementById("sb-key").value = localStorage.getItem("sb_key") || "";
+  document.getElementById("sb-url").value = localStorage.getItem("sb_url") || "https://iyhynpndndgxyioojdwp.supabase.co";
+  document.getElementById("sb-key").value = localStorage.getItem("sb_key") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aHlucG5kbmRneHlpb29qZHdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NDg4MTksImV4cCI6MjA5NjUyNDgxOX0.QrDi0n3i-Et4EUabbPU6dtn9A-g35xDm3Ogv22jzXe4";
 
   // Set up forms & event listeners
   setupDatabaseConfig();
   setupProjectsManager();
   setupTestimonialsManager();
   setupAboutManager();
-  setupBugsManager();
+  setupBlogsManager();
   setupBackupRestore();
 
   // Load active count stats
@@ -340,11 +340,11 @@ async function initDashboard() {
 async function updateStats() {
   const proj = await db.getProjects();
   const test = await db.getTestimonials();
-  const bugs = await db.getBugs();
+  const blogs = await db.getBlogs();
 
   document.getElementById("stat-projects").textContent = proj.length;
   document.getElementById("stat-testimonials").textContent = test.length;
-  document.getElementById("stat-bugs").textContent = bugs.filter(b => b.status !== "Resolved").length;
+  document.getElementById("stat-bugs").textContent = blogs.length;
 }
 
 // 1. Supabase Database configuration handlers
@@ -590,66 +590,67 @@ async function setupAboutManager() {
   });
 }
 
-// 5. Bugs / Changelog Manager Implementation
-async function setupBugsManager() {
-  const form = document.getElementById("bug-form");
-  const body = document.getElementById("bugs-list-body");
-  const addBtn = document.getElementById("add-bug-btn");
-  const cancelBtn = document.getElementById("cancel-bug-btn");
+// 5. Blogs Manager Implementation
+async function setupBlogsManager() {
+  const form = document.getElementById("blog-form");
+  const body = document.getElementById("blogs-list-body");
+  const addBtn = document.getElementById("add-blog-btn");
+  const cancelBtn = document.getElementById("cancel-blog-btn");
 
-  const renderBugs = async () => {
-    const list = await db.getBugs();
+  const renderBlogs = async () => {
+    const list = await db.getBlogs();
     body.innerHTML = "";
     if (list.length === 0) {
-      body.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-muted-foreground">No bug/dev reports loaded.</td></tr>`;
+      body.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-muted-foreground">No articles or blog posts logged yet.</td></tr>`;
       return;
     }
     list.forEach(b => {
       let statusClass = "bg-primary/10 text-primary";
-      if (b.status === "Resolved") statusClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-      if (b.status === "In Progress") statusClass = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+      if (b.status === "Published") statusClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+      if (b.status === "Draft") statusClass = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
 
       const tr = document.createElement("tr");
       tr.className = "border-b border-foreground/5 hover:bg-foreground/[0.01]";
       tr.innerHTML = `
         <td class="p-4">
           <div class="font-bold text-base">${b.title}</div>
-          <div class="text-xs text-muted-foreground mt-1 line-clamp-1">${b.description}</div>
+          <div class="text-xs text-muted-foreground mt-1 line-clamp-1">${b.excerpt || b.content}</div>
         </td>
         <td class="p-4">
           <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${statusClass}">${b.status}</span>
         </td>
         <td class="p-4">
           <div class="flex gap-2">
-            <button class="edit-b-btn text-xs font-semibold hover:text-primary transition" data-id="${b.id}">Edit</button>
-            <button class="delete-b-btn text-xs font-semibold text-destructive hover:opacity-85 transition" data-id="${b.id}">Delete</button>
+            <button class="edit-blog-btn text-xs font-semibold hover:text-primary transition" data-id="${b.id}">Edit</button>
+            <button class="delete-blog-btn text-xs font-semibold text-destructive hover:opacity-85 transition" data-id="${b.id}">Delete</button>
           </div>
         </td>
       `;
       body.appendChild(tr);
     });
 
-    document.querySelectorAll(".delete-b-btn").forEach(btn => {
+    document.querySelectorAll(".delete-blog-btn").forEach(btn => {
       btn.addEventListener("click", async () => {
-        if (confirm("Are you sure you want to delete this log entry?")) {
-          await db.deleteBug(btn.getAttribute("data-id"));
-          renderBugs();
+        if (confirm("Are you sure you want to delete this blog post?")) {
+          await db.deleteBlog(btn.getAttribute("data-id"));
+          renderBlogs();
           updateStats();
         }
       });
     });
 
-    document.querySelectorAll(".edit-b-btn").forEach(btn => {
+    document.querySelectorAll(".edit-blog-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const id = btn.getAttribute("data-id");
         const item = list.find(b => b.id === id);
         if (item) {
-          document.getElementById("bug-id").value = item.id;
-          document.getElementById("bug-title").value = item.title;
-          document.getElementById("bug-status").value = item.status || "Active";
-          document.getElementById("bug-description").value = item.description;
+          document.getElementById("blog-id").value = item.id;
+          document.getElementById("blog-title").value = item.title;
+          document.getElementById("blog-status").value = item.status || "Published";
+          document.getElementById("blog-excerpt").value = item.excerpt || "";
+          document.getElementById("blog-content").value = item.content;
 
-          document.getElementById("bug-form-title").textContent = "Edit Log Entry";
+          document.getElementById("blog-form-title").textContent = "Edit Blog Post";
           form.classList.remove("hidden");
         }
       });
@@ -658,8 +659,8 @@ async function setupBugsManager() {
 
   addBtn.addEventListener("click", () => {
     form.reset();
-    document.getElementById("bug-id").value = "";
-    document.getElementById("bug-form-title").textContent = "Log New Issue / Update";
+    document.getElementById("blog-id").value = "";
+    document.getElementById("blog-form-title").textContent = "Create New Blog Post";
     form.classList.remove("hidden");
   });
 
@@ -669,19 +670,20 @@ async function setupBugsManager() {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const bug = {
-      id: document.getElementById("bug-id").value || undefined,
-      title: document.getElementById("bug-title").value.trim(),
-      status: document.getElementById("bug-status").value,
-      description: document.getElementById("bug-description").value.trim()
+    const blog = {
+      id: document.getElementById("blog-id").value || undefined,
+      title: document.getElementById("blog-title").value.trim(),
+      status: document.getElementById("blog-status").value,
+      excerpt: document.getElementById("blog-excerpt").value.trim(),
+      content: document.getElementById("blog-content").value.trim()
     };
-    await db.saveBug(bug);
+    await db.saveBlog(blog);
     form.classList.add("hidden");
-    renderBugs();
+    renderBlogs();
     updateStats();
   });
 
-  renderBugs();
+  renderBlogs();
 }
 
 // 6. Data Import & Export operations
@@ -695,7 +697,7 @@ function setupBackupRestore() {
       projects: await db.getProjects(),
       testimonials: await db.getTestimonials(),
       about: await db.getAboutInfo(),
-      bugs: await db.getBugs()
+      blogs: await db.getBlogs()
     };
 
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup, null, 2));
@@ -738,11 +740,11 @@ function setupBackupRestore() {
         if (data.about) {
           await db.saveAboutInfo(data.about);
         }
-        if (data.bugs) {
+        if (data.blogs) {
           if (sbClient) {
-            for (let b of data.bugs) await db.saveBug(b);
+            for (let b of data.blogs) await db.saveBlog(b);
           } else {
-            localStorage.setItem("db_bugs", JSON.stringify(data.bugs));
+            localStorage.setItem("db_blogs", JSON.stringify(data.blogs));
           }
         }
 

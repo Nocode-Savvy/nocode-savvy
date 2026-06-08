@@ -40,7 +40,7 @@
       color: #f8f7f4;
     }
   </style>
-  <script type="module" crossorigin src="/assets/admin-oO2O-b02.js"></script>
+  <script type="module" crossorigin src="/assets/admin-DSt17Lp3.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/transitions-CTRLMX6l.js">
   <link rel="stylesheet" crossorigin href="/assets/transitions-DXIsyZ1G.css">
 </head>
@@ -90,7 +90,7 @@
       <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="projects">Projects</button>
       <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="testimonials">Testimonials</button>
       <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="about">About Me</button>
-      <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="bugs">Bugs & Changelog</button>
+      <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="bugs">Blogs & Articles</button>
     </div>
 
     <!-- Tab Sections -->
@@ -137,7 +137,7 @@
                   <span id="stat-testimonials" class="font-mono">0</span>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="text-muted-foreground">Active Bugs Logged:</span>
+                  <span class="text-muted-foreground">Active Blogs Published:</span>
                   <span id="stat-bugs" class="font-mono">0</span>
                 </div>
               </div>
@@ -199,18 +199,19 @@ alter table about_me enable row level security;
 create policy "Public Read" on about_me for select using (true);
 create policy "Admin Write" on about_me for all using (true);
 
--- 4. Bugs Table
-create table if not exists bugs (
+-- 4. Blogs Table
+create table if not exists blogs (
   id uuid default gen_random_uuid() primary key,
   title text not null,
-  description text,
-  status text default 'Active', -- Active, In Progress, Resolved
+  content text not null,
+  excerpt text,
+  status text default 'Published', -- Published, Draft
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
-alter table bugs enable row level security;
-create policy "Public Read" on bugs for select using (true);
-create policy "Admin Write" on bugs for all using (true);
+alter table blogs enable row level security;
+create policy "Public Read" on blogs for select using (true);
+create policy "Admin Write" on blogs for all using (true);
           </pre>
         </div>
       </section>
@@ -347,54 +348,57 @@ create policy "Admin Write" on bugs for all using (true);
         </form>
       </section>
 
-      <!-- Tab 5: Bugs & Changelog Tracker -->
+      <!-- Tab 5: Blogs & Articles Manager -->
       <section id="tab-bugs" class="tab-section hidden space-y-6">
         <div class="flex items-center justify-between">
-          <h3 class="text-2xl font-bold">Track Bugs & Dev Logs</h3>
-          <button id="add-bug-btn" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg transition hover:opacity-90">+ Log Bug / Update</button>
+          <h3 class="text-2xl font-bold">Manage Blogs & Articles</h3>
+          <button id="add-blog-btn" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg transition hover:opacity-90">+ Write New Post</button>
         </div>
 
-        <!-- Bug Form -->
-        <form id="bug-form" class="hidden p-6 admin-card space-y-4">
-          <h4 id="bug-form-title" class="text-xl font-bold">New Log Entry</h4>
-          <input type="hidden" id="bug-id">
+        <!-- Blog Form -->
+        <form id="blog-form" class="hidden p-6 admin-card space-y-4">
+          <h4 id="blog-form-title" class="text-xl font-bold">New Blog Post</h4>
+          <input type="hidden" id="blog-id">
           <div class="grid gap-4 md:grid-cols-2">
             <div class="md:col-span-2">
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Issue / Feature Title</label>
-              <input type="text" id="bug-title" required class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary">
+              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Blog Post Title</label>
+              <input type="text" id="blog-title" required class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary" placeholder="e.g. Scaling Bubble Databases with Supabase">
             </div>
             <div>
               <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Status</label>
-              <select id="bug-status" class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary">
-                <option value="Active">Active / Broken</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Resolved">Resolved / Shipped</option>
+              <select id="blog-status" class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary">
+                <option value="Published">Published</option>
+                <option value="Draft">Draft</option>
               </select>
             </div>
             <div class="md:col-span-2">
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Detailed Description / Notes</label>
-              <textarea id="bug-description" rows="3" required class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary"></textarea>
+              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Excerpt / Summary</label>
+              <input type="text" id="blog-excerpt" class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary" placeholder="A brief summary shown on index and preview pages...">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Content / Body</label>
+              <textarea id="blog-content" rows="6" required class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary" placeholder="Write the main body content of the blog post..."></textarea>
             </div>
           </div>
           <div class="flex gap-2">
-            <button type="submit" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg transition hover:opacity-90">Save Entry</button>
-            <button type="button" id="cancel-bug-btn" class="px-4 py-2 text-sm font-medium border border-foreground/15 rounded-lg transition hover:bg-foreground/[0.03]">Cancel</button>
+            <button type="submit" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg transition hover:opacity-90">Save Post</button>
+            <button type="button" id="cancel-blog-btn" class="px-4 py-2 text-sm font-medium border border-foreground/15 rounded-lg transition hover:bg-foreground/[0.03]">Cancel</button>
           </div>
         </form>
 
-        <!-- Bugs Table -->
+        <!-- Blogs Table -->
         <div class="admin-card overflow-hidden">
           <table class="w-full text-left text-sm border-collapse">
             <thead>
               <tr class="border-b border-foreground/10 bg-foreground/[0.01]">
-                <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Log Details</th>
+                <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Article Details</th>
                 <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Status</th>
                 <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Actions</th>
               </tr>
             </thead>
-            <tbody id="bugs-list-body">
+            <tbody id="blogs-list-body">
               <tr>
-                <td colspan="3" class="p-8 text-center text-muted-foreground">No bug/dev reports loaded.</td>
+                <td colspan="3" class="p-8 text-center text-muted-foreground">No articles or blog posts loaded.</td>
               </tr>
             </tbody>
           </table>
