@@ -24,6 +24,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   initBackToTop();
   initContactForm();
   initMobilePortraitTap();
+  try {
+    initAnalyticsTracking();
+  } catch (e) {
+    console.error("Analytics tracking failed:", e);
+  }
 });
 
 // --- Theme Toggle ---
@@ -448,6 +453,39 @@ function initChatbot() {
     setTimeout(() => {
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }, 50);
+  }
+}
+
+// --- Dynamic Page-View Analytics Tracking ---
+async function initAnalyticsTracking() {
+  const client = getSupabaseClient();
+  if (!client) return;
+
+  // Avoid tracking if query param or storage flag says so (optional)
+  if (localStorage.getItem("admin_logged_in") === "true") return;
+
+  let sessionId = sessionStorage.getItem("ncs_analytics_session");
+  if (!sessionId) {
+    sessionId = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
+    sessionStorage.setItem("ncs_analytics_session", sessionId);
+  }
+
+  const path = window.location.pathname;
+  const pageName = path === "/" || path.endsWith("index.html") || path.endsWith("/")
+    ? "Home"
+    : (path.endsWith("portfolio.html") ? "Portfolio" : path.split("/").pop() || "Unknown");
+
+  const payload = {
+    page: pageName,
+    referrer: document.referrer || "Direct",
+    user_agent: navigator.userAgent,
+    session_id: sessionId
+  };
+
+  try {
+    await client.from("analytics").insert([payload]);
+  } catch (err) {
+    console.warn("Failed to log page view:", err);
   }
 }
 

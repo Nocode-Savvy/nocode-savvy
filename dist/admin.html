@@ -49,11 +49,12 @@
       color: #f8f7f4;
     }
   </style>
-  <script type="module" crossorigin src="/assets/admin-D_qFMWXG.js"></script>
+  <script type="module" crossorigin src="/assets/admin-DcadBsEK.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/transitions-CTRLMX6l.js">
   <link rel="stylesheet" crossorigin href="/assets/transitions-DXIsyZ1G.css">
 </head>
 <body class="min-h-screen bg-background text-foreground transition-colors duration-300">
+  <div id="theme-bg"></div>
   <!-- Dynamic background canvas (shared from main portfolio) -->
   <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-[-1]"></canvas>
 
@@ -106,6 +107,7 @@
       <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="testimonials">Testimonials</button>
       <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="about">About Me</button>
       <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="bugs">Blogs & Articles</button>
+      <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition" data-tab="analytics">Analytics</button>
     </div>
 
     <!-- Tab Sections -->
@@ -126,9 +128,13 @@
                 <span class="text-muted-foreground">Total Testimonials:</span>
                 <span id="stat-testimonials" class="font-mono font-semibold">0</span>
               </div>
-              <div class="flex justify-between items-center">
+              <div class="flex justify-between items-center border-b border-foreground/5 pb-2">
                 <span class="text-muted-foreground">Blogs Published:</span>
                 <span id="stat-bugs" class="font-mono font-semibold">0</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-muted-foreground">Total Page Views:</span>
+                <span id="stat-views" class="font-mono font-semibold">0</span>
               </div>
             </div>
           </div>
@@ -138,6 +144,108 @@
             <button id="export-data" class="flex-1 py-3 text-xs font-semibold border border-foreground/15 rounded-lg hover:bg-foreground/[0.03] transition">Backup Workspace (JSON)</button>
             <button id="import-data-btn" class="flex-1 py-3 text-xs font-semibold border border-foreground/15 rounded-lg hover:bg-foreground/[0.03] transition">Restore Workspace</button>
             <input type="file" id="import-file-input" class="hidden" accept=".json">
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 6: Analytics Dashboard -->
+      <section id="tab-analytics" class="tab-section hidden space-y-6">
+        <div class="flex items-center justify-between">
+          <h3 class="text-2xl font-bold">Traffic & Visitor Analytics</h3>
+          <button id="refresh-analytics-btn" class="px-4 py-2 text-sm font-medium border border-foreground/15 rounded-lg hover:bg-foreground/[0.03] transition">Refresh Stats</button>
+        </div>
+
+        <!-- Metric Summary Cards -->
+        <div class="grid gap-6 md:grid-cols-3">
+          <div class="p-6 admin-card space-y-2">
+            <div class="text-xs uppercase tracking-wider text-muted-foreground">Total Page Views</div>
+            <div id="analytics-total-views" class="text-4xl font-extrabold font-mono text-primary animate-pulse">0</div>
+            <p class="text-xs text-muted-foreground">All page loads logged by visitors</p>
+          </div>
+          <div class="p-6 admin-card space-y-2">
+            <div class="text-xs uppercase tracking-wider text-muted-foreground">Unique Visitors</div>
+            <div id="analytics-unique-visitors" class="text-4xl font-extrabold font-mono text-primary animate-pulse">0</div>
+            <p class="text-xs text-muted-foreground">Distinct browser sessions tracked</p>
+          </div>
+          <div class="p-6 admin-card space-y-2">
+            <div class="text-xs uppercase tracking-wider text-muted-foreground">Average Views / Session</div>
+            <div id="analytics-avg-views" class="text-4xl font-extrabold font-mono text-primary animate-pulse">0.0</div>
+            <p class="text-xs text-muted-foreground">Average pages viewed per session</p>
+          </div>
+        </div>
+
+        <!-- 7-Day Pageviews Timeline Chart -->
+        <div class="p-6 admin-card space-y-4">
+          <h4 class="text-lg font-bold">Daily Traffic (Last 7 Days)</h4>
+          <div class="relative h-48 w-full flex items-end justify-between pt-6 border-b border-foreground/10" id="analytics-chart-container">
+            <div class="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm" id="chart-loading-placeholder">
+              Loading chart data...
+            </div>
+          </div>
+        </div>
+
+        <!-- Split lists: Top Pages & Referrers -->
+        <div class="grid gap-6 md:grid-cols-2">
+          <!-- Top Pages -->
+          <div class="p-6 admin-card space-y-4">
+            <h4 class="text-lg font-bold">Most Visited Pages</h4>
+            <div class="overflow-hidden">
+              <table class="w-full text-left text-sm border-collapse">
+                <thead>
+                  <tr class="border-b border-foreground/5 text-xs uppercase text-muted-foreground">
+                    <th class="pb-2 font-semibold">Page Route</th>
+                    <th class="pb-2 font-semibold text-right">Views</th>
+                  </tr>
+                </thead>
+                <tbody id="analytics-pages-body">
+                  <tr>
+                    <td colspan="2" class="py-4 text-center text-muted-foreground">No traffic logs found.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Top Referrers -->
+          <div class="p-6 admin-card space-y-4">
+            <h4 class="text-lg font-bold">Top Traffic Sources</h4>
+            <div class="overflow-hidden">
+              <table class="w-full text-left text-sm border-collapse">
+                <thead>
+                  <tr class="border-b border-foreground/5 text-xs uppercase text-muted-foreground">
+                    <th class="pb-2 font-semibold">Referrer Url</th>
+                    <th class="pb-2 font-semibold text-right">Views</th>
+                  </tr>
+                </thead>
+                <tbody id="analytics-referrers-body">
+                  <tr>
+                    <td colspan="2" class="py-4 text-center text-muted-foreground">No traffic logs found.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity Feed -->
+        <div class="p-6 admin-card space-y-4">
+          <h4 class="text-lg font-bold">Live Traffic Stream</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm border-collapse min-w-[500px]">
+              <thead>
+                <tr class="border-b border-foreground/10 bg-foreground/[0.01]">
+                  <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Timestamp</th>
+                  <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Page</th>
+                  <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Source / Referrer</th>
+                  <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Device / OS</th>
+                </tr>
+              </thead>
+              <tbody id="analytics-stream-body">
+                <tr>
+                  <td colspan="4" class="p-8 text-center text-muted-foreground">No page views recorded yet.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>

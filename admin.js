@@ -193,6 +193,17 @@ const db = {
     const updated = blogs.filter(b => b.id !== id);
     localStorage.setItem("db_blogs", JSON.stringify(updated));
     return true;
+  },
+
+  // Analytics Operations
+  async getAnalytics() {
+    if (sbClient) {
+      const { data, error } = await sbClient.from("analytics").select("*").order("created_at", { ascending: false });
+      if (!error) return data;
+      console.warn("Supabase analytics load failed, falling back to LocalStorage:", error);
+    }
+    const local = localStorage.getItem("db_analytics");
+    return local ? JSON.parse(local) : [];
   }
 };
 
@@ -338,6 +349,7 @@ async function initDashboard() {
   setupTestimonialsManager();
   setupAboutManager();
   setupBlogsManager();
+  setupAnalyticsManager();
   setupBackupRestore();
 
   // Load active count stats
@@ -349,10 +361,13 @@ async function updateStats() {
   const proj = await db.getProjects();
   const test = await db.getTestimonials();
   const blogs = await db.getBlogs();
+  const views = await db.getAnalytics();
 
   document.getElementById("stat-projects").textContent = proj.length;
   document.getElementById("stat-testimonials").textContent = test.length;
   document.getElementById("stat-bugs").textContent = blogs.length;
+  const statViews = document.getElementById("stat-views");
+  if (statViews) statViews.textContent = views.length;
 }
 
 // 1. Database Configuration elements removed from layout. Fallback initialized directly.
@@ -676,7 +691,8 @@ function setupBackupRestore() {
       projects: await db.getProjects(),
       testimonials: await db.getTestimonials(),
       about: await db.getAboutInfo(),
-      blogs: await db.getBlogs()
+      blogs: await db.getBlogs(),
+      analytics: await db.getAnalytics()
     };
 
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup, null, 2));
@@ -703,7 +719,6 @@ function setupBackupRestore() {
         
         if (data.projects) {
           if (sbClient) {
-            // Upsert array to Supabase
             for (let p of data.projects) await db.saveProject(p);
           } else {
             localStorage.setItem("db_projects", JSON.stringify(data.projects));
@@ -726,6 +741,15 @@ function setupBackupRestore() {
             localStorage.setItem("db_blogs", JSON.stringify(data.blogs));
           }
         }
+        if (data.analytics) {
+          if (sbClient) {
+            for (let a of data.analytics) {
+              await sbClient.from("analytics").insert([a]);
+            }
+          } else {
+            localStorage.setItem("db_analytics", JSON.stringify(data.analytics));
+          }
+        }
 
         alert("Data successfully restored! Refreshing page...");
         location.reload();
@@ -736,4 +760,184 @@ function setupBackupRestore() {
     };
     reader.readAsText(file);
   });
+}
+
+// 7. Analytics Dashboard Manager Implementation
+async function setupAnalyticsManager() {
+  const refreshBtn = document.getElementById("refresh-analytics-btn");
+  if (!refreshBtn) return;
+
+  const renderAnalytics = async () => {
+    const data = await db.getAnalytics();
+
+    // A. Stats Summary
+    const totalViews = data.length;
+    const uniqueSessionIds = new Set(data.map(item => item.session_id));
+    const uniqueVisitors = uniqueSessionIds.size;
+    const avgViews = uniqueVisitors > 0 ? (totalViews / uniqueVisitors).toFixed(1) : "0.0";
+
+    const totalViewsEl = document.getElementById("analytics-total-views");
+    const uniqueVisitorsEl = document.getElementById("analytics-unique-visitors");
+    const avgViewsEl = document.getElementById("analytics-avg-views");
+
+    if (totalViewsEl) {
+      totalViewsEl.textContent = totalViews;
+      totalViewsEl.classList.remove("animate-pulse");
+    }
+    if (uniqueVisitorsEl) {
+      uniqueVisitorsEl.textContent = uniqueVisitors;
+      uniqueVisitorsEl.classList.remove("animate-pulse");
+    }
+    if (avgViewsEl) {
+      avgViewsEl.textContent = avgViews;
+      avgViewsEl.classList.remove("animate-pulse");
+    }
+
+    // B. Daily Chart (Last 7 Days)
+    const last7Days = [];
+    const dailyCounts = [];
+    const dailyLabels = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      d.setHours(0,0,0,0);
+      last7Days.push(d);
+
+      const label = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      dailyLabels.push(label);
+      dailyCounts.push(0);
+    }
+
+    data.forEach(item => {
+      if (item.created_at) {
+        const itemDate = new Date(item.created_at);
+        itemDate.setHours(0,0,0,0);
+        const dayIdx = last7Days.findIndex(d => d.getTime() === itemDate.getTime());
+        if (dayIdx !== -1) {
+          dailyCounts[dayIdx]++;
+        }
+      }
+    });
+
+    const chartContainer = document.getElementById("analytics-chart-container");
+    if (chartContainer) {
+      chartContainer.innerHTML = "";
+      const maxVal = Math.max(...dailyCounts, 1);
+
+      dailyCounts.forEach((count, i) => {
+        const dayLabel = dailyLabels[i];
+        const pct = (count / maxVal) * 80; // Scale to 80% to fit tooltips
+
+        const barWrapper = document.createElement("div");
+        barWrapper.className = "flex-1 flex flex-col items-center group relative h-full justify-end pb-2";
+        barWrapper.innerHTML = `
+          <!-- Tooltip -->
+          <div class="absolute -top-7 bg-primary text-primary-foreground text-[10px] font-mono px-2 py-0.5 rounded shadow opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none z-10 whitespace-nowrap">
+            ${count} views
+          </div>
+          <!-- Bar -->
+          <div class="w-6 md:w-10 rounded-t bg-primary/20 border-t border-x border-primary/40 group-hover:bg-primary/40 group-hover:border-primary transition-all duration-300" style="height: ${pct}%;"></div>
+          <!-- Date Label -->
+          <span class="text-[9px] text-muted-foreground font-mono mt-2">${dayLabel}</span>
+        `;
+        chartContainer.appendChild(barWrapper);
+      });
+    }
+
+    // C. Top Pages Table
+    const pageCounts = {};
+    data.forEach(item => {
+      if (item.page) {
+        pageCounts[item.page] = (pageCounts[item.page] || 0) + 1;
+      }
+    });
+    const sortedPages = Object.entries(pageCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
+    const pagesBody = document.getElementById("analytics-pages-body");
+    if (pagesBody) {
+      pagesBody.innerHTML = "";
+      if (sortedPages.length === 0) {
+        pagesBody.innerHTML = `<tr><td colspan="2" class="py-4 text-center text-muted-foreground">No traffic logs found.</td></tr>`;
+      } else {
+        sortedPages.forEach(([page, count]) => {
+          const tr = document.createElement("tr");
+          tr.className = "border-b border-foreground/5 hover:bg-foreground/[0.01]";
+          tr.innerHTML = `
+            <td class="py-3 font-mono text-xs text-foreground/80">${page}</td>
+            <td class="py-3 text-right font-semibold font-mono">${count}</td>
+          `;
+          pagesBody.appendChild(tr);
+        });
+      }
+    }
+
+    // D. Top Referrers Table
+    const refCounts = {};
+    data.forEach(item => {
+      let ref = item.referrer || "Direct";
+      if (ref.startsWith("http")) {
+        try {
+          ref = new URL(ref).hostname;
+        } catch(e) {}
+      }
+      refCounts[ref] = (refCounts[ref] || 0) + 1;
+    });
+    const sortedRefs = Object.entries(refCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
+    const refsBody = document.getElementById("analytics-referrers-body");
+    if (refsBody) {
+      refsBody.innerHTML = "";
+      if (sortedRefs.length === 0) {
+        refsBody.innerHTML = `<tr><td colspan="2" class="py-4 text-center text-muted-foreground">No traffic logs found.</td></tr>`;
+      } else {
+        sortedRefs.forEach(([ref, count]) => {
+          const tr = document.createElement("tr");
+          tr.className = "border-b border-foreground/5 hover:bg-foreground/[0.01]";
+          tr.innerHTML = `
+            <td class="py-3 text-foreground/80">${ref}</td>
+            <td class="py-3 text-right font-semibold font-mono">${count}</td>
+          `;
+          refsBody.appendChild(tr);
+        });
+      }
+    }
+
+    // E. Live Traffic Stream Table (Last 15 Hits)
+    const streamBody = document.getElementById("analytics-stream-body");
+    if (streamBody) {
+      streamBody.innerHTML = "";
+      const recentHits = data.slice(0, 15);
+      if (recentHits.length === 0) {
+        streamBody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-muted-foreground">No page views recorded yet.</td></tr>`;
+      } else {
+        recentHits.forEach(hit => {
+          const timeStr = hit.created_at ? new Date(hit.created_at).toLocaleString() : '';
+
+          const ua = hit.user_agent || "";
+          let device = "Desktop";
+          if (/mobile/i.test(ua)) device = "Mobile";
+          else if (/tablet/i.test(ua)) device = "Tablet";
+
+          let os = "Unknown OS";
+          if (/windows/i.test(ua)) os = "Windows";
+          else if (/macintosh|mac os x/i.test(ua)) os = "macOS";
+          else if (/iphone|ipad/i.test(ua)) os = "iOS";
+          else if (/android/i.test(ua)) os = "Android";
+          else if (/linux/i.test(ua)) os = "Linux";
+
+          const tr = document.createElement("tr");
+          tr.className = "border-b border-foreground/5 hover:bg-foreground/[0.01]";
+          tr.innerHTML = `
+            <td class="p-4 font-mono text-xs text-muted-foreground">${timeStr}</td>
+            <td class="p-4 font-mono text-xs font-semibold">${hit.page}</td>
+            <td class="p-4 text-xs text-muted-foreground max-w-[200px] truncate" title="${hit.referrer}">${hit.referrer}</td>
+            <td class="p-4 text-xs text-muted-foreground">${device} (${os})</td>
+          `;
+          streamBody.appendChild(tr);
+        });
+      }
+    }
+  };
+
+  refreshBtn.addEventListener("click", renderAnalytics);
+  renderAnalytics();
 }
