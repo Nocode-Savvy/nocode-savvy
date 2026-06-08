@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   initBackToTop();
   initContactForm();
   initMobilePortraitTap();
-  initAdminLink();
 });
 
 // --- Theme Toggle ---
@@ -1114,22 +1113,7 @@ async function initDynamicContent() {
   }
 }
 
-function initAdminLink() {
-  const footers = document.querySelectorAll("footer");
-  footers.forEach(footer => {
-    const linkDiv = footer.querySelector(".flex.items-center.gap-4") || footer;
-    if (linkDiv) {
-      const adminLink = document.createElement("a");
-      adminLink.href = "admin.html";
-      adminLink.className = "hover:text-foreground transition text-[11px] text-muted-foreground";
-      adminLink.textContent = "Admin Portal";
-      
-      const separator = document.createTextNode(" · ");
-      linkDiv.appendChild(separator);
-      linkDiv.appendChild(adminLink);
-    }
-  });
-}
+
 
 
 
