@@ -288,7 +288,7 @@
     } catch(e) {}
   </script>
   <script type="module" crossorigin src="/assets/transitions-CTRLMX6l.js"></script>
-  <script type="module" crossorigin src="/assets/main-BrqLFZlB.js"></script>
+  <script type="module" crossorigin src="/assets/main-DJMjp9YN.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/transitions-DXIsyZ1G.css">
 </head>
 <body class="min-h-screen bg-background text-foreground pb-36">
@@ -983,49 +983,89 @@
   <style>
     .blog-featured-card {
       position: relative;
-      border-radius: 20px;
+      border-radius: 24px;
       border: 1px solid var(--border);
       overflow: hidden;
-      background: var(--background);
-      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease;
+      background: rgba(255, 255, 255, 0.015);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    html[data-theme="light"] .blog-featured-card {
+      background: rgba(0, 0, 0, 0.01);
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.04);
     }
     .blog-featured-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 60px -16px color-mix(in oklab, var(--primary) 22%, transparent);
-      border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
+      transform: translateY(-6px);
+      box-shadow: 0 24px 64px -16px color-mix(in oklab, var(--primary) 22%, transparent);
+      border-color: var(--primary);
+    }
+    .blog-featured-card-content {
+      padding: 2.25rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+    .blog-thumb-wrapper {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.01);
     }
     .blog-thumb {
       width: 100%;
-      aspect-ratio: 16/9;
+      height: 100%;
       object-fit: cover;
-      display: block;
-      filter: brightness(0.92);
-      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), filter 0.4s ease;
+      filter: brightness(0.9) contrast(1.05);
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
     }
-    .blog-featured-card:hover .blog-thumb { transform: scale(1.04); filter: brightness(0.98); }
+    .blog-featured-card:hover .blog-thumb {
+      transform: scale(1.04);
+      filter: brightness(0.96) contrast(1.05);
+    }
     .blog-mini-card {
       display: flex;
-      gap: 1rem;
-      align-items: flex-start;
+      gap: 1.25rem;
+      align-items: center;
       padding: 1.25rem;
-      border-radius: 16px;
+      border-radius: 20px;
       border: 1px solid var(--border);
-      background: var(--background);
-      transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
-      cursor: default;
+      background: rgba(255, 255, 255, 0.015);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.15);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+    }
+    html[data-theme="light"] .blog-mini-card {
+      background: rgba(0, 0, 0, 0.01);
+      box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.02);
     }
     .blog-mini-card:hover {
-      background: color-mix(in oklab, var(--background) 94%, var(--primary));
-      border-color: color-mix(in oklab, var(--primary) 35%, var(--border));
-      transform: translateX(4px);
+      background: color-mix(in oklab, var(--background) 95%, var(--primary));
+      border-color: var(--primary);
+      transform: translateX(6px);
+      box-shadow: 0 12px 30px -10px color-mix(in oklab, var(--primary) 15%, transparent);
     }
-    .blog-mini-number {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--muted-foreground);
-      opacity: 0.6;
-      min-width: 24px;
-      padding-top: 3px;
+    .blog-mini-thumb {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      object-fit: cover;
+      filter: brightness(0.9);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+    .blog-mini-card:hover .blog-mini-thumb {
+      filter: brightness(1.0);
+      transform: scale(1.03);
     }
     .blog-tag {
       display: inline-flex;
@@ -1033,15 +1073,21 @@
       padding: 3px 10px;
       border-radius: 9999px;
       font-size: 0.7rem;
+      font-weight: 500;
       border: 1px solid var(--border);
       color: var(--muted-foreground);
       background: transparent;
-      font-family: var(--font-sans);
+      transition: all 0.3s ease;
     }
     .blog-tag.primary {
-      background: color-mix(in oklab, var(--primary) 12%, transparent);
+      background: color-mix(in oklab, var(--primary) 10%, transparent);
       color: var(--primary);
-      border-color: color-mix(in oklab, var(--primary) 30%, transparent);
+      border-color: color-mix(in oklab, var(--primary) 20%, transparent);
+    }
+    .blog-mini-card:hover .blog-tag.primary {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border-color: var(--primary);
     }
     .blog-empty-state {
       display: flex;
@@ -1095,9 +1141,9 @@
       </a>
     </div>
 
-    <div id="blog-grid" class="hidden">
-      <div id="blog-featured-slot" class="mb-8"></div>
-      <div id="blog-mini-grid" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"></div>
+    <div id="blog-grid" class="hidden grid gap-8 lg:grid-cols-12 items-stretch">
+      <div id="blog-featured-slot" class="lg:col-span-7"></div>
+      <div id="blog-mini-grid" class="lg:col-span-5 flex flex-col gap-5"></div>
     </div>
   </div>
 </section>

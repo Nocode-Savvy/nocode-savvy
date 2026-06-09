@@ -969,7 +969,7 @@ async function initDynamicContent() {
     const homeShowcase = document.getElementById("projects-showcase-grid");
     if (homeShowcase) {
       homeShowcase.innerHTML = ""; // Clear static fallbacks!
-      projects.forEach(p => {
+      projects.slice(0, 6).forEach(p => {
         const tagsHtml = (p.tags || []).map(t => `<span class="rounded-full border hairline px-2.5 py-1">${t}</span>`).join("");
         const imageBlock = p.image_url 
           ? `<img src="${p.image_url}" class="w-full h-full object-cover filter brightness-[0.95] group-hover:scale-[1.03] transition duration-500" alt="${p.title} screen">`
@@ -1134,40 +1134,54 @@ async function initDynamicContent() {
       if (featuredSlot) {
         featuredSlot.innerHTML = `
           <article class="blog-featured-card">
-            ${featured.image_url ? `<div style="overflow:hidden"><img src="${featured.image_url}" alt="${featured.title}" class="blog-thumb"></div>` : ''}
-            <div style="padding:1.75rem 2rem 2rem">
-              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap">
-                <span class="blog-tag primary">Featured</span>
-                ${featured.category ? `<span class="blog-tag">${featured.category}</span>` : ''}
-                <span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--muted-foreground);opacity:0.6;margin-left:auto">${featuredDate}</span>
+            ${featured.image_url 
+              ? `<div class="blog-thumb-wrapper"><img src="${featured.image_url}" alt="${featured.title}" class="blog-thumb"></div>` 
+              : `<div class="blog-thumb-wrapper flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/20 text-primary/30 font-display text-4xl font-semibold select-none">${featured.title.substring(0, 2).toUpperCase()}</div>`
+            }
+            <div class="blog-featured-card-content">
+              <div class="space-y-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="blog-tag primary">Featured</span>
+                  ${featured.category ? `<span class="blog-tag">${featured.category}</span>` : ''}
+                  <span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--muted-foreground);opacity:0.6;margin-left:auto">${featuredDate}</span>
+                </div>
+                <h3 class="font-display text-2xl md:text-3xl font-bold leading-snug text-foreground">${featured.title}</h3>
+                ${featured.excerpt ? `<p class="text-sm text-muted-foreground leading-relaxed">${featured.excerpt}</p>` : ''}
               </div>
-              <h3 style="font-family:var(--font-display);font-size:clamp(1.4rem,3vw,2rem);font-weight:700;line-height:1.2;color:var(--foreground);margin-bottom:0.75rem">${featured.title}</h3>
-              ${featured.excerpt ? `<p style="font-size:0.9rem;color:var(--muted-foreground);line-height:1.65;max-width:680px">${featured.excerpt}</p>` : ''}
-              ${featured.url ? `<a href="${featured.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;margin-top:1.25rem;font-size:0.825rem;color:var(--primary);text-decoration:none;font-weight:500">Read article <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>` : ''}
+              <div class="pt-6">
+                ${featured.url ? `<a href="${featured.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">Read Article <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition group-hover:translate-x-0.5"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>` : ''}
+              </div>
             </div>
           </article>
         `;
       }
 
-      // Mini cards — rest of posts
+      // Mini cards — rest of posts (limited to 3)
       if (miniGrid && publishedBlogs.length > 1) {
         miniGrid.innerHTML = '';
-        publishedBlogs.slice(1).forEach((b, idx) => {
+        publishedBlogs.slice(1, 4).forEach((b, idx) => {
           const postDate = b.created_at
             ? new Date(b.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
             : '';
-          const card = document.createElement('article');
-          card.className = 'blog-mini-card';
+          const card = document.createElement('a');
+          card.href = b.url || '#';
+          card.target = '_blank';
+          card.rel = 'noopener noreferrer';
+          card.className = 'blog-mini-card group';
+
+          const imageBlock = b.image_url 
+            ? `<img src="${b.image_url}" alt="${b.title}" class="blog-mini-thumb">`
+            : `<div class="blog-mini-thumb flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/20 text-primary/30 font-display font-semibold text-lg select-none">${b.title.substring(0, 2).toUpperCase()}</div>`;
+
           card.innerHTML = `
-            <span class="blog-mini-number">0${idx + 2}</span>
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap">
+            ${imageBlock}
+            <div style="flex:1;min-width:0" class="space-y-1.5">
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
                 ${b.category ? `<span class="blog-tag">${b.category}</span>` : ''}
                 <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--muted-foreground);opacity:0.6">${postDate}</span>
               </div>
-              <h4 style="font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:var(--foreground);line-height:1.3;margin-bottom:4px">${b.title}</h4>
+              <h4 style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--foreground);line-height:1.3;margin-bottom:2px">${b.title}</h4>
               ${b.excerpt ? `<p style="font-size:0.8rem;color:var(--muted-foreground);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${b.excerpt}</p>` : ''}
-              ${b.url ? `<a href="${b.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:0.75rem;color:var(--primary);text-decoration:none">Read <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>` : ''}
             </div>
           `;
           miniGrid.appendChild(card);
