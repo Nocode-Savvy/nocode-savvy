@@ -223,6 +223,26 @@ document.getElementById("login-form").addEventListener("submit", (e) => {
   }
 });
 
+// Password Reveal Toggle controller
+const passwordInput = document.getElementById("password");
+const passwordToggle = document.getElementById("password-toggle");
+const eyeIcon = document.getElementById("eye-icon");
+const eyeOffIcon = document.getElementById("eye-off-icon");
+
+if (passwordToggle && passwordInput) {
+  passwordToggle.addEventListener("click", () => {
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      if (eyeIcon) eyeIcon.classList.add("hidden");
+      if (eyeOffIcon) eyeOffIcon.classList.remove("hidden");
+    } else {
+      passwordInput.type = "password";
+      if (eyeIcon) eyeIcon.classList.remove("hidden");
+      if (eyeOffIcon) eyeOffIcon.classList.add("hidden");
+    }
+  });
+}
+
 document.getElementById("logout-btn").addEventListener("click", () => {
   localStorage.removeItem("admin_logged_in");
   location.reload();
@@ -390,14 +410,14 @@ async function setupProjectsManager() {
       const tr = document.createElement("tr");
       tr.className = "border-b border-foreground/5 hover:bg-foreground/[0.01]";
       tr.innerHTML = `
-        <td class="p-4">
+        <td data-label="Project" class="p-4">
           <div class="font-bold text-base">${p.title}</div>
           <div class="text-xs text-muted-foreground mt-1 line-clamp-1">${p.description}</div>
         </td>
-        <td class="p-4 text-muted-foreground font-mono text-xs">${p.category}</td>
-        <td class="p-4 text-muted-foreground font-mono text-xs">${p.year}</td>
-        <td class="p-4">
-          <div class="flex gap-2">
+        <td data-label="Category" class="p-4 text-muted-foreground font-mono text-xs">${p.category}</td>
+        <td data-label="Year" class="p-4 text-muted-foreground font-mono text-xs">${p.year}</td>
+        <td data-label="Actions" class="p-4">
+          <div class="flex gap-2 justify-end md:justify-start">
             <button class="edit-p-btn text-xs font-semibold hover:text-primary transition" data-id="${p.id}">Edit</button>
             <button class="delete-p-btn text-xs font-semibold text-destructive hover:opacity-85 transition" data-id="${p.id}">Delete</button>
           </div>
@@ -431,6 +451,18 @@ async function setupProjectsManager() {
           document.getElementById("project-image-url").value = item.image_url || "";
           document.getElementById("project-description").value = item.description;
 
+          // Clear file input and set image preview
+          const fileInput = document.getElementById("project-image-file");
+          if (fileInput) fileInput.value = "";
+          const preview = document.getElementById("project-image-preview");
+          if (preview) {
+            if (item.image_url) {
+              preview.innerHTML = `<img src="${item.image_url}" class="h-full w-full object-cover">`;
+            } else {
+              preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image Selected</span>`;
+            }
+          }
+
           document.getElementById("project-form-title").textContent = "Edit Project Info";
           form.classList.remove("hidden");
         }
@@ -438,15 +470,69 @@ async function setupProjectsManager() {
     });
   };
 
+  // Live File Input and URL Input listeners
+  const fileInput = document.getElementById("project-image-file");
+  const urlInput = document.getElementById("project-image-url");
+  const preview = document.getElementById("project-image-preview");
+
+  if (fileInput) {
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        if (preview) {
+          preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">Converting...</span>`;
+        }
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64Str = event.target.result;
+          if (urlInput) {
+            urlInput.value = base64Str;
+          }
+          if (preview) {
+            preview.innerHTML = `<img src="${base64Str}" class="h-full w-full object-cover">`;
+          }
+        };
+        reader.onerror = (err) => {
+          console.error("File reading failed:", err);
+          if (preview) {
+            preview.innerHTML = `<span class="text-[10px] text-destructive text-center px-2">Error loading</span>`;
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  if (urlInput) {
+    urlInput.addEventListener("input", (e) => {
+      const val = e.target.value.trim();
+      if (preview) {
+        if (val) {
+          preview.innerHTML = `<img src="${val}" class="h-full w-full object-cover" onerror="this.parentNode.innerHTML='<span class=\'text-[10px] text-destructive text-center px-2\'>Invalid Image URL</span>'">`;
+        } else {
+          preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image Selected</span>`;
+        }
+      }
+    });
+  }
+
   addBtn.addEventListener("click", () => {
     form.reset();
     document.getElementById("project-id").value = "";
+    if (fileInput) fileInput.value = "";
+    if (preview) {
+      preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image Selected</span>`;
+    }
     document.getElementById("project-form-title").textContent = "New Project Details";
     form.classList.remove("hidden");
   });
 
   cancelBtn.addEventListener("click", () => {
     form.classList.add("hidden");
+    if (fileInput) fileInput.value = "";
+    if (preview) {
+      preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image Selected</span>`;
+    }
   });
 
   form.addEventListener("submit", async (e) => {
@@ -463,6 +549,10 @@ async function setupProjectsManager() {
     };
     await db.saveProject(project);
     form.classList.add("hidden");
+    if (fileInput) fileInput.value = "";
+    if (preview) {
+      preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image Selected</span>`;
+    }
     renderProjects();
     updateStats();
   });
@@ -608,15 +698,15 @@ async function setupBlogsManager() {
       const tr = document.createElement("tr");
       tr.className = "border-b border-foreground/5 hover:bg-foreground/[0.01]";
       tr.innerHTML = `
-        <td class="p-4">
+        <td data-label="Article Details" class="p-4">
           <div class="font-bold text-base">${b.title}</div>
           <div class="text-xs text-muted-foreground mt-1 line-clamp-1">${b.excerpt || b.content}</div>
         </td>
-        <td class="p-4">
+        <td data-label="Status" class="p-4">
           <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${statusClass}">${b.status}</span>
         </td>
-        <td class="p-4">
-          <div class="flex gap-2">
+        <td data-label="Actions" class="p-4">
+          <div class="flex gap-2 justify-end md:justify-start">
             <button class="edit-blog-btn text-xs font-semibold hover:text-primary transition" data-id="${b.id}">Edit</button>
             <button class="delete-blog-btn text-xs font-semibold text-destructive hover:opacity-85 transition" data-id="${b.id}">Delete</button>
           </div>
@@ -865,8 +955,8 @@ async function setupAnalyticsManager() {
           const tr = document.createElement("tr");
           tr.className = "border-b border-foreground/5 hover:bg-foreground/[0.01]";
           tr.innerHTML = `
-            <td class="py-3 font-mono text-xs text-foreground/80">${page}</td>
-            <td class="py-3 text-right font-semibold font-mono">${count}</td>
+            <td data-label="Page Route" class="py-3 font-mono text-xs text-foreground/80">${page}</td>
+            <td data-label="Views" class="py-3 text-right font-semibold font-mono">${count}</td>
           `;
           pagesBody.appendChild(tr);
         });
@@ -895,8 +985,8 @@ async function setupAnalyticsManager() {
           const tr = document.createElement("tr");
           tr.className = "border-b border-foreground/5 hover:bg-foreground/[0.01]";
           tr.innerHTML = `
-            <td class="py-3 text-foreground/80">${ref}</td>
-            <td class="py-3 text-right font-semibold font-mono">${count}</td>
+            <td data-label="Referrer Url" class="py-3 text-foreground/80">${ref}</td>
+            <td data-label="Views" class="py-3 text-right font-semibold font-mono">${count}</td>
           `;
           refsBody.appendChild(tr);
         });
@@ -929,10 +1019,10 @@ async function setupAnalyticsManager() {
           const tr = document.createElement("tr");
           tr.className = "border-b border-foreground/5 hover:bg-foreground/[0.01]";
           tr.innerHTML = `
-            <td class="p-4 font-mono text-xs text-muted-foreground">${timeStr}</td>
-            <td class="p-4 font-mono text-xs font-semibold">${hit.page}</td>
-            <td class="p-4 text-xs text-muted-foreground max-w-[200px] truncate" title="${hit.referrer}">${hit.referrer}</td>
-            <td class="p-4 text-xs text-muted-foreground">${device} (${os})</td>
+            <td data-label="Timestamp" class="p-4 font-mono text-xs text-muted-foreground">${timeStr}</td>
+            <td data-label="Page" class="p-4 font-mono text-xs font-semibold">${hit.page}</td>
+            <td data-label="Source / Referrer" class="p-4 text-xs text-muted-foreground max-w-[200px] truncate" title="${hit.referrer}">${hit.referrer}</td>
+            <td data-label="Device / OS" class="p-4 text-xs text-muted-foreground">${device} (${os})</td>
           `;
           streamBody.appendChild(tr);
         });
