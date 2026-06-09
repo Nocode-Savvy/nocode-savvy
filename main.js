@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initVideoSoundToggle();
   initChatPopup();
   initBackToTop();
+  initVideoLightbox();
   initContactForm();
   initMobilePortraitTap();
   try {
@@ -1200,6 +1201,90 @@ async function initDynamicContent() {
     }
   }
 }
+
+// --- Hero Video Lightbox (Expand to Fullscreen) ---
+function initVideoLightbox() {
+  const expandBtn = document.getElementById("video-expand-toggle");
+  const modal = document.getElementById("video-modal");
+  const modalClose = document.getElementById("video-modal-close");
+  const heroVideo = document.getElementById("hero-loop-video");
+  const modalVideo = document.getElementById("modal-video");
+
+  if (!expandBtn || !modal || !modalClose || !heroVideo || !modalVideo) return;
+
+  const openLightbox = () => {
+    // Sync timeline current time from background video
+    if (!isNaN(heroVideo.currentTime)) {
+      modalVideo.currentTime = heroVideo.currentTime;
+    }
+    
+    // Pause hero video
+    heroVideo.pause();
+
+    // Show modal container
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    
+    // Force reflow
+    modal.offsetHeight;
+
+    // Fade in
+    modal.classList.remove("opacity-0");
+    modal.classList.add("opacity-100");
+
+    // Play modal video (unmuted for better viewing)
+    modalVideo.muted = false;
+    modalVideo.play().catch(err => {
+      console.warn("Auto-play modal video failed:", err);
+    });
+  };
+
+  const closeLightbox = () => {
+    // Fade out modal
+    modal.classList.remove("opacity-100");
+    modal.classList.add("opacity-0");
+
+    // Pause modal video
+    modalVideo.pause();
+
+    // After animation duration, hide modal completely
+    setTimeout(() => {
+      modal.classList.remove("flex");
+      modal.classList.add("hidden");
+      
+      // Sync timeline back to background video
+      if (!isNaN(modalVideo.currentTime)) {
+        heroVideo.currentTime = modalVideo.currentTime;
+      }
+      // Resume background loop video
+      heroVideo.play().catch(e => {});
+    }, 300);
+  };
+
+  expandBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openLightbox();
+  });
+
+  // Also open lightbox when clicking on the video container itself on mobile (optional, very intuitive)
+  const videoTrigger = document.getElementById("hero-video-trigger");
+  if (videoTrigger) {
+    videoTrigger.addEventListener("click", (e) => {
+      // Prevent opening lightbox if user clicked control buttons inside it
+      if (e.target.closest("button")) return;
+      openLightbox();
+    });
+  }
+
+  modalClose.addEventListener("click", closeLightbox);
+  modal.addEventListener("click", (e) => {
+    // Close lightbox if clicking overlay backdrop, but not the video container card
+    if (e.target === modal) {
+      closeLightbox();
+    }
+  });
+}
+
 
 
 

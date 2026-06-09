@@ -279,6 +279,19 @@
         gap: 1.5rem;
       }
     }
+
+    /* Hero loop video micro-interactions */
+    #hero-video-trigger {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s ease !important;
+    }
+    #hero-video-trigger:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.4) !important;
+      border-color: var(--primary) !important;
+    }
+    #hero-video-trigger:hover #hero-loop-video {
+      filter: brightness(0.95);
+    }
   </style>
   <script>
     try {
@@ -318,13 +331,18 @@
   </div>
 </header><div class="space-y-0"><section data-section="home" id="hero" class="container-edge pt-6 md:pt-12 pb-20 md:pb-28 reveal"><div class="grid gap-10 md:grid-cols-12 md:gap-8 items-end"><div class="md:col-span-7 reveal delay-100"><div class="eyebrow mb-6 flex items-center gap-2"><span class="inline-block h-1 w-6 bg-primary"></span> Emmanuel Ajibewe · Nocode Savvy</div><h1 class="display-xl text-[clamp(2.2rem,5.5vw,4.5rem)]">I Don't Just Build Apps. <span class="block">I Build the <em class="font-normal italic text-primary">Thing</em> Your Business Actually Needs.</span></h1><p class="mt-8 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">I&#x27;m a <strong class="text-foreground">systems-led product engineer</strong>. I build <strong class="text-foreground" id="typewriter-text">SaaS platforms that scale.</strong></p><div class="mt-10 flex flex-wrap items-center gap-3"><a href="#work" class="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground">See selected work <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-4 w-4 transition group-hover:rotate-45" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="#contact" class="inline-flex items-center gap-2 rounded-full border hairline px-5 py-3 text-sm">Start a project</a></div></div><div class="md:col-span-5 space-y-6 reveal delay-200">
   <!-- Intro Video Placeholder -->
-  <div id="hero-video-trigger" class="aspect-video w-full rounded-2xl border hairline overflow-hidden bg-foreground/5 relative shadow-md mb-8">
+  <div id="hero-video-trigger" class="aspect-video w-full rounded-2xl border hairline overflow-hidden bg-foreground/5 relative shadow-md mb-8 cursor-pointer">
     <video id="hero-loop-video" class="w-full h-full object-cover filter brightness-[0.8] transition duration-500" autoplay muted loop playsinline preload="metadata">
       <source src="1000540539.mp4" type="video/mp4">
     </video>
     
     <!-- Controls Overlay Group -->
     <div class="absolute bottom-4 right-4 z-10 flex items-center gap-2 pointer-events-auto">
+      <!-- Expand Video Button -->
+      <button id="video-expand-toggle" aria-label="Expand video" class="flex h-9 w-9 items-center justify-center rounded-full bg-background/80 border hairline text-foreground backdrop-blur hover:bg-background transition shadow-sm cursor-pointer hover:scale-105 active:scale-95">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-maximize-2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      </button>
+
       <!-- Play/Pause Toggle -->
       <button id="video-play-toggle" aria-label="Toggle play" class="flex h-9 w-9 items-center justify-center rounded-full bg-background/80 border hairline text-foreground backdrop-blur hover:bg-background transition shadow-sm cursor-pointer hover:scale-105 active:scale-95">
         <!-- Pause Icon (visible initially since video autoplay is on) -->
@@ -1764,7 +1782,17 @@
   </div>
 </div>
 
-
+<!-- Video Lightbox Modal for Mobile and Desktop -->
+<div id="video-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/95 backdrop-blur-md opacity-0 transition-opacity duration-300">
+  <button id="video-modal-close" aria-label="Close video" class="absolute top-6 right-6 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-white/10 transition cursor-pointer">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+  </button>
+  <div class="relative w-full max-w-4xl aspect-video mx-4 overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-black" style="max-height: 80vh;">
+    <video id="modal-video" class="w-full h-full object-contain" controls playsinline>
+      <source src="1000540539.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="module" src="animations.js"></script>
