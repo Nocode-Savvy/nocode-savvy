@@ -2,6 +2,38 @@
 
 let sbClient = null;
 
+// Drawer Panel Control functions
+function openDrawer(drawerId) {
+  const drawer = document.getElementById(drawerId);
+  const overlay = document.getElementById("drawer-overlay");
+  if (drawer && overlay) {
+    overlay.classList.add("open");
+    drawer.classList.add("open");
+  }
+}
+
+function closeDrawer(drawerId) {
+  const drawer = document.getElementById(drawerId);
+  const overlay = document.getElementById("drawer-overlay");
+  if (drawer && overlay) {
+    drawer.classList.remove("open");
+    const openDrawers = document.querySelectorAll(".drawer-panel.open");
+    if (openDrawers.length === 0) {
+      overlay.classList.remove("open");
+    }
+  }
+}
+
+// Global Drawer Overlay close action
+const overlay = document.getElementById("drawer-overlay");
+if (overlay) {
+  overlay.addEventListener("click", () => {
+    document.querySelectorAll(".drawer-panel").forEach(d => d.classList.remove("open"));
+    overlay.classList.remove("open");
+  });
+}
+
+
 // Initialize Supabase Client if credentials exist
 function initSupabase() {
   const url = localStorage.getItem("sb_url") || "https://iyhynpndndgxyioojdwp.supabase.co";
@@ -393,37 +425,89 @@ async function updateStats() {
 // 1. Database Configuration elements removed from layout. Fallback initialized directly.
 
 // 2. Projects Manager Implementation
+let activeProjectTags = [];
+
+function renderTagPills() {
+  const container = document.getElementById("project-tags-container");
+  const hiddenInput = document.getElementById("project-tags");
+  if (!container) return;
+  
+  container.innerHTML = "";
+  activeProjectTags.forEach((tag, idx) => {
+    const pill = document.createElement("span");
+    pill.className = "tag-pill";
+    pill.innerHTML = `
+      ${tag}
+      <span class="tag-pill-remove" data-index="${idx}">&times;</span>
+    `;
+    container.appendChild(pill);
+  });
+  
+  if (hiddenInput) {
+    hiddenInput.value = activeProjectTags.join(", ");
+  }
+
+  container.querySelectorAll(".tag-pill-remove").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const index = parseInt(btn.getAttribute("data-index"));
+      activeProjectTags.splice(index, 1);
+      renderTagPills();
+    });
+  });
+}
+
 async function setupProjectsManager() {
   const form = document.getElementById("project-form");
-  const body = document.getElementById("projects-list-body");
+  const grid = document.getElementById("projects-card-grid");
   const addBtn = document.getElementById("add-project-btn");
   const cancelBtn = document.getElementById("cancel-project-btn");
+  const closeBtn = document.getElementById("close-project-drawer-btn");
 
   const renderProjects = async () => {
     const list = await db.getProjects();
-    body.innerHTML = "";
+    if (!grid) return;
+    grid.innerHTML = "";
     if (list.length === 0) {
-      body.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-muted-foreground">No custom projects loaded.</td></tr>`;
+      grid.innerHTML = `<div class="col-span-full text-center text-muted-foreground p-8 admin-card">No custom projects loaded.</div>`;
       return;
     }
     list.forEach(p => {
-      const tr = document.createElement("tr");
-      tr.className = "border-b border-foreground/5 hover:bg-foreground/[0.01]";
-      tr.innerHTML = `
-        <td data-label="Project" class="p-4">
-          <div class="font-bold text-base">${p.title}</div>
-          <div class="text-xs text-muted-foreground mt-1 line-clamp-1">${p.description}</div>
-        </td>
-        <td data-label="Category" class="p-4 text-muted-foreground font-mono text-xs">${p.category}</td>
-        <td data-label="Year" class="p-4 text-muted-foreground font-mono text-xs">${p.year}</td>
-        <td data-label="Actions" class="p-4">
-          <div class="flex gap-2 justify-end md:justify-start">
-            <button class="edit-p-btn text-xs font-semibold hover:text-primary transition" data-id="${p.id}">Edit</button>
-            <button class="delete-p-btn text-xs font-semibold text-destructive hover:opacity-85 transition" data-id="${p.id}">Delete</button>
+      const card = document.createElement("div");
+      card.className = "project-admin-card flex flex-col";
+      
+      const tagsList = p.tags || [];
+      const tagsHtml = tagsList.map(t => `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary/10 text-primary border border-primary/10">${t}</span>`).join("");
+      
+      card.innerHTML = `
+        <div class="h-44 w-full relative overflow-hidden bg-foreground/[0.02] border-b border-foreground/5 flex items-center justify-center">
+          ${p.image_url ? `
+            <img src="${p.image_url}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" onerror="this.parentNode.innerHTML='<span class=\\'text-xs text-destructive font-mono\\'>Image Load Failed</span>'">
+          ` : `
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          `}
+          <div class="absolute top-3 right-3 bg-background/80 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-mono border border-foreground/10">${p.year}</div>
+        </div>
+        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <div class="text-[10px] uppercase tracking-wider text-primary font-semibold">${p.category}</div>
+            <h4 class="text-lg font-bold line-clamp-1">${p.title}</h4>
+            <p class="text-xs text-muted-foreground line-clamp-3">${p.description}</p>
           </div>
-        </td>
+          <div class="space-y-4 pt-2">
+            <div class="flex flex-wrap gap-1">
+              ${tagsHtml || '<span class="text-[10px] text-muted-foreground">No tags</span>'}
+            </div>
+            <div class="flex items-center justify-between border-t border-foreground/5 pt-3">
+              ${p.link ? `<a href="${p.link}" target="_blank" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">Live Demo <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>` : `<span></span>`}
+              <div class="flex gap-3">
+                <button class="edit-p-btn text-xs font-semibold hover:text-primary transition cursor-pointer" data-id="${p.id}">Edit</button>
+                <button class="delete-p-btn text-xs font-semibold text-destructive hover:opacity-80 transition cursor-pointer" data-id="${p.id}">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
       `;
-      body.appendChild(tr);
+      grid.appendChild(card);
     });
 
     // Wire up delete and edit event listeners
@@ -447,7 +531,11 @@ async function setupProjectsManager() {
           document.getElementById("project-category").value = item.category;
           document.getElementById("project-year").value = item.year;
           document.getElementById("project-link").value = item.link || "";
-          document.getElementById("project-tags").value = (item.tags || []).join(", ");
+          
+          // Setup initial tags
+          activeProjectTags = [...(item.tags || [])];
+          renderTagPills();
+          
           document.getElementById("project-image-url").value = item.image_url || "";
           document.getElementById("project-description").value = item.description;
 
@@ -459,12 +547,12 @@ async function setupProjectsManager() {
             if (item.image_url) {
               preview.innerHTML = `<img src="${item.image_url}" class="h-full w-full object-cover">`;
             } else {
-              preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image Selected</span>`;
+              preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image</span>`;
             }
           }
 
           document.getElementById("project-form-title").textContent = "Edit Project Info";
-          form.classList.remove("hidden");
+          openDrawer("project-drawer");
         }
       });
     });
@@ -474,31 +562,65 @@ async function setupProjectsManager() {
   const fileInput = document.getElementById("project-image-file");
   const urlInput = document.getElementById("project-image-url");
   const preview = document.getElementById("project-image-preview");
+  const uploadZone = document.getElementById("project-upload-zone");
+
+  const handleProjectFile = (file) => {
+    if (preview) {
+      preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">Converting...</span>`;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64Str = event.target.result;
+      if (urlInput) {
+        urlInput.value = base64Str;
+      }
+      if (preview) {
+        preview.innerHTML = `<img src="${base64Str}" class="h-full w-full object-cover">`;
+      }
+    };
+    reader.onerror = (err) => {
+      console.error("File reading failed:", err);
+      if (preview) {
+        preview.innerHTML = `<span class="text-[10px] text-destructive text-center px-2">Error loading</span>`;
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   if (fileInput) {
     fileInput.addEventListener("change", (e) => {
       const file = e.target.files[0];
-      if (file) {
-        if (preview) {
-          preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">Converting...</span>`;
-        }
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const base64Str = event.target.result;
-          if (urlInput) {
-            urlInput.value = base64Str;
-          }
-          if (preview) {
-            preview.innerHTML = `<img src="${base64Str}" class="h-full w-full object-cover">`;
-          }
-        };
-        reader.onerror = (err) => {
-          console.error("File reading failed:", err);
-          if (preview) {
-            preview.innerHTML = `<span class="text-[10px] text-destructive text-center px-2">Error loading</span>`;
-          }
-        };
-        reader.readAsDataURL(file);
+      if (file) handleProjectFile(file);
+    });
+  }
+
+  if (uploadZone) {
+    uploadZone.addEventListener("click", () => {
+      if (fileInput) fileInput.click();
+    });
+
+    ["dragenter", "dragover"].forEach(eventName => {
+      uploadZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadZone.classList.add("dragover");
+      }, false);
+    });
+
+    ["dragleave", "drop"].forEach(eventName => {
+      uploadZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadZone.classList.remove("dragover");
+      }, false);
+    });
+
+    uploadZone.addEventListener("drop", (e) => {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      if (files.length > 0) {
+        if (fileInput) fileInput.files = files;
+        handleProjectFile(files[0]);
       }
     });
   }
@@ -510,30 +632,51 @@ async function setupProjectsManager() {
         if (val) {
           preview.innerHTML = `<img src="${val}" class="h-full w-full object-cover" onerror="this.parentNode.innerHTML='<span class=\'text-[10px] text-destructive text-center px-2\'>Invalid Image URL</span>'">`;
         } else {
-          preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image Selected</span>`;
+          preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image</span>`;
         }
+      }
+    });
+  }
+
+  // Tag inputs key listener
+  const tagInput = document.getElementById("project-tag-input");
+  if (tagInput) {
+    tagInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === ",") {
+        e.preventDefault();
+        const val = tagInput.value.trim().replace(/,/g, "");
+        if (val && !activeProjectTags.includes(val)) {
+          activeProjectTags.push(val);
+          renderTagPills();
+        }
+        tagInput.value = "";
       }
     });
   }
 
   addBtn.addEventListener("click", () => {
     form.reset();
+    activeProjectTags = [];
+    renderTagPills();
     document.getElementById("project-id").value = "";
     if (fileInput) fileInput.value = "";
     if (preview) {
-      preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image Selected</span>`;
+      preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image</span>`;
     }
     document.getElementById("project-form-title").textContent = "New Project Details";
-    form.classList.remove("hidden");
+    openDrawer("project-drawer");
   });
 
-  cancelBtn.addEventListener("click", () => {
-    form.classList.add("hidden");
+  const closeForm = () => {
+    closeDrawer("project-drawer");
     if (fileInput) fileInput.value = "";
     if (preview) {
-      preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image Selected</span>`;
+      preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image</span>`;
     }
-  });
+  };
+
+  if (cancelBtn) cancelBtn.addEventListener("click", closeForm);
+  if (closeBtn) closeBtn.addEventListener("click", closeForm);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -543,16 +686,12 @@ async function setupProjectsManager() {
       category: document.getElementById("project-category").value.trim(),
       year: document.getElementById("project-year").value.trim(),
       link: document.getElementById("project-link").value.trim() || undefined,
-      tags: document.getElementById("project-tags").value.split(",").map(t => t.trim()).filter(t => t.length > 0),
+      tags: activeProjectTags,
       image_url: document.getElementById("project-image-url").value.trim() || undefined,
       description: document.getElementById("project-description").value.trim()
     };
     await db.saveProject(project);
-    form.classList.add("hidden");
-    if (fileInput) fileInput.value = "";
-    if (preview) {
-      preview.innerHTML = `<span class="text-[10px] text-muted-foreground text-center px-2">No Image Selected</span>`;
-    }
+    closeForm();
     renderProjects();
     updateStats();
   });
@@ -679,40 +818,44 @@ async function setupAboutManager() {
 // 5. Blogs Manager Implementation
 async function setupBlogsManager() {
   const form = document.getElementById("blog-form");
-  const body = document.getElementById("blogs-list-body");
+  const grid = document.getElementById("blogs-card-grid");
   const addBtn = document.getElementById("add-blog-btn");
   const cancelBtn = document.getElementById("cancel-blog-btn");
+  const closeBtn = document.getElementById("close-blog-drawer-btn");
 
   const renderBlogs = async () => {
     const list = await db.getBlogs();
-    body.innerHTML = "";
+    if (!grid) return;
+    grid.innerHTML = "";
     if (list.length === 0) {
-      body.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-muted-foreground">No articles or blog posts logged yet.</td></tr>`;
+      grid.innerHTML = `<div class="col-span-full text-center text-muted-foreground p-8 admin-card">No blog articles logged yet.</div>`;
       return;
     }
     list.forEach(b => {
-      let statusClass = "bg-primary/10 text-primary";
+      let statusClass = "bg-primary/10 text-primary border border-primary/10";
       if (b.status === "Published") statusClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
       if (b.status === "Draft") statusClass = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
 
-      const tr = document.createElement("tr");
-      tr.className = "border-b border-foreground/5 hover:bg-foreground/[0.01]";
-      tr.innerHTML = `
-        <td data-label="Article Details" class="p-4">
-          <div class="font-bold text-base">${b.title}</div>
-          <div class="text-xs text-muted-foreground mt-1 line-clamp-1">${b.excerpt || b.content}</div>
-        </td>
-        <td data-label="Status" class="p-4">
-          <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${statusClass}">${b.status}</span>
-        </td>
-        <td data-label="Actions" class="p-4">
-          <div class="flex gap-2 justify-end md:justify-start">
-            <button class="edit-blog-btn text-xs font-semibold hover:text-primary transition" data-id="${b.id}">Edit</button>
-            <button class="delete-blog-btn text-xs font-semibold text-destructive hover:opacity-85 transition" data-id="${b.id}">Delete</button>
+      const card = document.createElement("div");
+      card.className = "blog-admin-card p-6 admin-card space-y-4";
+      
+      const dateStr = b.created_at ? new Date(b.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recently";
+
+      card.innerHTML = `
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${statusClass}">${b.status}</span>
+            <span class="text-[10px] font-mono text-muted-foreground">${dateStr}</span>
           </div>
-        </td>
+          <h4 class="text-lg font-bold line-clamp-1">${b.title}</h4>
+          <p class="text-xs text-muted-foreground line-clamp-3">${b.excerpt || b.content}</p>
+        </div>
+        <div class="flex gap-3 pt-3 border-t border-foreground/5 justify-end">
+          <button class="edit-blog-btn text-xs font-semibold hover:text-primary transition cursor-pointer" data-id="${b.id}">Edit</button>
+          <button class="delete-blog-btn text-xs font-semibold text-destructive hover:opacity-80 transition cursor-pointer" data-id="${b.id}">Delete</button>
+        </div>
       `;
-      body.appendChild(tr);
+      grid.appendChild(card);
     });
 
     document.querySelectorAll(".delete-blog-btn").forEach(btn => {
@@ -737,7 +880,7 @@ async function setupBlogsManager() {
           document.getElementById("blog-content").value = item.content;
 
           document.getElementById("blog-form-title").textContent = "Edit Blog Post";
-          form.classList.remove("hidden");
+          openDrawer("blog-drawer");
         }
       });
     });
@@ -747,12 +890,15 @@ async function setupBlogsManager() {
     form.reset();
     document.getElementById("blog-id").value = "";
     document.getElementById("blog-form-title").textContent = "Create New Blog Post";
-    form.classList.remove("hidden");
+    openDrawer("blog-drawer");
   });
 
-  cancelBtn.addEventListener("click", () => {
-    form.classList.add("hidden");
-  });
+  const closeForm = () => {
+    closeDrawer("blog-drawer");
+  };
+
+  if (cancelBtn) cancelBtn.addEventListener("click", closeForm);
+  if (closeBtn) closeBtn.addEventListener("click", closeForm);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -764,7 +910,7 @@ async function setupBlogsManager() {
       content: document.getElementById("blog-content").value.trim()
     };
     await db.saveBlog(blog);
-    form.classList.add("hidden");
+    closeForm();
     renderBlogs();
     updateStats();
   });
