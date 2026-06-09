@@ -428,6 +428,7 @@ async function setupProjectsManager() {
           document.getElementById("project-year").value = item.year;
           document.getElementById("project-link").value = item.link || "";
           document.getElementById("project-tags").value = (item.tags || []).join(", ");
+          document.getElementById("project-image-url").value = item.image_url || "";
           document.getElementById("project-description").value = item.description;
 
           document.getElementById("project-form-title").textContent = "Edit Project Info";
@@ -457,6 +458,7 @@ async function setupProjectsManager() {
       year: document.getElementById("project-year").value.trim(),
       link: document.getElementById("project-link").value.trim() || undefined,
       tags: document.getElementById("project-tags").value.split(",").map(t => t.trim()).filter(t => t.length > 0),
+      image_url: document.getElementById("project-image-url").value.trim() || undefined,
       description: document.getElementById("project-description").value.trim()
     };
     await db.saveProject(project);
