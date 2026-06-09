@@ -1115,38 +1115,74 @@ async function initDynamicContent() {
   const blogs = await getBlogsData();
   const blogsContainer = document.getElementById("changelog-container");
   if (blogsContainer) {
-    if (blogs && blogs.length > 0) {
-      blogsContainer.innerHTML = "";
-      blogs.forEach(b => {
-        let badgeColor = "bg-primary/10 text-primary border border-primary/20";
-        if (b.status === "Published") badgeColor = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-        if (b.status === "Draft") badgeColor = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+    const emptyState = blogsContainer.querySelector('#blog-empty-state');
+    const blogGrid = blogsContainer.querySelector('#blog-grid');
+    const featuredSlot = blogsContainer.querySelector('#blog-featured-slot');
+    const miniGrid = blogsContainer.querySelector('#blog-mini-grid');
 
-        const blogEntry = document.createElement("article");
-        blogEntry.className = "p-6 rounded-2xl border hairline bg-foreground/[0.02] flex flex-col items-start gap-4 text-left w-full";
-        
-        // Format post date tastefully
-        const postDate = b.created_at ? new Date(b.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
-        
-        blogEntry.innerHTML = `
-          <div class="flex items-center justify-between w-full gap-4">
-            <span class="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">${postDate}</span>
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${badgeColor}">${b.status}</span>
-          </div>
-          <div class="space-y-2 mt-1">
-            <h4 class="font-display text-2xl font-bold text-foreground leading-tight">${b.title}</h4>
-            <p class="text-sm text-muted-foreground leading-relaxed">${b.excerpt || ''}</p>
-            <div class="text-sm text-foreground/80 mt-4 leading-relaxed pt-2 border-t border-foreground/5 whitespace-pre-wrap">${b.content}</div>
-          </div>
+    const publishedBlogs = (blogs || []).filter(b => b.status === 'Published');
+
+    if (publishedBlogs.length > 0) {
+      if (emptyState) emptyState.style.display = 'none';
+      if (blogGrid) blogGrid.classList.remove('hidden');
+
+      // Featured card — first published post
+      const featured = publishedBlogs[0];
+      const featuredDate = featured.created_at
+        ? new Date(featured.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+        : '';
+      if (featuredSlot) {
+        featuredSlot.innerHTML = `
+          <article class="blog-featured-card">
+            ${featured.image_url ? `<div style="overflow:hidden"><img src="${featured.image_url}" alt="${featured.title}" class="blog-thumb"></div>` : ''}
+            <div style="padding:1.75rem 2rem 2rem">
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap">
+                <span class="blog-tag primary">Featured</span>
+                ${featured.category ? `<span class="blog-tag">${featured.category}</span>` : ''}
+                <span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--muted-foreground);opacity:0.6;margin-left:auto">${featuredDate}</span>
+              </div>
+              <h3 style="font-family:var(--font-display);font-size:clamp(1.4rem,3vw,2rem);font-weight:700;line-height:1.2;color:var(--foreground);margin-bottom:0.75rem">${featured.title}</h3>
+              ${featured.excerpt ? `<p style="font-size:0.9rem;color:var(--muted-foreground);line-height:1.65;max-width:680px">${featured.excerpt}</p>` : ''}
+              ${featured.url ? `<a href="${featured.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;margin-top:1.25rem;font-size:0.825rem;color:var(--primary);text-decoration:none;font-weight:500">Read article <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>` : ''}
+            </div>
+          </article>
         `;
-        blogsContainer.appendChild(blogEntry);
-      });
+      }
+
+      // Mini cards — rest of posts
+      if (miniGrid && publishedBlogs.length > 1) {
+        miniGrid.innerHTML = '';
+        publishedBlogs.slice(1).forEach((b, idx) => {
+          const postDate = b.created_at
+            ? new Date(b.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+            : '';
+          const card = document.createElement('article');
+          card.className = 'blog-mini-card';
+          card.innerHTML = `
+            <span class="blog-mini-number">0${idx + 2}</span>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap">
+                ${b.category ? `<span class="blog-tag">${b.category}</span>` : ''}
+                <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--muted-foreground);opacity:0.6">${postDate}</span>
+              </div>
+              <h4 style="font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:var(--foreground);line-height:1.3;margin-bottom:4px">${b.title}</h4>
+              ${b.excerpt ? `<p style="font-size:0.8rem;color:var(--muted-foreground);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${b.excerpt}</p>` : ''}
+              ${b.url ? `<a href="${b.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:0.75rem;color:var(--primary);text-decoration:none">Read <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>` : ''}
+            </div>
+          `;
+          miniGrid.appendChild(card);
+        });
+      }
+
+      // Show "View all" link if many posts
+      const viewAllLink = document.getElementById('blog-view-all');
+      if (viewAllLink && publishedBlogs.length > 4) {
+        viewAllLink.style.display = 'inline-flex';
+      }
     } else {
-      blogsContainer.innerHTML = `
-        <div class="text-center p-8 border border-dashed rounded-2xl border-foreground/15 text-muted-foreground text-sm">
-          No articles or blog posts published yet.
-        </div>
-      `;
+      // Keep empty state visible (it's already in the HTML)
+      if (emptyState) emptyState.style.display = '';
+      if (blogGrid) blogGrid.classList.add('hidden');
     }
   }
 }

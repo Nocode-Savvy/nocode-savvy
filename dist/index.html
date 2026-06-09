@@ -288,7 +288,7 @@
     } catch(e) {}
   </script>
   <script type="module" crossorigin src="/assets/transitions-CTRLMX6l.js"></script>
-  <script type="module" crossorigin src="/assets/main-BgiQ0lM2.js"></script>
+  <script type="module" crossorigin src="/assets/main-BrqLFZlB.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/transitions-DXIsyZ1G.css">
 </head>
 <body class="min-h-screen bg-background text-foreground pb-36">
@@ -318,7 +318,7 @@
   </div>
 </header><div class="space-y-0"><section data-section="home" id="hero" class="container-edge pt-6 md:pt-12 pb-20 md:pb-28 reveal"><div class="grid gap-10 md:grid-cols-12 md:gap-8 items-end"><div class="md:col-span-7 reveal delay-100"><div class="eyebrow mb-6 flex items-center gap-2"><span class="inline-block h-1 w-6 bg-primary"></span> Emmanuel Ajibewe · Nocode Savvy</div><h1 class="display-xl text-[clamp(2.2rem,5.5vw,4.5rem)]">I Don't Just Build Apps. <span class="block">I Build the <em class="font-normal italic text-primary">Thing</em> Your Business Actually Needs.</span></h1><p class="mt-8 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">I&#x27;m a <strong class="text-foreground">systems-led product engineer</strong>. I build <strong class="text-foreground" id="typewriter-text">SaaS platforms that scale.</strong></p><div class="mt-10 flex flex-wrap items-center gap-3"><a href="#work" class="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground">See selected work <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right h-4 w-4 transition group-hover:rotate-45" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="#contact" class="inline-flex items-center gap-2 rounded-full border hairline px-5 py-3 text-sm">Start a project</a></div></div><div class="md:col-span-5 space-y-6 reveal delay-200">
   <!-- Intro Video Placeholder -->
-  <div id="hero-video-trigger" class="aspect-video w-full rounded-2xl border hairline overflow-hidden bg-foreground/5 relative shadow-md mb-2">
+  <div id="hero-video-trigger" class="aspect-video w-full rounded-2xl border hairline overflow-hidden bg-foreground/5 relative shadow-md mb-8">
     <video id="hero-loop-video" class="w-full h-full object-cover filter brightness-[0.8] transition duration-500" autoplay muted loop playsinline preload="metadata">
       <source src="1000540539.mp4" type="video/mp4">
     </video>
@@ -969,7 +969,7 @@
           <button aria-label="Go to testimonial 1" class="h-2 w-4 rounded-full bg-primary transition-all duration-300 cursor-pointer"></button>
           <button aria-label="Go to testimonial 2" class="h-2 w-2 rounded-full bg-foreground/25 transition-all duration-300 cursor-pointer"></button>
           <button aria-label="Go to testimonial 3" class="h-2 w-2 rounded-full bg-foreground/25 transition-all duration-300 cursor-pointer"></button>
-        </div>
+</div>
         
         <button id="testimonial-next" aria-label="Next testimonial" class="p-2 rounded-full border border-foreground/10 bg-background hover:bg-foreground/5 transition active:scale-95 cursor-pointer text-foreground">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
@@ -980,16 +980,124 @@
 </section>
 
 <section data-section="changelog" id="changelog" class="container-edge py-24 md:py-32 border-t hairline reveal">
-  <div class="max-w-3xl mb-12">
-    <div class="eyebrow flex items-center gap-2 mb-4">
-      <span class="inline-block h-1 w-6 bg-primary"></span> blogs & logs
+  <style>
+    .blog-featured-card {
+      position: relative;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--background);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease;
+    }
+    .blog-featured-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px -16px color-mix(in oklab, var(--primary) 22%, transparent);
+      border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
+    }
+    .blog-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.92);
+      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), filter 0.4s ease;
+    }
+    .blog-featured-card:hover .blog-thumb { transform: scale(1.04); filter: brightness(0.98); }
+    .blog-mini-card {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 1.25rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--background);
+      transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+      cursor: default;
+    }
+    .blog-mini-card:hover {
+      background: color-mix(in oklab, var(--background) 94%, var(--primary));
+      border-color: color-mix(in oklab, var(--primary) 35%, var(--border));
+      transform: translateX(4px);
+    }
+    .blog-mini-number {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--muted-foreground);
+      opacity: 0.6;
+      min-width: 24px;
+      padding-top: 3px;
+    }
+    .blog-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      border: 1px solid var(--border);
+      color: var(--muted-foreground);
+      background: transparent;
+      font-family: var(--font-sans);
+    }
+    .blog-tag.primary {
+      background: color-mix(in oklab, var(--primary) 12%, transparent);
+      color: var(--primary);
+      border-color: color-mix(in oklab, var(--primary) 30%, transparent);
+    }
+    .blog-empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 4rem 2rem;
+      border: 1px dashed color-mix(in oklab, var(--border) 80%, transparent);
+      border-radius: 20px;
+      text-align: center;
+    }
+    .blog-empty-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: color-mix(in oklab, var(--primary) 10%, transparent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+    }
+  </style>
+
+  <div class="flex flex-wrap items-end justify-between gap-6 mb-14">
+    <div class="max-w-2xl">
+      <div class="eyebrow flex items-center gap-2 mb-4">
+        <span class="inline-block h-1 w-6 bg-primary"></span> Blogs &amp; Insights
+      </div>
+      <h2 class="font-display text-3xl md:text-5xl">Thoughts on building things that work.</h2>
+      <p class="mt-4 text-muted-foreground max-w-xl">Systems thinking, no-code architecture, API integration deep dives, and the realities of shipping real products fast.</p>
     </div>
-    <h2 class="font-display text-3xl md:text-5xl">Engineering Blogs & Insights</h2>
-    <p class="mt-4 text-muted-foreground">Writing about software systems, full-stack product engineering, custom API integrations, database architectures, and the realities of building scalable web platforms.</p>
+    <a id="blog-view-all" href="#changelog" class="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition" style="display:none">
+      View all articles
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+    </a>
   </div>
-  <div class="max-w-4xl mx-auto space-y-4" id="changelog-container">
-    <div class="text-center p-8 border border-dashed rounded-2xl border-foreground/15 text-muted-foreground text-sm">
-      No articles or blog posts published yet.
+
+  <div id="changelog-container">
+    <div class="blog-empty-state" id="blog-empty-state">
+      <div class="blog-empty-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+      </div>
+      <div>
+        <div class="font-display text-lg font-semibold text-foreground mb-2">No posts yet — coming soon</div>
+        <p class="text-sm text-muted-foreground max-w-xs">Articles on systems, no-code architecture, and shipping fast. Check back soon.</p>
+      </div>
+      <a href="#contact" class="mt-2 inline-flex items-center gap-2 rounded-full border hairline px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition">
+        Get notified when I publish
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+      </a>
+    </div>
+
+    <div id="blog-grid" class="hidden">
+      <div id="blog-featured-slot" class="mb-8"></div>
+      <div id="blog-mini-grid" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"></div>
     </div>
   </div>
 </section>
@@ -1269,30 +1377,201 @@
     </form>
   </div>
 
-  
-<div class="mt-8 border-t hairline pt-8 flex flex-wrap gap-x-6 gap-y-3 text-xs text-muted-foreground justify-center w-full">
-  <a href="mailto:buildwithtimi8@gmail.com" class="flex items-center gap-1.5 hover:text-foreground">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail h-3.5 w-3.5"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path></svg>
-    buildwithtimi8@gmail.com
-  </a>
-  <a href="https://instagram.com/nocodesavvy" target="_blank" class="flex items-center gap-1.5 hover:text-foreground">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram h-3.5 w-3.5"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
-    @nocodesavvy
-  </a>
-  <a href="https://linkedin.com/in/emmanuel-ajibewe" target="_blank" class="flex items-center gap-1.5 hover:text-foreground">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin h-3.5 w-3.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-    Emmanuel Ajibewe
-  </a>
-  <span class="flex items-center gap-1.5">
-    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
-    Based in Nigeria. Remote. Worldwide.
-  </span>
-</div>
-<div class="mt-4 text-[11px] text-muted-foreground text-center w-full">
-  © 2026 Nocode Savvy · Built by Emmanuel Ajibewe · <a href="admin.html" class="hover:text-foreground transition font-medium">Admin Portal</a>
-</div>
-
+  </div>
 </section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="site-footer" class="border-t hairline mt-0">
+  <style>
+    #site-footer {
+      background: color-mix(in oklab, var(--background) 97%, var(--foreground));
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 2rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    @media (min-width: 640px) {
+      .footer-grid { grid-template-columns: 1.5fr 1fr 1fr; gap: 2rem 3rem; }
+    }
+    @media (min-width: 1024px) {
+      .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+    }
+    .footer-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--foreground);
+      text-decoration: none;
+      margin-bottom: 1rem;
+    }
+    .footer-col-label {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted-foreground);
+      opacity: 0.6;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .footer-link {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      padding: 0.3rem 0;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .footer-link:hover {
+      color: var(--foreground);
+      transform: translateX(3px);
+    }
+    .footer-social-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    .footer-social-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      color: var(--muted-foreground);
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+    .footer-social-btn:hover {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px color-mix(in oklab, var(--primary) 30%, transparent);
+    }
+    .footer-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0 1.5rem;
+      opacity: 0.5;
+    }
+    .footer-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 0.7rem;
+      color: var(--muted-foreground);
+    }
+    .footer-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      border: 1px solid color-mix(in oklab, #34d399 25%, transparent);
+      background: color-mix(in oklab, #34d399 8%, transparent);
+      color: #34d399;
+    }
+  </style>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <!-- Brand column -->
+      <div>
+        <a href="#hero" class="footer-logo">
+          <span class="inline-block h-2 w-2 rounded-full bg-primary"></span>Nocode<span style="color:var(--primary)">Savvy</span>
+        </a>
+        <p style="font-size:0.85rem;color:var(--muted-foreground);line-height:1.65;max-width:260px;margin-bottom:0.5rem">
+          Systems-led product engineering. No-code first, real code when it counts. Building production-grade platforms since 2021.
+        </p>
+        <div class="footer-status">
+          <span style="width:7px;height:7px;border-radius:50%;background:#34d399;display:inline-block;animation:pulse 2s infinite"></span>
+          Available for new projects
+        </div>
+        <div class="footer-social-row">
+          <a href="mailto:buildwithtimi8@gmail.com" class="footer-social-btn" aria-label="Email" title="Email">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/></svg>
+          </a>
+          <a href="https://instagram.com/nocodesavvy" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Instagram" title="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/emmanuel-ajibewe" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="LinkedIn" title="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://twitter.com/nocodesavvy" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Twitter / X" title="Twitter / X">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Navigation column -->
+      <div>
+        <span class="footer-col-label">Navigate</span>
+        <a href="#hero" class="footer-link">Home</a>
+        <a href="#work" class="footer-link">Selected Work</a>
+        <a href="#process" class="footer-link">Process</a>
+        <a href="#toolkit" class="footer-link">Toolkit</a>
+        <a href="#about" class="footer-link">About</a>
+        <a href="#testimonials" class="footer-link">Testimonials</a>
+        <a href="#changelog" class="footer-link">Blog</a>
+        <a href="#faq" class="footer-link">FAQ</a>
+      </div>
+
+      <!-- Services column -->
+      <div>
+        <span class="footer-col-label">Services</span>
+        <a href="#contact" class="footer-link">MVP Development</a>
+        <a href="#contact" class="footer-link">Platform Ecosystems</a>
+        <a href="#contact" class="footer-link">AI Integration</a>
+        <a href="#contact" class="footer-link">App Rescue</a>
+        <a href="#contact" class="footer-link">UI / UX Redesign</a>
+        <a href="#contact" class="footer-link">Billing Systems</a>
+      </div>
+
+      <!-- Contact column -->
+      <div>
+        <span class="footer-col-label">Get in Touch</span>
+        <a href="mailto:buildwithtimi8@gmail.com" class="footer-link">buildwithtimi8@gmail.com</a>
+        <a href="#contact" class="footer-link">Book a scoping call</a>
+        <a href="portfolio.html" class="footer-link">Full Portfolio</a>
+        <a href="admin.html" class="footer-link" style="opacity:0.5">Admin Portal</a>
+        <div style="margin-top:1rem;font-size:0.78rem;color:var(--muted-foreground);line-height:1.6">
+          <span style="display:flex;align-items:center;gap:6px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Lagos, Nigeria — Remote Worldwide
+          </span>
+          <span style="display:flex;align-items:center;gap:6px;margin-top:4px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            Response within 24 hours
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="footer-divider">
+
+    <div class="footer-bottom">
+      <span>© 2026 Nocode Savvy · Built by Emmanuel Ajibewe</span>
+      <span style="display:flex;align-items:center;gap:0.4rem">
+        <span style="width:6px;height:6px;border-radius:50%;background:#34d399"></span>
+        Bubble · Next.js · Supabase
+      </span>
+    </div>
+  </div>
+</footer>
 </div>
 <div class="fixed inset-x-0 bottom-4 z-50 flex flex-col items-center gap-2 px-4 pointer-events-none">
   <!-- Active Section indicator -->
