@@ -156,6 +156,154 @@
         letter-spacing: 0.05em;
         display: block;
       }
+    /* Slide-over Drawer Panels */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .drawer-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 520px;
+      background: var(--background);
+      border-left: 1px solid var(--border);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.3);
+      z-index: 101;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer-panel.open {
+      transform: translateX(0);
+    }
+    
+    /* Drag and Drop Dropzone */
+    .upload-dropzone {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.01);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .upload-dropzone:hover, .upload-dropzone.dragover {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    html[data-theme="light"] .upload-dropzone:hover, 
+    html[data-theme="light"] .upload-dropzone.dragover {
+      background: rgba(0, 0, 0, 0.015);
+    }
+
+    /* Tag Editor Pills */
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-subtle);
+      min-height: 42px;
+      align-items: center;
+    }
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    html[data-theme="dark"] .tag-pill {
+      background: #eeede8;
+      color: #0d0f12;
+    }
+    html[data-theme="light"] .tag-pill {
+      background: #0d0f12;
+      color: #f8f7f4;
+    }
+    .tag-pill-remove {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.1);
+      color: inherit;
+      font-size: 9px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .tag-pill-remove:hover {
+      background: rgba(0, 0, 0, 0.25);
+    }
+    
+    /* Modern Card grids for lists */
+    .admin-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+    .project-admin-card {
+      display: flex;
+      flex-direction: column;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    html[data-theme="light"] .project-admin-card {
+      background: rgba(0, 0, 0, 0.015);
+    }
+    .project-admin-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+    .blog-admin-card {
+      padding: 1.25rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    html[data-theme="light"] .blog-admin-card {
+      background: rgba(0, 0, 0, 0.015);
+    }
+    .blog-admin-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
     }
   </style>
 </head>
@@ -174,7 +322,7 @@
       </button>
 
       <div class="text-center space-y-4">
-        <div class="h-14 w-14 rounded-full overflow-hidden border-2 border-foreground/15 mx-auto shadow-md">
+        <div class="h-10 w-10 rounded-full overflow-hidden border-2 border-foreground/15 mx-auto shadow-md">
           <img src="profile.jpg" alt="Emmanuel Ajibewe" class="w-full h-full object-cover">
         </div>
         <div>
@@ -379,81 +527,11 @@
         </div>
 
         <!-- Project Editor Form (Hidden by default) -->
-        <form id="project-form" class="hidden p-6 admin-card space-y-4">
-          <h4 id="project-form-title" class="text-xl font-bold">New Project Details</h4>
-          <input type="hidden" id="project-id">
-          <div class="grid gap-4 md:grid-cols-2">
-            <div>
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Project Name</label>
-              <input type="text" id="project-title" required class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary">
-            </div>
-            <div>
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Category / Type</label>
-              <input type="text" id="project-category" placeholder="e.g. Full-Stack Platform, E-Commerce" required class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary">
-            </div>
-            <div>
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Year</label>
-              <input type="text" id="project-year" placeholder="e.g. 2025" required class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary">
-            </div>
-            <div>
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Live URL Link</label>
-              <input type="url" id="project-link" placeholder="https://example.com" class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary">
-            </div>
-            <div class="md:col-span-2 grid gap-4 md:grid-cols-4 items-end border border-foreground/5 p-4 rounded-xl bg-foreground/[0.01]">
-              <div class="md:col-span-3 space-y-3">
-                <div>
-                  <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Upload Project Image File</label>
-                  <input type="file" id="project-image-file" accept="image/*" class="w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border file:border-foreground/10 file:text-xs file:font-semibold file:bg-foreground/[0.03] file:text-foreground hover:file:bg-foreground/[0.08] file:cursor-pointer">
-                </div>
-                <div class="relative flex py-1 items-center">
-                  <div class="flex-grow border-t border-foreground/10"></div>
-                  <span class="flex-shrink mx-4 text-xs font-mono uppercase text-muted-foreground">Or paste link</span>
-                  <div class="flex-grow border-t border-foreground/10"></div>
-                </div>
-                <div>
-                  <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Project Image URL</label>
-                  <input type="text" id="project-image-url" placeholder="https://example.com/project-thumbnail.jpg" class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary">
-                </div>
-              </div>
-              <div class="flex flex-col items-center justify-center">
-                <span class="block text-xs uppercase tracking-wider text-muted-foreground mb-1.5 text-center w-full">Image Preview</span>
-                <div id="project-image-preview" class="h-24 w-24 rounded-xl border border-foreground/15 bg-foreground/[0.02] flex items-center justify-center overflow-hidden">
-                  <span class="text-[10px] text-muted-foreground text-center px-2">No Image Selected</span>
-                </div>
-              </div>
-            </div>
-            <div class="md:col-span-2">
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Tech Stack (comma-separated)</label>
-              <input type="text" id="project-tags" placeholder="Next.js, Bubble.io, Stripe, Supabase" required class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary">
-            </div>
-            <div class="md:col-span-2">
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Project Description</label>
-              <textarea id="project-description" rows="3" required class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary"></textarea>
-            </div>
+        <!-- Projects List Grid (Clean card showcase instead of a raw table) -->
+        <div id="projects-card-grid" class="admin-grid">
+          <div class="col-span-full text-center text-muted-foreground p-8 admin-card">
+            Loading showcase projects...
           </div>
-          <div class="flex gap-2">
-            <button type="submit" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg transition hover:opacity-90">Save Project</button>
-            <button type="button" id="cancel-project-btn" class="px-4 py-2 text-sm font-medium border border-foreground/15 rounded-lg transition hover:bg-foreground/[0.03]">Cancel</button>
-          </div>
-        </form>
-
-        <!-- Projects List Table -->
-        <div class="admin-card overflow-hidden">
-          <table class="w-full text-left text-sm border-collapse responsive-table">
-            <thead>
-              <tr class="border-b border-foreground/10 bg-foreground/[0.01]">
-                <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Project Details</th>
-                <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Category</th>
-                <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Year</th>
-                <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="projects-list-body">
-              <tr>
-                <td colspan="4" class="p-8 text-center text-muted-foreground">No custom projects loaded.</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </section>
 
@@ -534,56 +612,131 @@
         </div>
 
         <!-- Blog Form -->
-        <form id="blog-form" class="hidden p-6 admin-card space-y-4">
-          <h4 id="blog-form-title" class="text-xl font-bold">New Blog Post</h4>
-          <input type="hidden" id="blog-id">
-          <div class="grid gap-4 md:grid-cols-2">
-            <div class="md:col-span-2">
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Blog Post Title</label>
-              <input type="text" id="blog-title" required class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary" placeholder="e.g. Scaling Bubble Databases with Supabase">
-            </div>
-            <div>
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Status</label>
-              <select id="blog-status" class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary">
-                <option value="Published">Published</option>
-                <option value="Draft">Draft</option>
-              </select>
-            </div>
-            <div class="md:col-span-2">
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Excerpt / Summary</label>
-              <input type="text" id="blog-excerpt" class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary" placeholder="A brief summary shown on index and preview pages...">
-            </div>
-            <div class="md:col-span-2">
-              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Content / Body</label>
-              <textarea id="blog-content" rows="6" required class="w-full px-4 py-2 rounded-lg border border-foreground/15 bg-background text-foreground text-sm focus:outline-none focus:border-primary" placeholder="Write the main body content of the blog post..."></textarea>
-            </div>
+        <!-- Blogs List Grid (Premium card showcase instead of a raw table) -->
+        <div id="blogs-card-grid" class="admin-grid">
+          <div class="col-span-full text-center text-muted-foreground p-8 admin-card">
+            Loading blog articles...
           </div>
-          <div class="flex gap-2">
-            <button type="submit" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg transition hover:opacity-90">Save Post</button>
-            <button type="button" id="cancel-blog-btn" class="px-4 py-2 text-sm font-medium border border-foreground/15 rounded-lg transition hover:bg-foreground/[0.03]">Cancel</button>
-          </div>
-        </form>
-
-        <!-- Blogs Table -->
-        <div class="admin-card overflow-hidden">
-          <table class="w-full text-left text-sm border-collapse responsive-table">
-            <thead>
-              <tr class="border-b border-foreground/10 bg-foreground/[0.01]">
-                <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Article Details</th>
-                <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Status</th>
-                <th class="p-4 font-semibold text-xs uppercase text-muted-foreground">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="blogs-list-body">
-              <tr>
-                <td colspan="3" class="p-8 text-center text-muted-foreground">No articles or blog posts loaded.</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </section>
 
     </main>
+  </div>
+
+  <!-- Drawer Overlay Backdrop -->
+  <div id="drawer-overlay" class="drawer-overlay"></div>
+
+  <!-- Project Editor Drawer -->
+  <div id="project-drawer" class="drawer-panel">
+    <form id="project-form" class="h-full flex flex-col justify-between p-6 space-y-4 overflow-y-auto" autocomplete="off">
+      <div>
+        <div class="flex items-center justify-between border-b border-foreground/10 pb-4 mb-4">
+          <h4 id="project-form-title" class="text-xl font-bold">New Project Details</h4>
+          <button type="button" id="close-project-drawer-btn" class="p-1.5 rounded-full hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <input type="hidden" id="project-id">
+        <div class="space-y-4 text-left">
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Project Name</label>
+            <input type="text" id="project-title" required class="w-full px-4 py-2 rounded-lg bg-background text-foreground text-sm focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Category / Type</label>
+            <input type="text" id="project-category" placeholder="e.g. Full-Stack Platform, E-Commerce" required class="w-full px-4 py-2 rounded-lg bg-background text-foreground text-sm focus:outline-none">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Year</label>
+              <input type="text" id="project-year" placeholder="e.g. 2025" required class="w-full px-4 py-2 rounded-lg bg-background text-foreground text-sm focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Live URL Link</label>
+              <input type="url" id="project-link" placeholder="https://example.com" class="w-full px-4 py-2 rounded-lg bg-background text-foreground text-sm focus:outline-none">
+            </div>
+          </div>
+
+          <!-- Drag-and-drop Image Upload Zone -->
+          <div class="space-y-2">
+            <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Project Image</label>
+            <div class="grid grid-cols-4 gap-4 items-center">
+              <div id="project-upload-zone" class="col-span-3 upload-dropzone">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground mb-1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <span class="text-[11px] font-medium text-foreground">Drag file here or <span class="text-primary underline">browse</span></span>
+                <span class="text-[9px] text-muted-foreground mt-0.5">Supports PNG, JPG (Max 5MB)</span>
+                <input type="file" id="project-image-file" accept="image/*" class="hidden">
+              </div>
+              <div class="flex flex-col items-center justify-center">
+                <div id="project-image-preview" class="h-20 w-20 rounded-xl border border-foreground/10 bg-foreground/[0.02] flex items-center justify-center overflow-hidden">
+                  <span class="text-[9px] text-muted-foreground text-center px-1">No Image</span>
+                </div>
+              </div>
+            </div>
+            <input type="text" id="project-image-url" placeholder="Or paste image URL link directly..." class="w-full px-4 py-2 rounded-lg bg-background text-foreground text-xs focus:outline-none mt-2">
+          </div>
+
+          <!-- Tech Stack tags editor -->
+          <div class="space-y-1.5">
+            <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Tech Stack Tags</label>
+            <div id="project-tags-container" class="tag-container">
+              <!-- Dynamic tag pills will go here -->
+            </div>
+            <input type="text" id="project-tag-input" placeholder="Type tag and press Enter or comma..." class="w-full px-4 py-2 rounded-lg bg-background text-foreground text-xs focus:outline-none">
+            <input type="hidden" id="project-tags"> <!-- Keep hidden binding for saving -->
+          </div>
+
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Project Description</label>
+            <textarea id="project-description" rows="3" required class="w-full px-4 py-2 rounded-lg bg-background text-foreground text-sm focus:outline-none"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-2 pt-4 border-t border-foreground/10">
+        <button type="submit" class="flex-1 py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-xl transition hover:opacity-90 cursor-pointer">Save Project</button>
+        <button type="button" id="cancel-project-btn" class="flex-1 py-3 text-sm font-semibold border border-foreground/15 rounded-xl transition hover:bg-foreground/[0.03] cursor-pointer">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Blog Editor Drawer -->
+  <div id="blog-drawer" class="drawer-panel">
+    <form id="blog-form" class="h-full flex flex-col justify-between p-6 space-y-4 overflow-y-auto" autocomplete="off">
+      <div>
+        <div class="flex items-center justify-between border-b border-foreground/10 pb-4 mb-4">
+          <h4 id="blog-form-title" class="text-xl font-bold">New Blog Post</h4>
+          <button type="button" id="close-blog-drawer-btn" class="p-1.5 rounded-full hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <input type="hidden" id="blog-id">
+        <div class="space-y-4 text-left">
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Blog Post Title</label>
+            <input type="text" id="blog-title" required class="w-full px-4 py-2 rounded-lg bg-background text-foreground text-sm focus:outline-none" placeholder="e.g. Scaling Bubble Databases with Supabase">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Status</label>
+            <select id="blog-status" class="w-full px-4 py-2 rounded-lg bg-background text-foreground text-sm focus:outline-none">
+              <option value="Published">Published</option>
+              <option value="Draft">Draft</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Excerpt / Summary</label>
+            <input type="text" id="blog-excerpt" class="w-full px-4 py-2 rounded-lg bg-background text-foreground text-sm focus:outline-none" placeholder="A brief summary shown on index and preview pages...">
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-muted-foreground mb-1">Content / Body</label>
+            <textarea id="blog-content" rows="10" required class="w-full px-4 py-2 rounded-lg bg-background text-foreground text-sm focus:outline-none" placeholder="Write the main body content of the blog post..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-2 pt-4 border-t border-foreground/10">
+        <button type="submit" class="flex-1 py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-xl transition hover:opacity-90 cursor-pointer">Save Post</button>
+        <button type="button" id="cancel-blog-btn" class="flex-1 py-3 text-sm font-semibold border border-foreground/15 rounded-xl transition hover:bg-foreground/[0.03] cursor-pointer">Cancel</button>
+      </div>
+    </form>
   </div>
 
   <!-- Admin logic controller scripts -->
